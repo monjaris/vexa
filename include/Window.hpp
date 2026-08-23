@@ -2,32 +2,32 @@
 #include "Renderer.hpp"
 NAMESPACE_BEGIN(cone)
 
-class MK_NODISCARD Window
+class CN_NODISCARD Window
 {
     class Impl;
     Uptr<Impl> impl;
 
 
-    class MK_NODISCARD M_Cfg
+    class CN_NODISCARD M_Cfg
     {
         friend class Window;
     public:
-        ConfigValue<Flags> flags;
+        CfgVal<Flags> flags;
     // private:
-        ConfigValue<const char*> title;
-        ConfigValue<Vec2i> size;
-        ConfigValue<Vec2i> position;
+        CfgVal<const char*> title;
+        CfgVal<Vec2i> size;
+        CfgVal<Vec2i> position;
         //
-        ConfigValue<bool> is_resizable;
-        ConfigValue<bool> is_maximized;
-        ConfigValue<bool> is_minimized;
-        ConfigValue<bool> is_fullscreen;
-        ConfigValue<bool> is_borderless;
-        ConfigValue<bool> is_hidden;
-        ConfigValue<bool> is_always_on_top;
-        ConfigValue<bool> is_mouse_grabbed;
-        ConfigValue<bool> is_mouse_relative;
-        ConfigValue<bool> is_keyboard_grabbed;
+        CfgVal<bool> is_resizable;
+        CfgVal<bool> is_maximized;
+        CfgVal<bool> is_minimized;
+        CfgVal<bool> is_fullscreen;
+        CfgVal<bool> is_borderless;
+        CfgVal<bool> is_hidden;
+        CfgVal<bool> is_always_on_top;
+        CfgVal<bool> is_mouse_grabbed;
+        CfgVal<bool> is_mouse_relative;
+        CfgVal<bool> is_keyboard_grabbed;
 
     public:
         constexpr M_Cfg() noexcept:
@@ -68,6 +68,24 @@ class MK_NODISCARD Window
     m_build_config;
 
 
+    using M_WindowPtr = void*;
+    using M_WindowFlags = uint64;
+    static M_WindowFlags _getActiveFlags(M_WindowPtr win);
+    static void _trySetTitle(M_WindowPtr win, const char* title);
+    static void _trySetSize(M_WindowPtr win, int x, int y);
+    static void _trySetPos(M_WindowPtr win, int x, int y);
+    static void _trySetResizable(M_WindowPtr win, bool yes);
+    static void _trySetMinimized(M_WindowPtr win, bool yes);
+    static void _trySetMaximized(M_WindowPtr win, bool yes);
+    static void _trySetFullscreen(M_WindowPtr win, bool yes);
+    static void _trySetBorderless(M_WindowPtr win, bool yes);
+    static void _trySetHidden(M_WindowPtr win, bool yes);
+    static void _trySetAlwaysOnTop(M_WindowPtr win, bool yes);
+    static void _trySetMouseGrabbed(M_WindowPtr win, bool yes);
+    static void _trySetMouseRelative(M_WindowPtr win, bool yes);
+    static void _trySetKeyboardGrabbed(M_WindowPtr win, bool yes);
+
+
 public:
     using Cfg = M_Cfg;
     enum Trait : uint64;
@@ -81,28 +99,12 @@ public:
     Window create();
     void destroy();
     bool exists();
-    inline uint32 id() const noexcept;
+    uint32 id() const noexcept;
 
     /** under construction **/
     // Flags defaultFlags() const noexcept;
     // Flags& flags() noexcept;
 
-    using M_WindowPtr = void*;
-    using M_WindowFlags = uint64;
-    static inline M_WindowFlags _getActiveFlags(M_WindowPtr win);
-    static inline void _trySetTitle(M_WindowPtr win, const char* title);
-    static inline void _trySetSize(M_WindowPtr win, int x, int y);
-    static inline void _trySetPos(M_WindowPtr win, int x, int y);
-    static inline void _trySetResizable(M_WindowPtr win, bool yes);
-    static inline void _trySetMinimized(M_WindowPtr win, bool yes);
-    static inline void _trySetMaximized(M_WindowPtr win, bool yes);
-    static inline void _trySetFullscreen(M_WindowPtr win, bool yes);
-    static inline void _trySetBorderless(M_WindowPtr win, bool yes);
-    static inline void _trySetHidden(M_WindowPtr win, bool yes);
-    static inline void _trySetAlwaysOnTop(M_WindowPtr win, bool yes);
-    static inline void _trySetMouseGrabbed(M_WindowPtr win, bool yes);
-    static inline void _trySetMouseRelative(M_WindowPtr win, bool yes);
-    static inline void _trySetKeyboardGrabbed(M_WindowPtr win, bool yes);
 
     Renderer& renderer() noexcept;
     const char* title();
@@ -141,7 +143,7 @@ private:
 };
 
 
-enum MK_NODISCARD Window::Trait : uint64 {
+enum CN_NODISCARD Window::Trait : uint64 {
     NONE = 0,
 
     /* general */

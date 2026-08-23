@@ -1,4 +1,4 @@
-#include "alt/SDL3.hpp"
+#include "alt/SDL3.h"
 #include "Engine.hpp"
 NAMESPACE_BEGIN(cone)
 
@@ -6,16 +6,18 @@ bool Engine::Init(const Flags initial_subsystems) noexcept {
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
-        return InitSubsystems(m_subsystems);
+        return SDL_Init(m_subsystems.value());
     }
     return false;
 }
 
 
 void Engine::Close() noexcept {
-    m_init = false;
-    m_subsystems.reset();
-    SDL_Quit();
+    if (m_init) {
+        m_init = false;
+        m_subsystems.reset();
+        SDL_Quit();
+    }
 }
 
 
@@ -35,7 +37,7 @@ bool Engine::setMouseCaptured(bool yes) noexcept {
     return SDL_CaptureMouse(yes);
 }
 
-MK_NODISCARD bool Engine::IsMouseCaptured() noexcept {
+CN_NODISCARD bool Engine::IsMouseCaptured() noexcept {
     return (SDL_GetWindowFlags(nullptr) & SDL_WINDOW_MOUSE_CAPTURE);
 }
 

@@ -1,6 +1,7 @@
 #pragma once
-#include "defs.hpp"
 #include <concepts>
+#include "defs.hpp"
+#include "math.hpp"
 NAMESPACE_BEGIN(cone)
 inline NAMESPACE_BEGIN(vec)
 
@@ -8,31 +9,51 @@ inline NAMESPACE_BEGIN(vec)
 template<class T>
 concept VectorConcept = requires(T t) { t.x, t.y; };
 
-template<VectorConcept VectorType>
-static constexpr inline bool VecEqu(const VectorType& left, const VectorType& right) {
+template<VectorConcept VectorT>
+static constexpr inline bool VecEqu(const VectorT& left, const VectorT& right) noexcept {
     return (left.x == right.x) && (left.y == right.y);
 }
 
+template<VectorConcept VectorT>
+static constexpr inline VectorT VecAdd(const VectorT& left, const VectorT& right) noexcept {
+    return {left.x + right.x, left.y + right.y};
+}
+
+template<VectorConcept VectorT>
+static constexpr inline VectorT VecSub(const VectorT& left, const VectorT& right) noexcept {
+    return {left.x + right.x, left.y + right.y};
+}
+
+
+// return distance between two points
+template<VectorConcept VectorT>
+constexpr VectorT::ValueT VecDist(const VectorT& first, const VectorT& second) {
+    return math::sqrt(math::pow(first.x-second.x, 2) + math::pow(first.y-second.y, 2));
+}
+
+
 struct Vec2i {
-    using Value = int32;
-    Value x;
-    Value y;
-    constexpr Vec2i(Value x, Value y): x(x), y(y) {}
+    using ValueT = int32;
+    ValueT x;
+    ValueT y;
+    constexpr Vec2i(ValueT x, ValueT y): x(x), y(y) {}
     constexpr bool operator== (Vec2i other) const noexcept { return VecEqu(*this, other); }
 };
 
 struct Vec2u {
-    using Value = uint32;
-    Value x;
-    Value y;
-    constexpr Vec2u(Value x, Value y): x(x), y(y) {}
+    using ValueT = uint32;
+    ValueT x;
+    ValueT y;
+    constexpr Vec2u(ValueT x, ValueT y): x(x), y(y) {}
+    constexpr bool operator== (Vec2u other) const noexcept { return VecEqu(*this, other); }
 };
 
 struct Vec2f {
-    using Value = fp32;
-    Value x;
-    Value y;
-    constexpr Vec2f(Value x, Value y): x(x), y(y) {}
+    using ValueT = fp32;
+    ValueT x;
+    ValueT y;
+    constexpr Vec2f(ValueT x, ValueT y): x(x), y(y) {}
+    constexpr bool operator== (Vec2f other) const noexcept { return VecEqu(*this, other); }
 };
 
 

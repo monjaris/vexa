@@ -1,4 +1,4 @@
-#include "alt/SDL3.hpp"
+#include "alt/SDL3.h"
 #include "../include/Window.hpp"
 NAMESPACE_BEGIN(cone)
 
@@ -14,11 +14,14 @@ NAMESPACE_BEGIN(cone)
     DEF_MSG mf_window_currently_doesnt_exist
         { "invalid call on an already destroyed window" };
 
+    DEF_MSG mf_renderer_doesnt_exist
+        { "window doesn't have a renderer" };
+
     DEF_MSG me_window_already_exists
         { "renderer already exists" };
 
-    DEF_MSG mf_renderer_doesnt_exist
-        { "window doesn't have a renderer" };
+    DEF_MSG me_failed_to_create_input_ctx
+        { "an error occured while creating the input context" };
 
 #undef DEF_MSG
 
@@ -125,6 +128,10 @@ public:
 
         return m_window;
     }
+
+    bool createInputCtx() {
+        return SDL_StartTextInputWithProperties(m_window, 0);
+    }
 };
 
 This::Window(Cfg config): impl(new Impl{}), m_build_config(config) {}
@@ -151,7 +158,12 @@ Window This::create() {
 
     auto* new_window = build.impl->createWindow(build.m_build_config);
     IF_THEN (!new_window,   log::fatal(FN"{}", __func__, mf_window_currently_doesnt_exist);)
-    log::info(FN"created new window at [{}]", __func__, (void*)new_window);
+    auto new_window_id = SDL_GetWindowID(new_window);
+    log::info(FN"created new window [ID={}]", __func__, new_window_id);
+
+    IF_THEN(!build.impl->createInputCtx(),
+        log::error(FN"{} [ID={}]", __func__, me_failed_to_create_input_ctx, new_window_id);
+    );
 
     if (!IS_CFG_DEFAULT(title))
         _trySetTitle(new_window, m_build_config.title);
@@ -180,7 +192,9 @@ Window This::create() {
     if (!IS_CFG_DEFAULT(is_keyboard_grabbed))
         _trySetKeyboardGrabbed(new_window, m_build_config.is_keyboard_grabbed);
 
-    if (impl->renderer_set) build.impl->renderer = build.impl->renderer.create((SDL_Window*)new_window);
+    if (impl->renderer_set) {
+        build.impl->renderer = build.impl->renderer.create((SDL_Window*)new_window);
+    }
     return build;
 }
 
@@ -205,7 +219,7 @@ bool This::exists() {
 // }
 
 
-inline uint32 This::id() const noexcept {
+uint32 This::id() const noexcept {
     return SDL_GetWindowID(impl->ptr());
 }
 

@@ -8,4 +8,9 @@ build/
 # Binaries
 /main
 /game
+/*.so
+/*.a
+/*.o
 
+# Directories
+/vendor/SDL3-upstream

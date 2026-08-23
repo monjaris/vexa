@@ -10,5 +10,5 @@ int main()
     mk::Ref<int> r1 = mk::Ref(x);
     mk::RefMut r2 = {x};
 
-    MK_UNUSE(x, r1, r2);
+    CN_UNUSE(x, r1, r2);
 }

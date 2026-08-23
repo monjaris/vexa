@@ -1,4 +1,4 @@
-#include "alt/SDL3.hpp"
+#include "alt/SDL3.h"
 #include <thread>
 #include <chrono>
 #include "time.hpp"

@@ -1,5 +1,5 @@
 #include "cone.hpp"
-#include "alt/SDL3.hpp"
+#include "alt/SDL3.h"
 
 namespace cn = cone;
 

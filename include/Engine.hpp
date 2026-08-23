@@ -2,7 +2,7 @@
 #include "Window.hpp"
 NAMESPACE_BEGIN(cone)
 
-class Engine
+class Engine CN_STATIC_CLASS
 {
     static inline bool m_init = false;
     static inline Flags m_subsystems;

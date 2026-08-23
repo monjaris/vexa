@@ -7,20 +7,20 @@ NAMESPACE_BEGIN(cone)
 NAMESPACE_BEGIN(log)
 
 
-constexpr const char* const PRINT_PREFIX = "";
-constexpr const char* const PRINT_POSTFIX = "\n";
+static constexpr const char* const PRINT_PREFIX = "";
+static constexpr const char* const PRINT_POSTFIX = "\n";
 
-constexpr const char* const INFO_PREFIX    = "\033[36m[INFO]\033[0m ";
-constexpr const char* const INFO_POSTFIX   = "\n";
+static constexpr const char* const INFO_PREFIX    = "\033[36m[INFO]\033[0m ";
+static constexpr const char* const INFO_POSTFIX   = "\n";
 //
-constexpr const char* const WARNING_PREFIX = "\033[33m[WARN]\033[0m ";
-constexpr const char* const WARNING_POSTFIX = "\n";
+static constexpr const char* const WARNING_PREFIX = "\033[33m[WARN]\033[0m ";
+static constexpr const char* const WARNING_POSTFIX = "\n";
 //
-constexpr const char* const ERROR_PREFIX   = "\033[1;35m[ERROR]\033[0m ";
-constexpr const char* const ERROR_POSTFIX  = "\n";
+static constexpr const char* const ERROR_PREFIX   = "\033[1;35m[ERROR]\033[0m ";
+static constexpr const char* const ERROR_POSTFIX  = "\n";
 //
-constexpr const char* const FATAL_PREFIX   = "\033[1;31m[FATAL]\033[0m ";
-constexpr const char* const FATAL_POSTFIX  = "!\n";
+static constexpr const char* const FATAL_PREFIX   = "\033[1;31m[FATAL]\033[0m ";
+static constexpr const char* const FATAL_POSTFIX  = "!\n";
 
 
 

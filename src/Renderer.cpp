@@ -1,4 +1,4 @@
-#include "alt/SDL3.hpp"
+#include "alt/SDL3.h"
 #include "../include/Renderer.hpp"
 NAMESPACE_BEGIN(cone)
 
@@ -45,7 +45,7 @@ public:
     ~Impl() {
         if (m_renderer_exists) {
             SDL_DestroyRenderer(m_renderer);
-            SDL_DestroyWindow(m_window);
+            m_window = nullptr;
             m_renderer_exists = false;
         }
     }
@@ -84,11 +84,14 @@ Renderer This::create(void* window_ptr) {
     build.impl->m_window = (SDL_Window*)window_ptr;
     // try creating renderer, exit with message on fail
     build.impl->m_renderer = SDL_CreateRenderer(build.impl->m_window, nullptr);
-    IF_THEN(!build.impl->m_renderer, log::fatal(FN"{}", __func__, mf_failed_to_create_renderer);)
+    IF_THEN(!build.impl->m_renderer, log::fatal(FN"{}: {}", __func__, mf_failed_to_create_renderer,
+        SDL_GetError());)
 
     // mark renderer is created
     build.impl->m_renderer_ever_existed = build.impl->m_renderer_exists = true;
-    log::info(FN"created renderer for window at [{}]", __func__, window_ptr);
+    log::info(FN"created renderer for window [ID={}]",
+        __func__, SDL_GetWindowID((SDL_Window*)window_ptr)
+    );
 
     return build;
 }
@@ -118,7 +121,7 @@ void This::_line(Vec2f pos1, Vec2f pos2) {
 }
 
 
-void This::_triangleFill(Triangle<> triangle, ColorF32 color) {
+void This::_triangleFill(Triangle triangle, ColorF32 color) {
     const SDL_Vertex vertices[3] = {
         SDL_Vertex {
             .position = {triangle.first.x, triangle.first.y},
@@ -141,6 +144,20 @@ void This::_triangleFill(Triangle<> triangle, ColorF32 color) {
         nullptr, vertices, 3, nullptr, 0
     );
 }
+
+void This::_triangleLines(Triangle triangle, ColorF32 color) {
+    _setColorF32(color);
+
+    SDL_FPoint points[4] = {
+        {triangle.first.x, triangle.first.y},
+        {triangle.middle.x, triangle.middle.y},
+        {triangle.last.x, triangle.last.y},
+        {triangle.first.x, triangle.first.y},
+    };
+
+    SDL_RenderLines(impl->m_renderer, points, 4);
+}
+
 
 void This::_rectFill(Rect<> rect) {
     const SDL_FRect sdl_rect = {rect.pos.x, rect.pos.y, rect.size.x, rect.size.y};
@@ -185,21 +202,20 @@ void This::finish() {
 
 
 
-void This::triangleFill(Triangle<> triangle, ColorU8 color) {
-    _setColorU8(color);
-    
+void This::triangleFill(Triangle triangle, ColorU8 color) {
+    _triangleFill(triangle, color.toF32());
 }
 
-void This::triangleFill(Triangle<> triangle, ColorF32 color) {
-    _setColorF32(color);
+void This::triangleFill(Triangle triangle, ColorF32 color) {
+    _triangleFill(triangle, color);
 }
 
-void This::triangleLines(Triangle<> triangle, ColorU8 color) {
-    _setColorU8(color);
+void This::triangleLines(Triangle triangle, ColorU8 color) {
+    _triangleLines(triangle, color.toF32());
 }
 
-void This::triangleLines(Triangle<> triangle, ColorF32 color) {
-    _setColorF32(color);
+void This::triangleLines(Triangle triangle, ColorF32 color) {
+    _triangleLines(triangle, color);
 }
 
 

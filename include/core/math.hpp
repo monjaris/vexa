@@ -1,6 +1,7 @@
 #pragma once
 #include "defs.hpp"
 #include <cmath>
+#include <type_traits>
 NAMESPACE_BEGIN(cone)
 NAMESPACE_BEGIN(math)
 
@@ -12,26 +13,41 @@ constexpr fp32 PI32_INV = 1.0f/3.14159265f;
 constexpr fp64 PI64_INV = 1.0f/3.14159265358979323846;
 
 
+// consteval sqrt for fp32
+template <const fp32 x>
+consteval inline auto sqrt_fp32_CT() -> decltype(x) {
+    return std::sqrtf(x);
+}
+// consteval sqrt for fp64
+template <const fp64 x>
+consteval inline auto sqrt_fp64_CT() -> decltype(x) {
+    return std::sqrt(x);
+}
 // sqrt for fp32
 template <const fp32 x>
-consteval inline auto sqrt_fp32() -> decltype(x) {
+constexpr inline auto sqrt_fp32() -> decltype(x) {
     return std::sqrtf(x);
 }
 // sqrt for fp64
 template <const fp64 x>
-consteval inline auto sqrt_fp64() -> decltype(x) {
+constexpr inline auto sqrt_fp64() -> decltype(x) {
     return std::sqrt(x);
+}
+// generic sqrt for metaprogramming
+template<typename FloatT>
+constexpr inline auto sqrt(FloatT x) {
+    if constexpr (is_same_t<fp32, FloatT>) return std::sqrtf(x);
+    else if constexpr (is_same_t<fp64, FloatT>) return std::sqrt(x);
+    else static_assert(true, "invalid type");
 }
 
 
 // sqrt for fp32
-template <const fp32 x, const fp32 exp>
-consteval inline auto pow() -> decltype(x) {
+constexpr inline fp32 pow(fp32 x, fp32 exp) noexcept {
     return std::powf(x, exp);
 }
 // pow for fp64
-template <const fp64 x, const fp32 exp>
-consteval inline auto pow() -> decltype(x) {
+constexpr inline fp64 pow(fp64 x, fp64 exp) noexcept {
     return std::pow(x, exp);
 }
 

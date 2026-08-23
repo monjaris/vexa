@@ -3,7 +3,7 @@
 NAMESPACE_BEGIN(cone)
 
 
-class MK_NODISCARD Flags {
+class CN_NODISCARD Flags {
     using This = Flags;
     uint32 m_value;
 
@@ -16,7 +16,7 @@ public:
 
 
     // Getters
-    MK_NODISCARD constexpr Value value() const noexcept { return m_value; }
+    CN_NODISCARD constexpr Value value() const noexcept { return m_value; }
     constexpr bool has(const Flags& flags) const noexcept { return (m_value & flags.m_value)!=0; }
 
     // sets the value directly

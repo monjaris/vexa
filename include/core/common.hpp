@@ -37,16 +37,16 @@ consteval usize item_size(const T&) noexcept {
 
 // a value with default value storage
 template<typename T>
-class ConfigValue {
+class CfgVal {
     T m_default;
     T value;
 public:
 
-    constexpr ConfigValue (T default_and_initial_value)
+    constexpr CfgVal (T default_and_initial_value)
         : m_default(default_and_initial_value), value(m_default)
     {}
 
-    constexpr ConfigValue& operator=(const T& new_value) {
+    constexpr CfgVal& operator=(const T& new_value) {
         value = new_value;
         return *this;
     }
@@ -98,7 +98,7 @@ class Ref {
 public:
     Ref(T& data): m_data(&data) {}
 
-    MK_NODISCARD const T& get() const noexcept { return *m_data; }
+    CN_NODISCARD const T& get() const noexcept { return *m_data; }
 };
 
 
