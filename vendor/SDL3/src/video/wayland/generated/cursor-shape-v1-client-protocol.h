@@ -82,16 +82,14 @@ extern const struct wl_interface wp_cursor_shape_manager_v1_interface;
  * @page page_iface_wp_cursor_shape_device_v1 wp_cursor_shape_device_v1
  * @section page_iface_wp_cursor_shape_device_v1_desc Description
  *
- * This interface advertises the list of supported cursor shapes for a
- * device, and allows clients to set the cursor shape.
+ * This interface allows clients to set the cursor shape.
  * @section page_iface_wp_cursor_shape_device_v1_api API
  * See @ref iface_wp_cursor_shape_device_v1.
  */
 /**
  * @defgroup iface_wp_cursor_shape_device_v1 The wp_cursor_shape_device_v1 interface
  *
- * This interface advertises the list of supported cursor shapes for a
- * device, and allows clients to set the cursor shape.
+ * This interface allows clients to set the cursor shape.
  */
 extern const struct wl_interface wp_cursor_shape_device_v1_interface;
 #endif
@@ -150,6 +148,9 @@ wp_cursor_shape_manager_v1_destroy(struct wp_cursor_shape_manager_v1 *wp_cursor_
  * @ingroup iface_wp_cursor_shape_manager_v1
  *
  * Obtain a wp_cursor_shape_device_v1 for a wl_pointer object.
+ *
+ * When the pointer capability is removed from the wl_seat, the
+ * wp_cursor_shape_device_v1 object becomes inert.
  */
 static inline struct wp_cursor_shape_device_v1 *
 wp_cursor_shape_manager_v1_get_pointer(struct wp_cursor_shape_manager_v1 *wp_cursor_shape_manager_v1, struct wl_pointer *pointer)
@@ -166,6 +167,9 @@ wp_cursor_shape_manager_v1_get_pointer(struct wp_cursor_shape_manager_v1 *wp_cur
  * @ingroup iface_wp_cursor_shape_manager_v1
  *
  * Obtain a wp_cursor_shape_device_v1 for a zwp_tablet_tool_v2 object.
+ *
+ * When the zwp_tablet_tool_v2 is removed, the wp_cursor_shape_device_v1
+ * object becomes inert.
  */
 static inline struct wp_cursor_shape_device_v1 *
 wp_cursor_shape_manager_v1_get_tablet_tool_v2(struct wp_cursor_shape_manager_v1 *wp_cursor_shape_manager_v1, struct zwp_tablet_tool_v2 *tablet_tool)
@@ -188,6 +192,14 @@ wp_cursor_shape_manager_v1_get_tablet_tool_v2(struct wp_cursor_shape_manager_v1 
  *
  * The names are taken from the CSS W3C specification:
  * https://w3c.github.io/csswg-drafts/css-ui/#cursor
+ * with a few additions.
+ *
+ * Note that there are some groups of cursor shapes that are related:
+ * The first group is drag-and-drop cursors which are used to indicate
+ * the selected action during dnd operations. The second group is resize
+ * cursors which are used to indicate resizing and moving possibilities
+ * on window borders. It is recommended that the shapes in these groups
+ * should use visually compatible images and metaphors.
  */
 enum wp_cursor_shape_device_v1_shape {
 	/**
@@ -326,7 +338,25 @@ enum wp_cursor_shape_device_v1_shape {
 	 * something can be zoomed out
 	 */
 	WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ZOOM_OUT = 34,
+	/**
+	 * drag-and-drop: the user will select which action will be carried out (non-css value)
+	 * @since 2
+	 */
+	WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DND_ASK = 35,
+	/**
+	 * resizing: something can be moved or resized in any direction (non-css value)
+	 * @since 2
+	 */
+	WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ALL_RESIZE = 36,
 };
+/**
+ * @ingroup iface_wp_cursor_shape_device_v1
+ */
+#define WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DND_ASK_SINCE_VERSION 2
+/**
+ * @ingroup iface_wp_cursor_shape_device_v1
+ */
+#define WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ALL_RESIZE_SINCE_VERSION 2
 #endif /* WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ENUM */
 
 #ifndef WP_CURSOR_SHAPE_DEVICE_V1_ERROR_ENUM

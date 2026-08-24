@@ -128,11 +128,14 @@
  * [blog post](https://moonside.games/posts/layers-all-the-way-down/)
  * explaining this situation.
  *
- * It is optimal for apps to pre-compile the shader formats they might use,
- * but for ease of use SDL provides a separate project,
+ * Shader binaries can be compiled using standard Vulkan, Direct3D or Metal
+ * tooling, but SDL provides a separate project,
  * [SDL_shadercross](https://github.com/libsdl-org/SDL_shadercross)
- * , for performing runtime shader cross-compilation. It also has a CLI
- * interface for offline precompilation as well.
+ * , as a convenient command-line wrapper for cross-compiling shaders from
+ * HLSL or SPIR-V to any backend format (SPIR-V, DXBC, DXIL, MSL).
+ *
+ * While offline ahead-of-time compilation is preferred, SDL_shadercross is
+ * also able to operate as a runtime library for advanced usecases.
  *
  * This is an extremely quick overview that leaves out several important
  * details. Already, though, one can see that GPU programming can be quite
@@ -679,8 +682,7 @@ typedef enum SDL_GPUIndexElementSize
  * a format is supported before using it. However, there are a few guaranteed
  * formats.
  *
- * FIXME: Check universal support for 32-bit component formats FIXME: Check
- * universal support for SIMULTANEOUS_READ_WRITE
+ * FIXME: Check universal support for 32-bit component formats
  *
  * For SAMPLER usage, the following formats are universally supported:
  *
@@ -750,6 +752,13 @@ typedef enum SDL_GPUIndexElementSize
  *
  * Unless D16_UNORM is sufficient for your purposes, always check which of
  * D24/D32 is supported before creating a depth-stencil texture!
+ *
+ * For SIMULTANEOUS_READ_WRITE usage, the following formats are universally
+ * supported:
+ *
+ * - R32_FLOAT
+ * - R32_UINT
+ * - R32_INT
  *
  * \since This enum is available since SDL 3.2.0.
  *
@@ -884,8 +893,8 @@ typedef enum SDL_GPUTextureFormat
 /**
  * Specifies how a texture is intended to be used by the client.
  *
- * A texture must have at least one usage flag. Note that some usage flag
- * combinations are invalid.
+ * A texture must have at least one usage flag. Note that combining SAMPLER
+ * with STORAGE_READ flags is invalid.
  *
  * With regards to compute storage usage, READ | WRITE means that you can have
  * shader A that only writes into the texture and shader B that only reads
@@ -967,13 +976,16 @@ typedef enum SDL_GPUCubeMapFace
 /**
  * Specifies how a buffer is intended to be used by the client.
  *
- * A buffer must have at least one usage flag. Note that some usage flag
- * combinations are invalid.
+ * A buffer must have at least one usage flag.
+ *
+ * If a buffer has multiple read usages, this may lead to a performance
+ * penalty due to more conservative memory barriers, but it also may not
+ * necessarily affect the performance.
  *
  * Unlike textures, READ | WRITE can be used for simultaneous read-write
  * usage. The same data synchronization concerns as textures apply.
  *
- * If you use a STORAGE flag, the data in the buffer must respect std140
+ * If you use a STORAGE flag, the data in the buffer must respect std430
  * layout conventions. In practical terms this means you must ensure that vec3
  * and vec4 fields are 16-byte aligned.
  *
@@ -1693,6 +1705,8 @@ typedef struct SDL_GPUVertexInputState
  * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_GPUDepthStencilState
+ * \sa SDL_GPUStencilOp
+ * \sa SDL_GPUCompareOp
  */
 typedef struct SDL_GPUStencilOpState
 {
@@ -1805,6 +1819,7 @@ typedef struct SDL_GPUBufferCreateInfo
  *
  * \since This struct is available since SDL 3.2.0.
  *
+ * \sa SDL_GPUTransferBufferUsage
  * \sa SDL_CreateGPUTransferBuffer
  */
 typedef struct SDL_GPUTransferBufferCreateInfo
@@ -1832,6 +1847,9 @@ typedef struct SDL_GPUTransferBufferCreateInfo
  * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_GPUGraphicsPipelineCreateInfo
+ * \sa SDL_GPUFillMode
+ * \sa SDL_GPUCullMode
+ * \sa SDL_GPUFrontFace
  */
 typedef struct SDL_GPURasterizerState
 {
@@ -1854,6 +1872,7 @@ typedef struct SDL_GPURasterizerState
  * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_GPUGraphicsPipelineCreateInfo
+ * \sa SDL_GPUSampleCount
  */
 typedef struct SDL_GPUMultisampleState
 {
@@ -1872,6 +1891,8 @@ typedef struct SDL_GPUMultisampleState
  * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_GPUGraphicsPipelineCreateInfo
+ * \sa SDL_GPUCompareOp
+ * \sa SDL_GPUStencilOpState
  */
 typedef struct SDL_GPUDepthStencilState
 {
@@ -1895,6 +1916,8 @@ typedef struct SDL_GPUDepthStencilState
  * \since This struct is available since SDL 3.2.0.
  *
  * \sa SDL_GPUGraphicsPipelineTargetInfo
+ * \sa SDL_GPUTextureFormat
+ * \sa SDL_GPUColorTargetBlendState
  */
 typedef struct SDL_GPUColorTargetDescription
 {
@@ -2382,6 +2405,20 @@ extern SDL_DECLSPEC SDL_GPUDevice * SDLCALL SDL_CreateGPUDeviceWithProperties(
 #define SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER                       "SDL.gpu.device.create.vulkan.options"
 #define SDL_PROP_GPU_DEVICE_CREATE_METAL_ALLOW_MACFAMILY1_BOOLEAN               "SDL.gpu.device.create.metal.allowmacfamily1"
 
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_ENABLE_BOOLEAN                            "SDL.gpu.device.create.xr.enable"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_INSTANCE_POINTER                          "SDL.gpu.device.create.xr.instance_out"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_SYSTEM_ID_POINTER                         "SDL.gpu.device.create.xr.system_id_out"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_VERSION_NUMBER                            "SDL.gpu.device.create.xr.version"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_FORM_FACTOR_NUMBER                        "SDL.gpu.device.create.xr.form_factor"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_EXTENSION_COUNT_NUMBER                    "SDL.gpu.device.create.xr.extensions.count"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_EXTENSION_NAMES_POINTER                   "SDL.gpu.device.create.xr.extensions.names"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_LAYER_COUNT_NUMBER                        "SDL.gpu.device.create.xr.layers.count"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_LAYER_NAMES_POINTER                       "SDL.gpu.device.create.xr.layers.names"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_APPLICATION_NAME_STRING                   "SDL.gpu.device.create.xr.application.name"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_APPLICATION_VERSION_NUMBER                "SDL.gpu.device.create.xr.application.version"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_ENGINE_NAME_STRING                        "SDL.gpu.device.create.xr.engine.name"
+#define SDL_PROP_GPU_DEVICE_CREATE_XR_ENGINE_VERSION_NUMBER                     "SDL.gpu.device.create.xr.engine.version"
+
 
 /**
  * A structure specifying additional options when using Vulkan.
@@ -2443,7 +2480,9 @@ extern SDL_DECLSPEC int SDLCALL SDL_GetNumGPUDrivers(void);
  * meant to be proper names.
  *
  * \param index the index of a GPU driver.
- * \returns the name of the GPU driver with the given **index**.
+ * \returns the name of the GPU driver with the given **index** or NULL when
+ *          the index is out of bounds; call SDL_GetError() for more
+ *          information.
  *
  * \since This function is available since SDL 3.2.0.
  *
@@ -2587,30 +2626,198 @@ extern SDL_DECLSPEC SDL_PropertiesID SDLCALL SDL_GetGPUDeviceProperties(SDL_GPUD
 /**
  * Creates a pipeline object to be used in a compute workflow.
  *
- * Shader resource bindings must be authored to follow a particular order
- * depending on the shader format.
+ * Shader resource bindings must be authored to follow a particular convention
+ * depending on the shader format. See below for details.
  *
- * For SPIR-V shaders, use the following resource sets:
+ * ---
  *
- * - 0: Sampled textures, followed by read-only storage textures, followed by
+ * **SPIR-V (GLSL)**
+ *
+ * For compute shaders, use:
+ *
+ * - Set 0 for samplers, read-only storage textures, and read-only storage
+ *   buffers
+ * - Set 1 for read-write storage textures and read-write storage buffers
+ * - Set 2 for uniform data
+ *
+ * The first resource in a given set must have a `binding` of 0. Additional
+ * resources must appear at consecutive bindings (1, 2, etc), leaving no gaps
+ * in the set.
+ *
+ * All samplers must come first in the binding order of Set 0, in order of how
+ * they are bound via `SDL_BindGPUComputeSamplers()`.
+ *
+ * All read-only storage textures must come after all samplers in the binding
+ * order, in order of how they are bound via
+ * `SDL_BindGPUComputeStorageTextures()`.
+ *
+ * All read-only storage buffers must come after all read-only storage
+ * textures in the binding order, in order of how they are bound via
+ * `SDL_BindGPUComputeStorageBuffers()`.
+ *
+ * All read-write storage textures must come first in the binding order of Set
+ * 1, in order of how they are bound via `SDL_BeginGPUComputePass()`.
+ *
+ * All read-write storage buffers must come after all read-write storage
+ * textures in the binding order, in order of how they are bound via
+ * `SDL_BeginGPUComputePass()`.
+ *
+ * **Example**
+ *
+ * If a compute shader binds 2 of each resource type, its binding layout
+ * should look like this:
+ *
+ * ```glsl
+ * // Any samplers come first in Set 0, in SDL bind slot order
+ * layout(set = 0, binding = 0) uniform sampler2D samplerBoundToSlot0;
+ * layout(set = 0, binding = 1) uniform sampler2D samplerBoundToSlot1;
+ * // Any read-only storage textures come next in Set 0, in SDL bind slot order
+ * layout(set = 0, binding = 2) uniform image2D storageTextureBoundToSlot0;
+ * layout(set = 0, binding = 3) uniform image2D storageTextureBoundToSlot1;
+ * // Any read-only storage buffers come next in Set 0, in SDL bind slot order
+ * layout(set = 0, binding = 4) buffer storageBufferBoundToSlot0 { ... };
+ * layout(set = 0, binding = 5) buffer storageBufferBoundToSlot1 { ... };
+ * // Any read-write storage textures come first in Set 1, in SDL bind slot order
+ * layout(set = 1, binding = 0) uniform image2D rwStorageTextureBoundToSlot0;
+ * layout(set = 1, binding = 1) uniform image2D rwStorageTextureBoundToSlot1;
+ * // Any read-write storage buffers come next in Set 1, in SDL bind slot order
+ * layout(set = 1, binding = 2) buffer rwStorageBufferBoundToSlot0 { ... };
+ * layout(set = 1, binding = 3) buffer rwStorageBufferBoundToSlot1 { ... };
+ * // Any uniform buffers are in Set 2, in SDL slot order
+ * layout(set = 2, binding = 0) uniform UniformDataBoundToSlot0 { ... };
+ * layout(set = 2, binding = 1) uniform UniformDataBoundToSlot1 { ... };
+ * ```
+ *
+ * ---
+ *
+ * **DXBC / DXIL (HLSL)**
+ *
+ * For compute shaders, use:
+ *
+ * - `(t[n], space0)` for sampled textures, read-only storage textures, and
  *   read-only storage buffers
- * - 1: Read-write storage textures, followed by read-write storage buffers
- * - 2: Uniform buffers
+ * - `(s[n], space0)` for samplers
+ * - `(u[n], space1)` for read-write storage textures and read-write storage
+ *   buffers
+ * - `(b[n], space2)` for uniform data
  *
- * For DXBC and DXIL shaders, use the following register order:
+ * The first resource in a given register set must have a register index of
+ * `0`. Additional resources must appear at consecutive indices (1, 2, etc),
+ * leaving no gaps in the register set.
  *
- * - (t[n], space0): Sampled textures, followed by read-only storage textures,
- *   followed by read-only storage buffers
- * - (u[n], space1): Read-write storage textures, followed by read-write
- *   storage buffers
- * - (b[n], space2): Uniform buffers
+ * All sampled textures must come first in the `t` register set, in order of
+ * how they are bound via `SDL_BindGPUComputeSamplers()`.
  *
- * For MSL/metallib, use the following order:
+ * All sampler objects must be in the `s` register set, in the same order as
+ * the textures above.
  *
- * - [[buffer]]: Uniform buffers, followed by read-only storage buffers,
- *   followed by read-write storage buffers
- * - [[texture]]: Sampled textures, followed by read-only storage textures,
- *   followed by read-write storage textures
+ * All read-only storage textures must come after all samplers in the `t`
+ * register set, in order of how they are bound via
+ * `SDL_BindComputeStorageTextures()`.
+ *
+ * All read-only storage buffers must come after all storage textures in the
+ * `t` register set, in order of how they are bound via
+ * `SDL_BindComputeStorageBuffers()`.
+ *
+ * All read-write storage textures must come first in the `u` register set in
+ * `space1`, in order of how they are bound via `SDL_BeginGPUComputePass()`.
+ *
+ * All read-write storage buffers must come after all read-write storage
+ * textures in the `u` register set in `space1`, in order of how they are
+ * bound via `SDL_BeginGPUComputePass()`.
+ *
+ * **Example**
+ *
+ * If a compute shader binds 2 of each resource type, the layout should look
+ * like this:
+ *
+ * ```c
+ * // Any samplers and sampled textures come first in their respective register sets, in SDL bind slot order
+ * SamplerState SamplerBoundToSlot0 : register( s0, space0 );
+ * SamplerState SamplerBoundToSlot1 : register( s1, space0 );
+ * Texture2D SampledTextureBoundToSlot0 : register( t0, space0 );
+ * Texture2D SampledTextureBoundToSlot1 : register( t1, space0 );
+ * // Any read-only storage textures come next in the `t` register set, in SDL bind slot order
+ * Texture2D StorageTextureBoundToSlot0 : register( t2, space0 );
+ * Texture2D StorageTextureBoundToSlot1 : register( t3, space0 );
+ * // Any read-only storage buffers come next in the `t` register set, in SDL bind slot order
+ * ByteAddressBuffer StorageBufferBoundToSlot0 : register( t4, space0 );
+ * ByteAddressBuffer StorageBufferBoundToSlot1 : register( t5, space0 );
+ * // Any read-write storage textures come first in the `u` register set in space1, in SDL bind slot order
+ * RWTexture2D RWStorageTextureBoundToSlot0 : register( u0, space1 );
+ * RWTexture2D RWStorageTextureBoundToSlot1 : register( u1, space1 );
+ * // Any read-write storage buffers come next in the `u` register set in space1, in SDL bind slot order
+ * RWByteAddressBuffer RWStorageTextureBoundToSlot0 : register( u2, space1 );
+ * RWByteAddressBuffer RWStorageTextureBoundToSlot1 : register( u3, space1 );
+ * // Any uniform buffers are in the `b` register set in space2, in SDL slot order
+ * cbuffer UniformDataBoundToSlot0 : register( b0, space2 ) { ... };
+ * cbuffer UniformDataBoundToSlot1 : register( b1, space2 ) { ... };
+ * ```
+ *
+ * ---
+ *
+ * **MSL / Metallib (Metal Shading Language)**
+ *
+ * The first resource in a given argument table must have an index of `0`.
+ * Additional resources must appear at consecutive indices (1, 2, etc),
+ * leaving no gaps in the table.
+ *
+ * All sampled textures must come first in the `[[texture]]` argument table,
+ * in order of how they are bound via `SDL_BindGPUComputeSamplers()`.
+ *
+ * All sampler objects must be in the `[[sampler]]` argument table, in the
+ * same order as the textures above.
+ *
+ * All read-only storage textures must come after all sampled textures in the
+ * `[[texture]]` argument table, in order of how they are bound via
+ * `SDL_BindGPUComputeStorageTextures()`.
+ *
+ * All read-write storage textures must come after all read-only storage
+ * textures in the `[[texture]]` argument table, in order of how they are
+ * bound via `SDL_BeginGPUComputePass()`.
+ *
+ * All uniform buffers must come first in the `[[buffer]]` argument table, in
+ * order of their slots in `SDL_PushGPUComputeUniformData()`.
+ *
+ * All read-only storage buffers must come after all uniform buffers in the
+ * `[[buffer]]` argument table, in order of how they are bound via
+ * `SDL_BindGPUComputeStorageBuffers()`.
+ *
+ * All read-write storage buffers must come after all read-only storage
+ * buffers in the `[[buffer]]` argument table, in order of how they are bound
+ * via `SDL_BeginGPUComputePass()`.
+ *
+ * **Example**
+ *
+ * For a compute shader binding 2 of each resource type, the main function
+ * signature should look like this:
+ *
+ * ```c++
+ * kernel void ExampleComputeShader(
+ *     // Any samplers go in the `sampler` table, in SDL bind slot order
+ *     sampler samplerBoundToSlot0 [[sampler(0)]],
+ *     sampler samplerBoundToSlot1 [[sampler(1)]],
+ *     // Any sampled textures come first in the `texture` table, in SDL bind slot order
+ *     texture2d<float> sampledTextureBoundToSlot0 [[texture(0)]],
+ *     texture2d<float> sampledTextureBoundToSlot1 [[texture(1)]],
+ *     // Any read-only storage textures come next in the `texture` table, in SDL bind slot order
+ *     texture2d<float> storageTextureBoundToSlot0 [[texture(2)]],
+ *     texture2d<float> storageTextureBoundToSlot1 [[texture(3)]],
+ *     // Any read-write storage textures come next in the `texture` table, in SDL bind slot order
+ *     texture2d<float, access::write> rwStorageTextureBoundToSlot0 [[texture(4)]];
+ *     texture2d<float, access::write> rwStorageTextureBoundToSlot1 [[texture(5)]];
+ *     // Any uniform buffers come first in the `buffer` table, in SDL slot order
+ *     constant SomeUniformStruct uniformDataBoundToSlot0 [[buffer(0)]],
+ *     constant SomeUniformStruct uniformDataBoundToSlot1 [[buffer(1)]],
+ *     // Any read-only storage buffers come next in the `buffer` table, in SDL bind slot order
+ *     device SomeBufferStruct& storageBufferBoundToSlot0 [[buffer(2)]],
+ *     device SomeBufferStruct& storageBufferBoundToSlot1 [[buffer(3)]]);
+ *     // Any read-write storage buffers come next in the `buffer` table, in SDL bind slot order
+ *     device SomeBufferStruct& rwStorageBufferBoundToSlot0 [[buffer(4)]];
+ *     device SomeBufferStruct& rwStorageBufferBoundToSlot1 [[buffer(5)]]);
+ * ```
+ *
+ * ---
  *
  * There are optional properties that can be provided through `props`. These
  * are the supported properties:
@@ -2692,57 +2899,174 @@ extern SDL_DECLSPEC SDL_GPUSampler * SDLCALL SDL_CreateGPUSampler(
 /**
  * Creates a shader to be used when creating a graphics pipeline.
  *
- * Shader resource bindings must be authored to follow a particular order
- * depending on the shader format.
+ * Shader resource bindings must be authored to follow a particular convention
+ * depending on the shader format. See below for details.
  *
- * For SPIR-V shaders, use the following resource sets:
+ * ---
  *
- * For vertex shaders:
+ * **SPIR-V (GLSL)**
  *
- * - 0: Sampled textures, followed by storage textures, followed by storage
- *   buffers
- * - 1: Uniform buffers
+ * For vertex shaders, use: - Set 0 for samplers, storage textures, and
+ * storage buffers - Set 1 for uniform data
  *
- * For fragment shaders:
+ * For fragment shaders, use: - Set 2 for samplers, storage textures, and
+ * storage buffers - Set 3 for uniform data
  *
- * - 2: Sampled textures, followed by storage textures, followed by storage
- *   buffers
- * - 3: Uniform buffers
+ * The first resource in a given set must have a `binding` of 0. Additional
+ * resources must appear at consecutive bindings (1, 2, etc), leaving no gaps
+ * in the set.
  *
- * For DXBC and DXIL shaders, use the following register order:
+ * All samplers must come first in the binding order, in order of how they are
+ * bound via `SDL_BindGPU*Samplers()`.
  *
- * For vertex shaders:
+ * All storage textures must come after all samplers in the binding order, in
+ * order of how they are bound via `SDL_Bind*StorageTextures()`.
  *
- * - (t[n], space0): Sampled textures, followed by storage textures, followed
- *   by storage buffers
- * - (s[n], space0): Samplers with indices corresponding to the sampled
- *   textures
- * - (b[n], space1): Uniform buffers
+ * All storage buffers must come after all storage textures in the binding
+ * order, in order of how they are bound via `SDL_Bind*StorageBuffers()`.
  *
- * For pixel shaders:
+ * **Example**
  *
- * - (t[n], space2): Sampled textures, followed by storage textures, followed
- *   by storage buffers
- * - (s[n], space2): Samplers with indices corresponding to the sampled
- *   textures
- * - (b[n], space3): Uniform buffers
+ * If a vertex shader binds 2 samplers, 2 storage textures, 2 storage buffers,
+ * and 2 uniform buffers, its binding layout should look like this:
  *
- * For MSL/metallib, use the following order:
+ * ```glsl
+ * // Any samplers come first in the set, in SDL bind slot order
+ * layout(set = 0, binding = 0) uniform sampler2D samplerBoundToSlot0;
+ * layout(set = 0, binding = 1) uniform sampler2D samplerBoundToSlot1;
+ * // Any storage textures come next in the set, in SDL bind slot order
+ * layout(set = 0, binding = 2) uniform image2D storageTextureBoundToSlot0;
+ * layout(set = 0, binding = 3) uniform image2D storageTextureBoundToSlot1;
+ * // Any storage buffers come next in the set, in SDL bind slot order
+ * layout(set = 0, binding = 4) buffer storageBufferBoundToSlot0 { ... };
+ * layout(set = 0, binding = 5) buffer storageBufferBoundToSlot1 { ... };
+ * // Any uniform buffers are in their own set, in SDL slot order
+ * layout(set = 1, binding = 0) uniform UniformDataBoundToSlot0 { ... };
+ * layout(set = 1, binding = 1) uniform UniformDataBoundToSlot1 { ... };
+ * ```
  *
- * - [[texture]]: Sampled textures, followed by storage textures
- * - [[sampler]]: Samplers with indices corresponding to the sampled textures
- * - [[buffer]]: Uniform buffers, followed by storage buffers. Vertex buffer 0
- *   is bound at [[buffer(14)]], vertex buffer 1 at [[buffer(15)]], and so on.
- *   Rather than manually authoring vertex buffer indices, use the
- *   [[stage_in]] attribute which will automatically use the vertex input
- *   information from the SDL_GPUGraphicsPipeline.
+ * ---
  *
- * Shader semantics other than system-value semantics do not matter in D3D12
- * and for ease of use the SDL implementation assumes that non system-value
- * semantics will all be TEXCOORD. If you are using HLSL as the shader source
- * language, your vertex semantics should start at TEXCOORD0 and increment
- * like so: TEXCOORD1, TEXCOORD2, etc. If you wish to change the semantic
- * prefix to something other than TEXCOORD you can use
+ * **DXBC / DXIL (HLSL)**
+ *
+ * For vertex shaders, use: - `(t[n], space0)` for sampled textures, storage
+ * textures, and storage buffers - `(s[n], space0)` for samplers - `(b[n],
+ * space1)` for uniform data
+ *
+ * For fragment (aka "pixel") shaders, use: - `(t[n], space2)` for sampled
+ * textures, storage textures, and storage buffers - `(s[n], space2)` for
+ * samplers - `(b[n], space3)` for uniform data
+ *
+ * The first resource in a given register set must have a register index of
+ * `0`. Additional resources must appear at consecutive indices (1, 2, etc),
+ * leaving no gaps in the register set.
+ *
+ * All sampled textures must come first in the `t` register set, in order of
+ * how they are bound via `SDL_BindGPU*Samplers()`.
+ *
+ * All sampler objects must be in the `s` register set, in the same order as
+ * the textures above.
+ *
+ * All storage textures must come after all samplers in the `t` register set,
+ * in order of how they are bound via `SDL_Bind*StorageTextures()`.
+ *
+ * All storage buffers must come after all storage textures in the `t`
+ * register set, in order of how they are bound via
+ * `SDL_Bind*StorageBuffers()`.
+ *
+ * **Example**
+ *
+ * If a pixel shader binds 2 samplers, 2 storage textures, 2 storage buffers,
+ * and 2 uniform buffers, its binding layout should look like this:
+ *
+ * ```c
+ * // Any samplers and sampled textures come first in their respective register sets, in SDL bind slot order
+ * SamplerState SamplerBoundToSlot0 : register( s0, space2 );
+ * SamplerState SamplerBoundToSlot1 : register( s1, space2 );
+ * Texture2D SampledTextureBoundToSlot0 : register( t0, space2 );
+ * Texture2D SampledTextureBoundToSlot1 : register( t1, space2 );
+ * // Any storage textures come next in the `t` register set, in SDL bind slot order
+ * Texture2D StorageTextureBoundToSlot0 : register( t2, space2 );
+ * Texture2D StorageTextureBoundToSlot1 : register( t3, space2 );
+ * // Any storage buffers come next in the `t` register set, in SDL bind slot order
+ * ByteAddressBuffer StorageBufferBoundToSlot0 : register( t4, space2 );
+ * ByteAddressBuffer StorageBufferBoundToSlot1 : register( t5, space2 );
+ * // Any uniform buffers are in the `b` register set *and* in their own space, in SDL slot order
+ * cbuffer UniformDataBoundToSlot0 : register( b0, space3 ) { ... };
+ * cbuffer UniformDataBoundToSlot1 : register( b1, space3 ) { ... };
+ * ```
+ *
+ * ---
+ *
+ * **MSL / Metallib (Metal Shading Language)**
+ *
+ * The first resource in a given argument table must have an index of `0`.
+ * Additional resources must appear at consecutive indices (1, 2, etc),
+ * leaving no gaps in the table. (_Except_ in the case of vertex buffers,
+ * which are mentioned below.)
+ *
+ * All sampled textures must come first in the `[[texture]]` argument table,
+ * in order of how they are bound via `SDL_BindGPU*Samplers()`.
+ *
+ * All sampler objects must be in the `[[sampler]]` argument table, in the
+ * same order as the textures above.
+ *
+ * All storage textures must come after all sampled textures in the
+ * `[[texture]]` argument table, in order of how they are bound via
+ * `SDL_BindGPU*StorageTextures()`.
+ *
+ * All uniform buffers must come first in the `[[buffer]]` argument table, in
+ * order of their slots in `SDL_PushGPU*UniformData()`.
+ *
+ * All storage buffers must come after all uniform buffers in the `[[buffer]]`
+ * argument table, in order of how they are bound via
+ * `SDL_BindGPU*StorageBuffers()`.
+ *
+ * In Metal, vertex buffers are also included in the `[[buffer]]` argument
+ * table. To work around this, SDL forces the vertex buffer bound to slot 0 to
+ * be bound at `[[buffer(14)]]`. The vertex buffer in slot 1 will be bound to
+ * `[[buffer(15)]]`, and so on. Rather than manually authoring vertex buffer
+ * indices, use the `[[stage_in]]` attribute which will automatically use the
+ * vertex input information from the SDL_GPUGraphicsPipeline.
+ *
+ * **Example**
+ *
+ * For a vertex shader with 1 vertex buffer, 2 samplers, 2 storage textures, 2
+ * storage buffers, and 2 uniform buffers, the main function signature should
+ * look something like this:
+ *
+ * ```c++
+ * vertex VertexOutput ExampleVertexShader(
+ *     // Vertex buffers are their own special thing...
+ *     SomeVertexInput input [[stage_in]], // alternatively, SomeVertexInput input [[buffer(14)]]
+ *     // Any samplers go in the `sampler` table, in SDL bind slot order
+ *     sampler samplerBoundToSlot0 [[sampler(0)]],
+ *     sampler samplerBoundToSlot1 [[sampler(1)]],
+ *     // Any sampled textures come first in the `texture` table, in SDL bind slot order
+ *     texture2d<float> sampledTextureBoundToSlot0 [[texture(0)]],
+ *     texture2d<float> sampledTextureBoundToSlot1 [[texture(1)]],
+ *     // Any storage textures come next in the `texture` table, in SDL bind slot order
+ *     texture2d<float> storageTextureBoundToSlot0 [[texture(2)]],
+ *     texture2d<float> storageTextureBoundToSlot1 [[texture(3)]],
+ *     // Any uniform buffers come first in the `buffer` table, in SDL slot order
+ *     constant SomeUniformStruct uniformDataBoundToSlot0 [[buffer(0)]],
+ *     constant SomeUniformStruct uniformDataBoundToSlot1 [[buffer(1)]],
+ *     // Any storage buffers come next in the `buffer` table, in SDL bind slot order
+ *     device SomeBufferStruct& storageBufferBoundToSlot0 [[buffer(2)]],
+ *     device SomeBufferStruct& storageBufferBoundToSlot1 [[buffer(3)]]);
+ *
+ * ```
+ *
+ * ---
+ *
+ * Shader semantics other than system-value semantics do not matter in D3D12.
+ * For ease of use, the SDL implementation assumes that non system-value
+ * semantics will all be `TEXCOORD`. If you are using HLSL as the shader
+ * source language, your vertex semantics should start at `TEXCOORD0` and
+ * increment like so: `TEXCOORD1`, `TEXCOORD2`, etc.
+ *
+ * If you wish to change the semantic prefix to something other than
+ * `TEXCOORD` you can use
  * SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING with
  * SDL_CreateGPUDeviceWithProperties().
  *
@@ -2847,7 +3171,7 @@ extern SDL_DECLSPEC SDL_GPUTexture * SDLCALL SDL_CreateGPUTexture(
  * Note that certain combinations of usage flags are invalid. For example, a
  * buffer cannot have both the VERTEX and INDEX flags.
  *
- * If you use a STORAGE flag, the data in the buffer must respect std140
+ * If you use a STORAGE flag, the data in the buffer must respect std430
  * layout conventions. In practical terms this means you must ensure that vec3
  * and vec4 fields are 16-byte aligned.
  *
@@ -2909,6 +3233,8 @@ extern SDL_DECLSPEC SDL_GPUBuffer * SDLCALL SDL_CreateGPUBuffer(
  *
  * \since This function is available since SDL 3.2.0.
  *
+ * \sa SDL_MapGPUTransferBuffer
+ * \sa SDL_UnmapGPUTransferBuffer
  * \sa SDL_UploadToGPUBuffer
  * \sa SDL_DownloadFromGPUBuffer
  * \sa SDL_UploadToGPUTexture
@@ -3042,6 +3368,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_PopGPUDebugGroup(
  *
  * You must not reference the texture after calling this function.
  *
+ * It is safe to pass NULL for `texture`, in that case this function is a
+ * no-op.
+ *
  * \param device a GPU context.
  * \param texture a texture to be destroyed.
  *
@@ -3055,6 +3384,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUTexture(
  * Frees the given sampler as soon as it is safe to do so.
  *
  * You must not reference the sampler after calling this function.
+ *
+ * It is safe to pass NULL for `sampler`, in that case this function is a
+ * no-op.
  *
  * \param device a GPU context.
  * \param sampler a sampler to be destroyed.
@@ -3070,6 +3402,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUSampler(
  *
  * You must not reference the buffer after calling this function.
  *
+ * It is safe to pass NULL for `buffer`, in that case this function is a
+ * no-op.
+ *
  * \param device a GPU context.
  * \param buffer a buffer to be destroyed.
  *
@@ -3083,6 +3418,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUBuffer(
  * Frees the given transfer buffer as soon as it is safe to do so.
  *
  * You must not reference the transfer buffer after calling this function.
+ *
+ * It is safe to pass NULL for `transfer_buffer`, in that case this function
+ * is a no-op.
  *
  * \param device a GPU context.
  * \param transfer_buffer a transfer buffer to be destroyed.
@@ -3098,6 +3436,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUTransferBuffer(
  *
  * You must not reference the compute pipeline after calling this function.
  *
+ * It is safe to pass NULL for `compute_pipeline`, in that case this function
+ * is a no-op.
+ *
  * \param device a GPU context.
  * \param compute_pipeline a compute pipeline to be destroyed.
  *
@@ -3112,6 +3453,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUComputePipeline(
  *
  * You must not reference the shader after calling this function.
  *
+ * It is safe to pass NULL for `shader`, in that case this function is a
+ * no-op.
+ *
  * \param device a GPU context.
  * \param shader a shader to be destroyed.
  *
@@ -3125,6 +3469,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_ReleaseGPUShader(
  * Frees the given graphics pipeline as soon as it is safe to do so.
  *
  * You must not reference the graphics pipeline after calling this function.
+ *
+ * It is safe to pass NULL for `graphics_pipeline`, in that case this function
+ * is a no-op.
  *
  * \param device a GPU context.
  * \param graphics_pipeline a graphics pipeline to be destroyed.
@@ -3834,9 +4181,9 @@ extern SDL_DECLSPEC void SDLCALL SDL_EndGPUComputePass(
 /**
  * Maps a transfer buffer into application address space.
  *
- * You must unmap the transfer buffer before encoding upload commands. The
- * memory is owned by the graphics driver - do NOT call SDL_free() on the
- * returned pointer.
+ * You must unmap the transfer buffer before encoding upload commands using
+ * SDL_UnmapGPUTransferBuffer. The memory is owned by the graphics driver - do
+ * NOT call SDL_free() on the returned pointer.
  *
  * \param device a GPU context.
  * \param transfer_buffer a transfer buffer.
@@ -4216,10 +4563,13 @@ extern SDL_DECLSPEC SDL_GPUTextureFormat SDLCALL SDL_GetGPUSwapchainTextureForma
  * submitted. The swapchain texture should only be referenced by the command
  * buffer used to acquire it.
  *
- * This function will fill the swapchain texture handle with NULL if too many
- * frames are in flight. This is not an error. This NULL pointer should not be
- * passed back into SDL. Instead, it should be considered as an indication to
- * wait until the swapchain is available.
+ * If too many frames are in flight, this function will fill the swapchain
+ * texture handle with NULL and return true. This is not an error. This NULL
+ * pointer should not be passed back into SDL. Instead, it should be
+ * considered as an indication to wait.
+ *
+ * In VSYNC present mode (which is the default) this function may block on
+ * vblank.
  *
  * If you use this function, it is possible to create a situation where many
  * command buffers are allocated while the rendering context waits for the GPU
@@ -4264,7 +4614,8 @@ extern SDL_DECLSPEC bool SDLCALL SDL_AcquireGPUSwapchainTexture(
     Uint32 *swapchain_texture_height);
 
 /**
- * Blocks the thread until a swapchain texture is available to be acquired.
+ * Blocks the thread until all presenting command buffers are finished
+ * executing.
  *
  * \param device a GPU context.
  * \param window a window that has been claimed.
@@ -4465,6 +4816,8 @@ extern SDL_DECLSPEC bool SDLCALL SDL_QueryGPUFence(
  *
  * You must not reference the fence after calling this function.
  *
+ * It is safe to pass NULL for `fence`, in that case this function is a no-op.
+ *
  * \param device a GPU context.
  * \param fence a fence.
  *
@@ -4567,11 +4920,13 @@ extern SDL_DECLSPEC SDL_GPUTextureFormat SDLCALL SDL_GetGPUTextureFormatFromPixe
 #ifdef SDL_PLATFORM_GDK
 
 /**
- * Call this to suspend GPU operation on Xbox when you receive the
+ * Call this to suspend GPU operation on Xbox after receiving the
  * SDL_EVENT_DID_ENTER_BACKGROUND event.
  *
  * Do NOT call any SDL_GPU functions after calling this function! This must
  * also be called before calling SDL_GDKSuspendComplete.
+ *
+ * This function MUST be called from the application's render thread.
  *
  * \param device a GPU context.
  *
@@ -4582,11 +4937,13 @@ extern SDL_DECLSPEC SDL_GPUTextureFormat SDLCALL SDL_GetGPUTextureFormatFromPixe
 extern SDL_DECLSPEC void SDLCALL SDL_GDKSuspendGPU(SDL_GPUDevice *device);
 
 /**
- * Call this to resume GPU operation on Xbox when you receive the
+ * Call this to resume GPU operation on Xbox after receiving the
  * SDL_EVENT_WILL_ENTER_FOREGROUND event.
  *
  * When resuming, this function MUST be called before calling any other
  * SDL_GPU functions.
+ *
+ * This function MUST be called from the application's render thread.
  *
  * \param device a GPU context.
  *

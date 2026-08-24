@@ -296,95 +296,72 @@ static UINT D3D12_Align(UINT location, UINT alignment)
     return (location + (alignment - 1)) & ~(alignment - 1);
 }
 
+static const struct {
+    SDL_PixelFormat sdl;
+    DXGI_FORMAT unorm;
+    DXGI_FORMAT srgb;
+} dxgi_format_map[] = {
+    { SDL_PIXELFORMAT_ARGB8888,     DXGI_FORMAT_B8G8R8A8_UNORM,     DXGI_FORMAT_B8G8R8A8_UNORM_SRGB },
+    { SDL_PIXELFORMAT_ABGR8888,     DXGI_FORMAT_R8G8B8A8_UNORM,     DXGI_FORMAT_R8G8B8A8_UNORM_SRGB },
+    { SDL_PIXELFORMAT_XRGB8888,     DXGI_FORMAT_B8G8R8X8_UNORM,     DXGI_FORMAT_B8G8R8X8_UNORM_SRGB },
+    { SDL_PIXELFORMAT_ABGR2101010,  DXGI_FORMAT_R10G10B10A2_UNORM,  DXGI_FORMAT_R10G10B10A2_UNORM   },
+    { SDL_PIXELFORMAT_RGBA64_FLOAT, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_R16G16B16A16_FLOAT  },
+    { SDL_PIXELFORMAT_RGB565,       DXGI_FORMAT_B5G6R5_UNORM,       DXGI_FORMAT_B5G6R5_UNORM        },
+    { SDL_PIXELFORMAT_ARGB1555,     DXGI_FORMAT_B5G5R5A1_UNORM,     DXGI_FORMAT_B5G5R5A1_UNORM      },
+    { SDL_PIXELFORMAT_ARGB4444,     DXGI_FORMAT_B4G4R4A4_UNORM,     DXGI_FORMAT_B4G4R4A4_UNORM      }
+};
+
 static SDL_PixelFormat D3D12_DXGIFormatToSDLPixelFormat(DXGI_FORMAT dxgiFormat)
 {
-    switch (dxgiFormat) {
-    case DXGI_FORMAT_B8G8R8A8_UNORM:
-    case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
-        return SDL_PIXELFORMAT_ARGB8888;
-    case DXGI_FORMAT_R8G8B8A8_UNORM:
-    case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
-        return SDL_PIXELFORMAT_ABGR8888;
-    case DXGI_FORMAT_B8G8R8X8_UNORM:
-    case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
-        return SDL_PIXELFORMAT_XRGB8888;
-    case DXGI_FORMAT_R10G10B10A2_UNORM:
-        return SDL_PIXELFORMAT_ABGR2101010;
-    case DXGI_FORMAT_R16G16B16A16_FLOAT:
-        return SDL_PIXELFORMAT_RGBA64_FLOAT;
-    default:
-        return SDL_PIXELFORMAT_UNKNOWN;
+    for (int i = 0; i < SDL_arraysize(dxgi_format_map); i++) {
+        if (dxgi_format_map[i].unorm == dxgiFormat ||
+            dxgi_format_map[i].srgb == dxgiFormat) {
+            return dxgi_format_map[i].sdl;
+        }
     }
+    return SDL_PIXELFORMAT_UNKNOWN;
 }
 
-static DXGI_FORMAT SDLPixelFormatToDXGITextureFormat(Uint32 format, Uint32 output_colorspace)
+static DXGI_FORMAT SDLPixelFormatToDXGITextureFormat(SDL_PixelFormat format, Uint32 output_colorspace)
 {
     switch (format) {
-    case SDL_PIXELFORMAT_RGBA64_FLOAT:
-        return DXGI_FORMAT_R16G16B16A16_FLOAT;
-    case SDL_PIXELFORMAT_ABGR2101010:
-        return DXGI_FORMAT_R10G10B10A2_UNORM;
-    case SDL_PIXELFORMAT_ARGB8888:
-        if (output_colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_B8G8R8A8_UNORM;
-    case SDL_PIXELFORMAT_ABGR8888:
-        if (output_colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case SDL_PIXELFORMAT_XRGB8888:
-        if (output_colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_B8G8R8X8_UNORM;
     case SDL_PIXELFORMAT_INDEX8:
     case SDL_PIXELFORMAT_YV12:
     case SDL_PIXELFORMAT_IYUV:
+    case SDL_PIXELFORMAT_P408:
         return DXGI_FORMAT_R8_UNORM;
     case SDL_PIXELFORMAT_NV12:
     case SDL_PIXELFORMAT_NV21:
         return DXGI_FORMAT_NV12;
     case SDL_PIXELFORMAT_P010:
         return DXGI_FORMAT_P010;
+    case SDL_PIXELFORMAT_P416:
+        return DXGI_FORMAT_R16_UNORM;
     default:
+        for (int i = 0; i < SDL_arraysize(dxgi_format_map); i++) {
+            if (dxgi_format_map[i].sdl == format) {
+                if (output_colorspace == SDL_COLORSPACE_SRGB_LINEAR ||
+                    output_colorspace == SDL_COLORSPACE_HDR10) {
+                    return dxgi_format_map[i].srgb;
+                } else {
+                    return dxgi_format_map[i].unorm;
+                }
+            }
+        }
         return DXGI_FORMAT_UNKNOWN;
     }
 }
 
-static DXGI_FORMAT SDLPixelFormatToDXGIMainResourceViewFormat(Uint32 format, Uint32 colorspace)
+static DXGI_FORMAT SDLPixelFormatToDXGIMainResourceViewFormat(SDL_PixelFormat format, Uint32 colorspace)
 {
     switch (format) {
-    case SDL_PIXELFORMAT_RGBA64_FLOAT:
-        return DXGI_FORMAT_R16G16B16A16_FLOAT;
-    case SDL_PIXELFORMAT_ABGR2101010:
-        return DXGI_FORMAT_R10G10B10A2_UNORM;
-    case SDL_PIXELFORMAT_ARGB8888:
-        if (colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_B8G8R8A8_UNORM;
-    case SDL_PIXELFORMAT_ABGR8888:
-        if (colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case SDL_PIXELFORMAT_XRGB8888:
-        if (colorspace == SDL_COLORSPACE_SRGB_LINEAR) {
-            return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_B8G8R8X8_UNORM;
-    case SDL_PIXELFORMAT_INDEX8:
-    case SDL_PIXELFORMAT_YV12:
-    case SDL_PIXELFORMAT_IYUV:
     case SDL_PIXELFORMAT_NV12: // For the Y texture
     case SDL_PIXELFORMAT_NV21: // For the Y texture
         return DXGI_FORMAT_R8_UNORM;
     case SDL_PIXELFORMAT_P010:  // For the Y texture
         return DXGI_FORMAT_R16_UNORM;
     default:
-        return DXGI_FORMAT_UNKNOWN;
+        return SDLPixelFormatToDXGITextureFormat(format, colorspace);
     }
 }
 
@@ -587,25 +564,25 @@ static HRESULT D3D12_IssueBatch(D3D12_RenderData *data)
 }
 
 #if defined(SDL_PLATFORM_XBOXONE) || defined(SDL_PLATFORM_XBOXSERIES)
-static bool SDLCALL D3D12_GDKEventFilter(void* userdata, SDL_Event* event)
+
+static void D3D12_GDKSuspendRenderer(SDL_Renderer *renderer)
 {
-    D3D12_RenderData *data = (D3D12_RenderData *)userdata;
-    if (event->type == SDL_EVENT_DID_ENTER_BACKGROUND) {
-        data->commandQueue->SuspendX(0);
-    } else if (event->type == SDL_EVENT_WILL_ENTER_FOREGROUND) {
-        data->commandQueue->ResumeX();
-    }
-    return true;
+    D3D12_RenderData *data = (D3D12_RenderData *)renderer->internal;
+    data->commandQueue->SuspendX(0);
 }
+
+static void D3D12_GDKResumeRenderer(SDL_Renderer *renderer)
+{
+    D3D12_RenderData *data = (D3D12_RenderData *)renderer->internal;
+    data->commandQueue->ResumeX();
+}
+
 #endif
 
 static void D3D12_DestroyRenderer(SDL_Renderer *renderer)
 {
     D3D12_RenderData *data = (D3D12_RenderData *)renderer->internal;
     if (data) {
-#if defined(SDL_PLATFORM_XBOXONE) || defined(SDL_PLATFORM_XBOXSERIES)
-        SDL_RemoveEventWatch(D3D12_GDKEventFilter, data);
-#endif
         D3D12_WaitForGPU(data);
         D3D12_ReleaseAll(renderer);
         SDL_free(data);
@@ -929,7 +906,7 @@ static HRESULT D3D12_CreateDeviceResources(SDL_Renderer *renderer)
                       D3D_GUID(SDL_IID_IDXGIAdapter4),
                       (void **)&data->dxgiAdapter);
     if (FAILED(result)) {
-        WIN_SetErrorFromHRESULT("IDXGIFactory6::EnumAdapterByGPUPreference", result);
+        WIN_SetErrorFromHRESULT("IDXGIFactory6::EnumAdapterByGpuPreference", result);
         goto done;
     }
 
@@ -1151,10 +1128,6 @@ static HRESULT D3D12_CreateDeviceResources(SDL_Renderer *renderer)
     SDL_PropertiesID props = SDL_GetRendererProperties(renderer);
     SDL_SetPointerProperty(props, SDL_PROP_RENDERER_D3D12_DEVICE_POINTER, data->d3dDevice);
     SDL_SetPointerProperty(props, SDL_PROP_RENDERER_D3D12_COMMAND_QUEUE_POINTER, data->commandQueue);
-
-#if defined(SDL_PLATFORM_XBOXONE) || defined(SDL_PLATFORM_XBOXSERIES)
-    SDL_AddEventWatch(D3D12_GDKEventFilter, data);
-#endif
 
 done:
     D3D_SAFE_RELEASE(d3dDevice);
@@ -1768,6 +1741,55 @@ static bool D3D12_CreateTexture(SDL_Renderer *renderer, SDL_Texture *texture, SD
         }
     }
 
+    if (texture->format == SDL_PIXELFORMAT_P408 ||
+        texture->format == SDL_PIXELFORMAT_P416) {
+        textureData->yuv = true;
+
+        if (!GetTextureProperty(create_props, SDL_PROP_TEXTURE_CREATE_D3D12_TEXTURE_U_POINTER, &textureData->mainTextureU)) {
+            return false;
+        }
+        if (!textureData->mainTextureU) {
+            result = ID3D12Device1_CreateCommittedResource(rendererData->d3dDevice,
+                              &heapProps,
+                              D3D12_HEAP_FLAG_NONE,
+                              &textureDesc,
+                              D3D12_RESOURCE_STATE_COPY_DEST,
+                              NULL,
+                              D3D_GUID(SDL_IID_ID3D12Resource),
+                              (void **)&textureData->mainTextureU);
+            if (FAILED(result)) {
+                return WIN_SetErrorFromHRESULT("ID3D12Device::CreateCommittedResource [texture]", result);
+            }
+        }
+        textureData->mainResourceStateU = D3D12_RESOURCE_STATE_COPY_DEST;
+        SDL_SetPointerProperty(SDL_GetTextureProperties(texture), SDL_PROP_TEXTURE_D3D12_TEXTURE_U_POINTER, textureData->mainTextureU);
+
+        if (!GetTextureProperty(create_props, SDL_PROP_TEXTURE_CREATE_D3D12_TEXTURE_V_POINTER, &textureData->mainTextureV)) {
+            return false;
+        }
+        if (!textureData->mainTextureV) {
+            result = ID3D12Device1_CreateCommittedResource(rendererData->d3dDevice,
+                              &heapProps,
+                              D3D12_HEAP_FLAG_NONE,
+                              &textureDesc,
+                              D3D12_RESOURCE_STATE_COPY_DEST,
+                              NULL,
+                              D3D_GUID(SDL_IID_ID3D12Resource),
+                              (void **)&textureData->mainTextureV);
+            if (FAILED(result)) {
+                return WIN_SetErrorFromHRESULT("ID3D12Device::CreateCommittedResource [texture]", result);
+            }
+        }
+        textureData->mainResourceStateV = D3D12_RESOURCE_STATE_COPY_DEST;
+        SDL_SetPointerProperty(SDL_GetTextureProperties(texture), SDL_PROP_TEXTURE_D3D12_TEXTURE_V_POINTER, textureData->mainTextureV);
+
+        const int bits_per_pixel = (texture->format == SDL_PIXELFORMAT_P408) ? 8 : 16;
+        textureData->YCbCr_matrix = SDL_GetYCbCRtoRGBConversionMatrix(texture->colorspace, texture->w, texture->h, bits_per_pixel);
+        if (!textureData->YCbCr_matrix) {
+            return SDL_SetError("Unsupported YUV colorspace");
+        }
+    }
+
     if (texture->format == SDL_PIXELFORMAT_NV12 ||
         texture->format == SDL_PIXELFORMAT_NV21 ||
         texture->format == SDL_PIXELFORMAT_P010) {
@@ -2049,17 +2071,30 @@ static bool D3D12_UpdateTexture(SDL_Renderer *renderer, SDL_Texture *texture,
     }
 #ifdef SDL_HAVE_YUV
     if (textureData->yuv) {
-        // Skip to the correct offset into the next texture
-        srcPixels = (const void *)((const Uint8 *)srcPixels + rect->h * srcPitch);
+        if (texture->format == SDL_PIXELFORMAT_P408 || texture->format == SDL_PIXELFORMAT_P416) {
+            // Skip to the correct offset into the next texture
+            srcPixels = (const void *)((const Uint8 *)srcPixels + rect->h * srcPitch);
+            if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureU, 0, rect->x, rect->y, rect->w, rect->h, srcPixels, srcPitch, &textureData->mainResourceStateU)) {
+                return false;
+            }
 
-        if (!D3D12_UpdateTextureInternal(rendererData, texture->format == SDL_PIXELFORMAT_YV12 ? textureData->mainTextureV : textureData->mainTextureU, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, srcPixels, (srcPitch + 1) / 2, texture->format == SDL_PIXELFORMAT_YV12 ? &textureData->mainResourceStateV : &textureData->mainResourceStateU)) {
-            return false;
-        }
+            // Skip to the correct offset into the next texture
+            srcPixels = (const void *)((const Uint8 *)srcPixels + rect->h * srcPitch);
+            if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureV, 0, rect->x, rect->y, rect->w, rect->h, srcPixels, srcPitch, &textureData->mainResourceStateV)) {
+                return false;
+            }
+        } else {
+            // Skip to the correct offset into the next texture
+            srcPixels = (const void *)((const Uint8 *)srcPixels + rect->h * srcPitch);
+            if (!D3D12_UpdateTextureInternal(rendererData, texture->format == SDL_PIXELFORMAT_YV12 ? textureData->mainTextureV : textureData->mainTextureU, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, srcPixels, (srcPitch + 1) / 2, texture->format == SDL_PIXELFORMAT_YV12 ? &textureData->mainResourceStateV : &textureData->mainResourceStateU)) {
+                return false;
+            }
 
-        // Skip to the correct offset into the next texture
-        srcPixels = (const void *)((const Uint8 *)srcPixels + ((rect->h + 1) / 2) * ((srcPitch + 1) / 2));
-        if (!D3D12_UpdateTextureInternal(rendererData, texture->format == SDL_PIXELFORMAT_YV12 ? textureData->mainTextureU : textureData->mainTextureV, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, srcPixels, (srcPitch + 1) / 2, texture->format == SDL_PIXELFORMAT_YV12 ? &textureData->mainResourceStateU : &textureData->mainResourceStateV)) {
-            return false;
+            // Skip to the correct offset into the next texture
+            srcPixels = (const void *)((const Uint8 *)srcPixels + ((rect->h + 1) / 2) * ((srcPitch + 1) / 2));
+            if (!D3D12_UpdateTextureInternal(rendererData, texture->format == SDL_PIXELFORMAT_YV12 ? textureData->mainTextureU : textureData->mainTextureV, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, srcPixels, (srcPitch + 1) / 2, texture->format == SDL_PIXELFORMAT_YV12 ? &textureData->mainResourceStateU : &textureData->mainResourceStateV)) {
+                return false;
+            }
         }
     }
 
@@ -2101,11 +2136,20 @@ static bool D3D12_UpdateTextureYUV(SDL_Renderer *renderer, SDL_Texture *texture,
     if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTexture, 0, rect->x, rect->y, rect->w, rect->h, Yplane, Ypitch, &textureData->mainResourceState)) {
         return false;
     }
-    if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureU, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, Uplane, Upitch, &textureData->mainResourceStateU)) {
-        return false;
-    }
-    if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureV, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, Vplane, Vpitch, &textureData->mainResourceStateV)) {
-        return false;
+    if (texture->format == SDL_PIXELFORMAT_P408 || texture->format == SDL_PIXELFORMAT_P416) {
+        if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureU, 0, rect->x, rect->y, rect->w, rect->h, Uplane, Upitch, &textureData->mainResourceStateU)) {
+            return false;
+        }
+        if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureV, 0, rect->x, rect->y, rect->w, rect->h, Vplane, Vpitch, &textureData->mainResourceStateV)) {
+            return false;
+        }
+    } else {
+        if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureU, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, Uplane, Upitch, &textureData->mainResourceStateU)) {
+            return false;
+        }
+        if (!D3D12_UpdateTextureInternal(rendererData, textureData->mainTextureV, 0, rect->x / 2, rect->y / 2, (rect->w + 1) / 2, (rect->h + 1) / 2, Vplane, Vpitch, &textureData->mainResourceStateV)) {
+            return false;
+        }
     }
     if (textureData->mainTextureResourceView.ptr == rendererData->currentShaderResource.ptr) {
         // We'll need to rebind this resource after updating it
@@ -2244,7 +2288,7 @@ static bool D3D12_LockTexture(SDL_Renderer *renderer, SDL_Texture *texture,
     if (pitchedDesc.Format == DXGI_FORMAT_R8_UNORM) {
         bpp = 1;
     } else {
-        bpp = 4;
+        bpp = SDL_BYTESPERPIXEL(texture->format);
     }
     pitchedDesc.RowPitch = D3D12_Align(rect->w * bpp, D3D12_TEXTURE_DATA_PITCH_ALIGNMENT);
 
@@ -2302,7 +2346,7 @@ static void D3D12_UnlockTexture(SDL_Renderer *renderer, SDL_Texture *texture)
     if (pitchedDesc.Format == DXGI_FORMAT_R8_UNORM) {
         bpp = 1;
     } else {
-        bpp = 4;
+        bpp = SDL_BYTESPERPIXEL(texture->format);
     }
     pitchedDesc.RowPitch = D3D12_Align(textureData->lockedRect.w * bpp, D3D12_TEXTURE_DATA_PITCH_ALIGNMENT);
 
@@ -2392,7 +2436,7 @@ static bool D3D12_QueueDrawPoints(SDL_Renderer *renderer, SDL_RenderCommand *cmd
     cmd->data.draw.count = count;
 
     if (convert_color) {
-        SDL_ConvertToLinear(&color);
+        SDL_ConvertToLinear(renderer, &color);
     }
 
     for (i = 0; i < count; i++) {
@@ -2446,7 +2490,7 @@ static bool D3D12_QueueGeometry(SDL_Renderer *renderer, SDL_RenderCommand *cmd, 
         verts->pos.y = xy_[1] * scale_y;
         verts->color = *(SDL_FColor *)((char *)color + j * color_stride);
         if (convert_color) {
-            SDL_ConvertToLinear(&verts->color);
+            SDL_ConvertToLinear(renderer, &verts->color);
         }
 
         if (texture) {
@@ -2632,6 +2676,7 @@ static void D3D12_SetupShaderConstants(SDL_Renderer *renderer, const SDL_RenderC
             break;
         case SDL_PIXELFORMAT_YV12:
         case SDL_PIXELFORMAT_IYUV:
+        case SDL_PIXELFORMAT_P408:
             constants->texture_type = TEXTURETYPE_YUV;
             constants->input_type = INPUTTYPE_SRGB;
             break;
@@ -2645,6 +2690,10 @@ static void D3D12_SetupShaderConstants(SDL_Renderer *renderer, const SDL_RenderC
             break;
         case SDL_PIXELFORMAT_P010:
             constants->texture_type = TEXTURETYPE_NV12;
+            constants->input_type = INPUTTYPE_HDR10;
+            break;
+        case SDL_PIXELFORMAT_P416:
+            constants->texture_type = TEXTURETYPE_YUV;
             constants->input_type = INPUTTYPE_HDR10;
             break;
         default:
@@ -2693,19 +2742,48 @@ static void D3D12_SetupShaderConstants(SDL_Renderer *renderer, const SDL_RenderC
     }
 }
 
-static D3D12_Shader SelectShader(const D3D12_PixelShaderConstants *shader_constants)
+static bool PQShaderScalesInput(const D3D12_PixelShaderConstants *shader_constants)
 {
-    if (!shader_constants) {
+    if (shader_constants->tonemap_method != 0.0f) {
+        // Tone mapping always scales
+        return true;
+    }
+
+    // The shader normalizes the PQ input using the SDR white point and then multiplies by the color scale
+    if (SDL_fabs((shader_constants->sdr_white_point - (shader_constants->color_scale * SCRGB_NITS))) > 1.0f) {
+        return true;
+    }
+
+    return false;
+}
+
+static D3D12_Shader SelectShader(SDL_Renderer *renderer, const D3D12_PixelShaderConstants *shader_constants)
+{
+    if (shader_constants) {
+        if (renderer->current_colorspace == SDL_COLORSPACE_HDR10) {
+            if (shader_constants->input_type == INPUTTYPE_HDR10 &&
+                !PQShaderScalesInput(shader_constants)) {
+                // Do a simple 1-1 copy
+                return SHADER_RGB_SIMPLE;
+            } else {
+                return SHADER_RGB_PQ;
+            }
+        }
+
+        if (shader_constants->texture_type == TEXTURETYPE_RGB &&
+            shader_constants->input_type == INPUTTYPE_UNSPECIFIED &&
+            shader_constants->tonemap_method == TONEMAP_NONE) {
+            return SHADER_RGB;
+        }
+
+        return SHADER_ADVANCED;
+    } else {
+        if (renderer->current_colorspace == SDL_COLORSPACE_HDR10) {
+            return SHADER_SOLID_PQ;
+        }
+
         return SHADER_SOLID;
     }
-
-    if (shader_constants->texture_type == TEXTURETYPE_RGB &&
-        shader_constants->input_type == INPUTTYPE_UNSPECIFIED &&
-        shader_constants->tonemap_method == TONEMAP_NONE) {
-        return SHADER_RGB;
-    }
-
-    return SHADER_ADVANCED;
 }
 
 static bool D3D12_SetDrawState(SDL_Renderer *renderer, const SDL_RenderCommand *cmd, const D3D12_PixelShaderConstants *shader_constants,
@@ -2721,7 +2799,7 @@ static bool D3D12_SetDrawState(SDL_Renderer *renderer, const SDL_RenderCommand *
     int i;
     DXGI_FORMAT rtvFormat = rendererData->renderTargetFormat;
     D3D12_PipelineState *currentPipelineState = rendererData->currentPipelineState;
-    D3D12_Shader shader = SelectShader(shader_constants);
+    D3D12_Shader shader = SelectShader(renderer, shader_constants);
     D3D12_PixelShaderConstants solid_constants;
 
     bool shaderResourcesChanged = false;
@@ -2826,14 +2904,15 @@ static bool D3D12_SetDrawState(SDL_Renderer *renderer, const SDL_RenderCommand *
             // Figure out the correct sampler descriptor table index based on the type of shader
             switch (shader) {
             case SHADER_RGB:
+            case SHADER_RGB_SIMPLE:
                 tableIndex = 3;
                 break;
             case SHADER_ADVANCED:
+            case SHADER_RGB_PQ:
                 tableIndex = 5;
                 break;
             default:
                 return SDL_SetError("[direct3d12] Trying to set a sampler for a shader which doesn't have one");
-                break;
             }
 
             ID3D12GraphicsCommandList2_SetGraphicsRootDescriptorTable(rendererData->commandList, tableIndex, GPUHandle);
@@ -3094,14 +3173,21 @@ static bool D3D12_RunCommandQueue(SDL_Renderer *renderer, SDL_RenderCommand *cmd
         case SDL_RENDERCMD_CLEAR:
         {
             D3D12_CPU_DESCRIPTOR_HANDLE rtvDescriptor = D3D12_GetCurrentRenderTargetView(renderer);
-            bool convert_color = SDL_RenderingLinearSpace(renderer);
             SDL_FColor color = cmd->data.color.color;
-            if (convert_color) {
-                SDL_ConvertToLinear(&color);
+            if (SDL_RenderingLinearSpace(renderer)) {
+                SDL_ConvertToLinear(renderer, &color);
             }
+
             color.r *= cmd->data.color.color_scale;
             color.g *= cmd->data.color.color_scale;
             color.b *= cmd->data.color.color_scale;
+
+            if (renderer->current_colorspace == SDL_COLORSPACE_HDR10) {
+                color.r = SDL_PQfromNits(color.r * SCRGB_NITS);
+                color.g = SDL_PQfromNits(color.g * SCRGB_NITS);
+                color.b = SDL_PQfromNits(color.b * SCRGB_NITS);
+            }
+
             ID3D12GraphicsCommandList2_ClearRenderTargetView(rendererData->commandList, rtvDescriptor, &color.r, 0, NULL);
             break;
         }
@@ -3378,7 +3464,7 @@ static SDL_Surface *D3D12_RenderReadPixels(SDL_Renderer *renderer, const SDL_Rec
     output = SDL_DuplicatePixels(
         rect->w, rect->h,
         D3D12_DXGIFormatToSDLPixelFormat(textureDesc.Format),
-        renderer->target ? renderer->target->colorspace : renderer->output_colorspace,
+        renderer->current_colorspace,
         textureMemory,
         pitchedDesc.RowPitch);
 
@@ -3504,8 +3590,8 @@ bool D3D12_CreateRenderer(SDL_Renderer *renderer, SDL_Window *window, SDL_Proper
     SDL_SetupRendererColorspace(renderer, create_props);
 
     if (renderer->output_colorspace != SDL_COLORSPACE_SRGB &&
-        renderer->output_colorspace != SDL_COLORSPACE_SRGB_LINEAR
-        /*&& renderer->output_colorspace != SDL_COLORSPACE_HDR10*/) {
+        renderer->output_colorspace != SDL_COLORSPACE_SRGB_LINEAR &&
+        renderer->output_colorspace != SDL_COLORSPACE_HDR10) {
         return SDL_SetError("Unsupported output colorspace");
     }
 
@@ -3542,21 +3628,14 @@ bool D3D12_CreateRenderer(SDL_Renderer *renderer, SDL_Window *window, SDL_Proper
     renderer->DestroyTexture = D3D12_DestroyTexture;
     renderer->DestroyRenderer = D3D12_DestroyRenderer;
     renderer->SetVSync = D3D12_SetVSync;
+#if defined(SDL_PLATFORM_XBOXONE) || defined(SDL_PLATFORM_XBOXSERIES)
+    renderer->GDKSuspendRenderer = D3D12_GDKSuspendRenderer;
+    renderer->GDKResumeRenderer = D3D12_GDKResumeRenderer;
+#endif
     renderer->internal = data;
     D3D12_InvalidateCachedState(renderer);
 
     renderer->name = D3D12_RenderDriver.name;
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_ARGB8888);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_ABGR8888);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_XRGB8888);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_ABGR2101010);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_RGBA64_FLOAT);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_INDEX8);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_YV12);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_IYUV);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_NV12);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_NV21);
-    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_P010);
     SDL_SetNumberProperty(SDL_GetRendererProperties(renderer), SDL_PROP_RENDERER_MAX_TEXTURE_SIZE_NUMBER, 16384);
 
     data->syncInterval = 0;
@@ -3574,6 +3653,39 @@ bool D3D12_CreateRenderer(SDL_Renderer *renderer, SDL_Window *window, SDL_Proper
     if (FAILED(D3D12_CreateWindowSizeDependentResources(renderer))) {
         return false;
     }
+
+    for (int i = 0; i < SDL_arraysize(dxgi_format_map); i++) {
+        D3D12_FEATURE_DATA_FORMAT_SUPPORT unorm, srgb;
+
+        unorm.Format = dxgi_format_map[i].unorm;
+        if (FAILED(ID3D12Device_CheckFeatureSupport(data->d3dDevice,
+                                                    D3D12_FEATURE_FORMAT_SUPPORT,
+                                                    &unorm,
+                                                    sizeof(unorm)))) {
+            continue;
+        }
+
+        srgb.Format = dxgi_format_map[i].srgb;
+        if (FAILED(ID3D12Device_CheckFeatureSupport(data->d3dDevice,
+                                                    D3D12_FEATURE_FORMAT_SUPPORT,
+                                                    &srgb,
+                                                    sizeof(srgb)))) {
+            continue;
+        }
+
+        if ((unorm.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D) &&
+            (srgb.Support1  & D3D12_FORMAT_SUPPORT1_TEXTURE2D)) {
+            SDL_AddSupportedTextureFormat(renderer, dxgi_format_map[i].sdl);
+        }
+    }
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_INDEX8);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_YV12);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_IYUV);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_P408);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_NV12);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_NV21);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_P010);
+    SDL_AddSupportedTextureFormat(renderer, SDL_PIXELFORMAT_P416);
 
     return true;
 }

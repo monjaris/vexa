@@ -9,7 +9,7 @@ int main()
 
     vexa::Window::Cfg window_cfg;
     vexa::Renderer::Cfg renderer_cfg;
-    window_cfg.size = {1, 1};
+    window_cfg.m_size = {1, 1};
     auto window = vexa::Window{window_cfg}.setRenderer(renderer_cfg).create();
     auto& gfx = window.renderer();
 

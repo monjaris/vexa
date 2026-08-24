@@ -1,5 +1,5 @@
-#include "vexa.hpp"
-#include "alt/SDL3.h"
+#include "vexa/vexa.hpp"
+#include "vexa/alt/SDL3.h"
 
 using namespace vexa;
 
@@ -9,8 +9,7 @@ auto main() -> int
 
     constexpr auto dt = time::Millis{16.6f};
 
-    Window::Cfg window_cfg;
-    auto window = Window ()
+    auto window = Window {}
         .setResizable()
         .setSize({1280, 720})
         .setRenderer(Renderer::Cfg{})

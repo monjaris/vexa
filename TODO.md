@@ -1,2 +1,2 @@
 # TODOs
-1. make capturing mouse window-agnostic
+1. add first renderer backend namespace

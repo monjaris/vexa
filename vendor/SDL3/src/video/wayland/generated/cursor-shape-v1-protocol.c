@@ -57,7 +57,7 @@ static const struct wl_message wp_cursor_shape_manager_v1_requests[] = {
 };
 
 WL_PRIVATE const struct wl_interface wp_cursor_shape_manager_v1_interface = {
-	"wp_cursor_shape_manager_v1", 1,
+	"wp_cursor_shape_manager_v1", 2,
 	3, wp_cursor_shape_manager_v1_requests,
 	0, NULL,
 };
@@ -68,7 +68,7 @@ static const struct wl_message wp_cursor_shape_device_v1_requests[] = {
 };
 
 WL_PRIVATE const struct wl_interface wp_cursor_shape_device_v1_interface = {
-	"wp_cursor_shape_device_v1", 1,
+	"wp_cursor_shape_device_v1", 2,
 	2, wp_cursor_shape_device_v1_requests,
 	0, NULL,
 };

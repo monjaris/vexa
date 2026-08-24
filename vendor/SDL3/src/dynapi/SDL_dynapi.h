@@ -36,7 +36,7 @@
    not without this feature. Think hard before turning it off.
 */
 #ifdef SDL_DYNAMIC_API // Tried to force it on the command line?
-// #error Nope, you have to edit this file to force this off.
+#error Nope, you have to edit this file to force this off.
 #endif
 
 #ifdef SDL_PLATFORM_APPLE
@@ -65,6 +65,8 @@
 #define SDL_DYNAMIC_API 0 // devkitARM doesn't support dynamic linking
 #elif defined(SDL_PLATFORM_NGAGE)
 #define SDL_DYNAMIC_API 0
+#elif defined(SDL_PLATFORM_DOS)
+#define SDL_DYNAMIC_API 0 // DJGPP doesn't support dynamic linking
 #elif defined(DYNAPI_NEEDS_DLOPEN) && !defined(HAVE_DLOPEN)
 #define SDL_DYNAMIC_API 0 // we need dlopen(), but don't have it....
 #endif

@@ -1,15 +1,15 @@
 #pragma once
 #include <concepts>
 #include <print>
-#include "alt/ini_list.hpp"
+#include "vexa/alt/ini_list.hpp"
 #include "defs.hpp"
 // modules
-#include "core/math.hpp"
-#include "core/colors.hpp"
-#include "core/shapes.hpp"
-#include "core/vec.hpp"
-#include "core/log.hpp"
-#include "core/Flags.hpp"
+#include "vexa/core/math.hpp"
+#include "vexa/core/colors.hpp"
+#include "vexa/core/shapes.hpp"
+#include "vexa/core/vec.hpp"
+#include "vexa/core/log.hpp"
+#include "vexa/core/Flags.hpp"
 NAMESPACE_BEGIN(vexa)
 
 

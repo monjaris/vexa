@@ -1,6 +1,6 @@
 #pragma once
-#include "alt/memory.hpp"
-#include "core/common.hpp"
+#include "vexa/alt/memory.hpp"
+#include "vexa/core/common.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -25,8 +25,6 @@ class VX_NODISCARD Renderer
         void reset() noexcept {
             vsync = vsync.defaultVal();
         }
-
-        M_Cfg& operator= (const M_Cfg& other) noexcept = default;
     }
     m_build_config;
 
@@ -65,6 +63,7 @@ public:
 
     Renderer& setVsync(bool enabled = true);
 
+    void start();
     void start(ColorU8 color);
     void start(ColorF32 color);
     void finish();

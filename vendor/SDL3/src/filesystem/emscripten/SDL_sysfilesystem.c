@@ -37,25 +37,30 @@ char *SDL_SYS_GetBasePath(void)
     return SDL_strdup("/");
 }
 
+char *SDL_SYS_GetExeName(void)
+{
+    return NULL;  // no EXE name on this system.
+}
+
 char *SDL_SYS_GetPrefPath(const char *org, const char *app)
 {
     #ifdef SDL_EMSCRIPTEN_PERSISTENT_PATH_STRING
-    const char *append = SDL_EMSCRIPTEN_PERSISTENT_PATH_STRING;
+    const char *prepend = SDL_EMSCRIPTEN_PERSISTENT_PATH_STRING;
     #else
-    const char *append = "/libsdl";
+    const char *prepend = "/libsdl";
     #endif
     char *result;
     char *ptr = NULL;
-    const size_t len = SDL_strlen(append) + SDL_strlen(org) + SDL_strlen(app) + 4;
+    const size_t len = SDL_strlen(prepend) + SDL_strlen(org) + SDL_strlen(app) + 4;
     result = (char *)SDL_malloc(len);
     if (!result) {
         return NULL;
     }
 
     if (*org) {
-        SDL_snprintf(result, len, "%s/%s/%s/", append, org, app);
+        SDL_snprintf(result, len, "%s/%s/%s/", prepend, org, app);
     } else {
-        SDL_snprintf(result, len, "%s/%s/", append, app);
+        SDL_snprintf(result, len, "%s/%s/", prepend, app);
     }
 
     for (ptr = result + 1; *ptr; ptr++) {

@@ -25,7 +25,11 @@
 #include <SDL3/SDL_test_common.h>
 #include "testutils.h"
 
+#ifdef SDL_PLATFORM_DOS
+#define DEFAULT_FONT "UNIFONT.HEX"
+#else
 #define DEFAULT_FONT "unifont-15.1.05.hex"
+#endif
 #define MAX_TEXT_LENGTH 256
 
 #define WINDOW_WIDTH    640
@@ -1014,7 +1018,7 @@ int main(int argc, char *argv[])
         ctx->window = window;
         ctx->renderer = renderer;
         ctx->rendererID = i;
-        ctx->settings_icon = LoadTexture(renderer, "icon.png", true);
+        ctx->settings_icon = LoadTexture(renderer, "icon.png");
         if (ctx->settings_icon) {
             ctx->settings_rect.w = (float)ctx->settings_icon->w;
             ctx->settings_rect.h = (float)ctx->settings_icon->h;

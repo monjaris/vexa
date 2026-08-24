@@ -1,5 +1,4 @@
-#include "alt/SDL3.h"
-#include "../include/Renderer.hpp"
+#include "vexa/Renderer.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -185,11 +184,15 @@ Renderer& This::setVsync(bool enabled) {
 }
 
 
+void This::start() {
+    SDL_RenderClear(impl->m_renderer);
+}
+// overload for clearing with Color8
 void This::start(ColorU8 color) {
     _setColorU8(color);
     SDL_RenderClear(impl->m_renderer);
 }
-// overload for float[4] color
+// overload for clearing with Color8
 void This::start(ColorF32 color) {
     _setColorF32(color);
     SDL_RenderClear(impl->m_renderer);

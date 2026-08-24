@@ -14,4 +14,4 @@ build/
 
 # Directories
 /vendor/SDL3-upstream
-.aider*
+/run.sh

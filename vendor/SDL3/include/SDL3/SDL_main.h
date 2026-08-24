@@ -219,6 +219,19 @@
            void reset_IOP(); \
            void reset_IOP() {}
 
+    #elif defined(SDL_PLATFORM_DOS)
+        /*
+          On DOS, SDL provides a main function that sets up memory
+          page locking (code, data, stack are locked, future
+          malloc calls are not locked), and sets up the "fat DS"
+          trick, so we can use C pointers from protected mode that
+          access conventional memory. SDL _requires_ the "fat DS"
+          trick!
+
+          If you provide this yourself, you may define SDL_MAIN_HANDLED
+        */
+        #define SDL_MAIN_AVAILABLE
+
     #elif defined(SDL_PLATFORM_3DS)
         /*
           On N3DS, SDL provides a main function that sets up the screens
@@ -664,12 +677,14 @@ extern SDL_DECLSPEC void SDLCALL SDL_UnregisterApp(void);
 /**
  * Callback from the application to let the suspend continue.
  *
- * This should be called from an event watch in response to an
- * `SDL_EVENT_DID_ENTER_BACKGROUND` event.
+ * This should be called in response to an `SDL_EVENT_DID_ENTER_BACKGROUND`
+ * event, which can be detected via event watch. However, do NOT call this
+ * function directly from within an event watch callback. Instead, wait until
+ * the app has suppressed all rendering operations, then call this from the
+ * application render thread.
  *
- * When using SDL_Render, your event watch should be added _after_ creating
- * the `SDL_Renderer`; this allows the timing of the D3D12 command queue
- * suspension to execute in the correct order.
+ * When using SDL_Render, this should be called after calling
+ * SDL_GDKSuspendRenderer.
  *
  * When using SDL_GPU, this should be called after calling SDL_GDKSuspendGPU.
  *

@@ -1,5 +1,5 @@
-#include "alt/SDL3.h"
-#include "Engine.hpp"
+#include "vexa/alt/SDL3.h"
+#include "vexa/Engine.hpp"
 NAMESPACE_BEGIN(vexa)
 
 bool Engine::Init(Subsystem initial_subsystems) noexcept {

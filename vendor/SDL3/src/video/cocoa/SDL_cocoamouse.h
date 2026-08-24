@@ -26,11 +26,16 @@
 #include "SDL_cocoavideo.h"
 
 extern bool Cocoa_InitMouse(SDL_VideoDevice *_this);
-extern NSWindow *Cocoa_GetMouseFocus();
+extern NSWindow *Cocoa_GetMouseFocus(void);
 extern void Cocoa_HandleMouseEvent(SDL_VideoDevice *_this, NSEvent *event);
 extern void Cocoa_HandleMouseWheel(SDL_Window *window, NSEvent *event);
 extern void Cocoa_HandleMouseWarp(CGFloat x, CGFloat y);
 extern void Cocoa_QuitMouse(SDL_VideoDevice *_this);
+
+extern void Cocoa_InitGCMouse(void);
+extern bool Cocoa_GCMouseRelativeMode(void);
+extern bool Cocoa_HasGCMouse(void);
+extern void Cocoa_QuitGCMouse(void);
 
 struct SDL_CursorData
 {

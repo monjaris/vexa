@@ -1,5 +1,5 @@
-#include "alt/SDL3.h"
-#include "../include/Window.hpp"
+#include "vexa/alt/SDL3.h"
+#include "vexa/Window.hpp"
 NAMESPACE_BEGIN(vexa)
 
 #define FN "Window::{}(): "
@@ -116,8 +116,8 @@ public:
         if (!window_exists)
         {
             m_window = SDL_CreateWindow(
-                config.title, config.size->x, config.size->y,
-                This::M_ToSDL3WindowFlagRuntime(config.flags->value())
+                config.m_title, config.m_size->x, config.m_size->y,
+                This::M_ToSDL3WindowFlagRuntime(config.m_flags->value())
             );
             IF_THEN(!m_window,   log::fatal(FN"{}", __func__, mf_failed_to_create_window);)
 
@@ -165,32 +165,32 @@ Window This::create() {
         log::error(FN"{} [ID={}]", __func__, me_failed_to_create_input_ctx, new_window_id);
     );
 
-    if (!IS_CFG_DEFAULT(title))
-        _trySetTitle(new_window, m_build_config.title);
-    if (!IS_CFG_DEFAULT(size))
-        _trySetSize(new_window, m_build_config.size->x, m_build_config.size->y);
-    if (!IS_CFG_DEFAULT(position))
-        _trySetPos(new_window, m_build_config.position->x, m_build_config.position->y);
-    if (!IS_CFG_DEFAULT(is_resizable))
-        _trySetResizable(new_window, m_build_config.is_resizable);
-    if (!IS_CFG_DEFAULT(is_minimized))
-        _trySetMinimized(new_window, m_build_config.is_minimized);
-    if (!IS_CFG_DEFAULT(is_maximized))
-        _trySetMaximized(new_window, m_build_config.is_maximized);
-    if (!IS_CFG_DEFAULT(is_fullscreen))
-        _trySetFullscreen(new_window, m_build_config.is_fullscreen);
-    if (!IS_CFG_DEFAULT(is_borderless))
-        _trySetBorderless(new_window, m_build_config.is_borderless);
-    if (!IS_CFG_DEFAULT(is_hidden))
-        _trySetHidden(new_window, m_build_config.is_hidden);
-    if (!IS_CFG_DEFAULT(is_always_on_top))
-        SDL_SetWindowAlwaysOnTop(new_window, m_build_config.is_always_on_top);
-    if (!IS_CFG_DEFAULT(is_mouse_grabbed))
-        SDL_SetWindowMouseGrab(new_window, m_build_config.is_mouse_grabbed);
-    if (!IS_CFG_DEFAULT(is_mouse_relative))
-        SDL_SetWindowRelativeMouseMode(new_window, m_build_config.is_mouse_relative);
-    if (!IS_CFG_DEFAULT(is_keyboard_grabbed))
-        _trySetKeyboardGrabbed(new_window, m_build_config.is_keyboard_grabbed);
+    if (!IS_CFG_DEFAULT(m_title))
+        _trySetTitle(new_window, m_build_config.m_title);
+    if (!IS_CFG_DEFAULT(m_size))
+        _trySetSize(new_window, m_build_config.m_size->x, m_build_config.m_size->y);
+    if (!IS_CFG_DEFAULT(m_position))
+        _trySetPos(new_window, m_build_config.m_position->x, m_build_config.m_position->y);
+    if (!IS_CFG_DEFAULT(m_is_resizable))
+        _trySetResizable(new_window, m_build_config.m_is_resizable);
+    if (!IS_CFG_DEFAULT(m_is_minimized))
+        _trySetMinimized(new_window, m_build_config.m_is_minimized);
+    if (!IS_CFG_DEFAULT(m_is_maximized))
+        _trySetMaximized(new_window, m_build_config.m_is_maximized);
+    if (!IS_CFG_DEFAULT(m_is_fullscreen))
+        _trySetFullscreen(new_window, m_build_config.m_is_fullscreen);
+    if (!IS_CFG_DEFAULT(m_is_borderless))
+        _trySetBorderless(new_window, m_build_config.m_is_borderless);
+    if (!IS_CFG_DEFAULT(m_is_hidden))
+        _trySetHidden(new_window, m_build_config.m_is_hidden);
+    if (!IS_CFG_DEFAULT(m_is_always_on_top))
+        SDL_SetWindowAlwaysOnTop(new_window, m_build_config.m_is_always_on_top);
+    if (!IS_CFG_DEFAULT(m_is_mouse_grabbed))
+        SDL_SetWindowMouseGrab(new_window, m_build_config.m_is_mouse_grabbed);
+    if (!IS_CFG_DEFAULT(m_is_mouse_relative))
+        SDL_SetWindowRelativeMouseMode(new_window, m_build_config.m_is_mouse_relative);
+    if (!IS_CFG_DEFAULT(m_is_keyboard_grabbed))
+        _trySetKeyboardGrabbed(new_window, m_build_config.m_is_keyboard_grabbed);
 
     if (impl->renderer_set) {
         build.impl->renderer = build.impl->renderer.create((SDL_Window*)new_window);
@@ -245,13 +245,13 @@ const char* This::title() {
 }
 
 Vec2i This::size() {
-    SDL_GetWindowSize(impl->ptr(), &m_build_config.size->x, &m_build_config.size->y);
-    return m_build_config.size;
+    SDL_GetWindowSize(impl->ptr(), &m_build_config.m_size->x, &m_build_config.m_size->y);
+    return m_build_config.m_size;
 }
 
 Vec2i This::position() {
-    SDL_GetWindowPosition(impl->ptr(), &m_build_config.position->x, &m_build_config.position->y);
-    return m_build_config.position;
+    SDL_GetWindowPosition(impl->ptr(), &m_build_config.m_position->x, &m_build_config.m_position->y);
+    return m_build_config.m_position;
 }
 
 bool This::isResizable() {
@@ -417,26 +417,26 @@ Window& This::setRenderer(const Renderer::Cfg& renderer_cfg) {
 
 Window& This::setTitle(const char* title) {
     if (impl && impl->window_exists) { _trySetTitle(impl->ptr(), title); }
-    m_build_config.title = title;
+    m_build_config.m_title = title;
     return *this;
 }
 
 Window& This::setSize(Vec2i size) {
     if (impl && impl->window_exists) { _trySetSize(impl->ptr(), size.x, size.y); }
-    m_build_config.size = size;
+    m_build_config.m_size = size;
     return *this;
 }
 
 Window& This::setPosition(Vec2i position) {
     if (impl && impl->window_exists) { _trySetPos(impl->ptr(), position.x, position.y); }
-    m_build_config.position = position;
+    m_build_config.m_position = position;
     return *this;
 }
 
 
 Window& This::setResizable(bool yes) {
     if (impl && impl->window_exists) { _trySetResizable(impl->ptr(), yes); }
-    m_build_config.is_resizable = yes;
+    m_build_config.m_is_resizable = yes;
     return *this;
 }
 
@@ -445,7 +445,7 @@ Window& This::setMaximized(bool yes) {
         (yes)?
             (SDL_MaximizeWindow(impl->ptr())) : (SDL_RestoreWindow(impl->ptr()));
     }
-    m_build_config.is_maximized = yes;
+    m_build_config.m_is_maximized = yes;
     return *this;
 }
 // friend of setMaximized
@@ -456,49 +456,49 @@ Window& This::toggleMaximized() {
 
 Window& This::setMinimized(bool yes) {
     if (impl && impl->window_exists) { _trySetMinimized(impl->ptr(), yes); }
-    m_build_config.is_minimized = yes;
+    m_build_config.m_is_minimized = yes;
     return *this;
 }
 
 Window& This::setFullScreen(bool yes) {
     if (impl && impl->window_exists) { _trySetFullscreen(impl->ptr(), yes); }
-    m_build_config.is_fullscreen = yes;
+    m_build_config.m_is_fullscreen = yes;
     return *this;
 }
 
 Window& This::setBorderless(bool yes) {
     if (impl && impl->window_exists) { _trySetBorderless(impl->ptr(), yes); }
-    m_build_config.is_borderless = yes;
+    m_build_config.m_is_borderless = yes;
     return *this;
 }
 
 Window& This::setHidden(bool yes) {
     if (impl && impl->window_exists) { _trySetHidden(impl->ptr(), yes); }
-    m_build_config.is_hidden = yes;
+    m_build_config.m_is_hidden = yes;
     return *this;
 }
 
 Window& This::setAlwaysOnTop(bool yes) {
     if (impl && impl->window_exists) { _trySetAlwaysOnTop(impl->ptr(), yes); }
-    m_build_config.is_always_on_top = yes;
+    m_build_config.m_is_always_on_top = yes;
     return *this;
 }
 
 Window& This::setKeyboardGrabbed(bool yes) {
     if (impl && impl->window_exists) { _trySetKeyboardGrabbed(impl->ptr(), yes); }
-    m_build_config.is_keyboard_grabbed = yes;
+    m_build_config.m_is_keyboard_grabbed = yes;
     return *this;
 }
 
 Window& This::setMouseGrabbed(bool yes) {
     if (impl && impl->window_exists) { _trySetMouseGrabbed(impl->ptr(), yes); }
-    m_build_config.is_mouse_grabbed = yes;
+    m_build_config.m_is_mouse_grabbed = yes;
     return *this;
 }
 
 Window& This::setMouseRelative(bool yes) {
     if (impl && impl->window_exists) { _trySetMouseRelative(impl->ptr(), yes); }
-    m_build_config.is_mouse_relative = yes;
+    m_build_config.m_is_mouse_relative = yes;
     return *this;
 }
 

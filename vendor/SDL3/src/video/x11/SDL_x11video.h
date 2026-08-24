@@ -73,6 +73,7 @@ struct SDL_VideoData
         Atom WM_TAKE_FOCUS;
         Atom WM_NAME;
         Atom WM_TRANSIENT_FOR;
+        Atom WM_STATE;
         Atom _NET_WM_STATE;
         Atom _NET_WM_STATE_HIDDEN;
         Atom _NET_WM_STATE_FOCUSED;
@@ -139,6 +140,8 @@ struct SDL_VideoData
 
     SDL_XInput2DeviceInfo *mouse_device_info;
     unsigned long xinput_last_button_serial;
+    unsigned long xinput_last_key_serial;
+    int xinput_last_keyboard_device;
     int xinput_master_pointer_device;
     bool xinput_hierarchy_changed;
 
@@ -190,7 +193,7 @@ struct SDL_VideoData
 #endif
 
     // Used to interact with the on-screen keyboard
-    bool is_steam_deck;
+    bool use_steam_screen_keyboard;
 
     bool is_xwayland;
 };

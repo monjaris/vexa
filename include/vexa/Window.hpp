@@ -16,56 +16,60 @@ private:
     {
         friend class Window;
 
-        CfgVal<Flags<Trait>> flags;
+        CfgVal<Flags<Trait>> m_flags;
         //
-        CfgVal<const char*> title;
-        CfgVal<Vec2i> size;
-        CfgVal<Vec2i> position;
-        CfgVal<bool> is_resizable;
-        CfgVal<bool> is_maximized;
-        CfgVal<bool> is_minimized;
-        CfgVal<bool> is_fullscreen;
-        CfgVal<bool> is_borderless;
-        CfgVal<bool> is_hidden;
-        CfgVal<bool> is_always_on_top;
-        CfgVal<bool> is_mouse_grabbed;
-        CfgVal<bool> is_mouse_relative;
-        CfgVal<bool> is_keyboard_grabbed;
+        CfgVal<const char*> m_title;
+        CfgVal<Vec2i> m_size;
+        CfgVal<Vec2i> m_position;
+        CfgVal<bool> m_is_resizable;
+        CfgVal<bool> m_is_maximized;
+        CfgVal<bool> m_is_minimized;
+        CfgVal<bool> m_is_fullscreen;
+        CfgVal<bool> m_is_borderless;
+        CfgVal<bool> m_is_hidden;
+        CfgVal<bool> m_is_always_on_top;
+        CfgVal<bool> m_is_mouse_grabbed;
+        CfgVal<bool> m_is_mouse_relative;
+        CfgVal<bool> m_is_keyboard_grabbed;
 
     public:
         constexpr M_Cfg() noexcept:
-            flags(CfgVal<Flags<Trait>>{Trait{}}),
+            m_flags(CfgVal<Flags<Trait>>{Trait{}}),
 
-            title(""),
-            size(Vec2i{0, 0}),
-            position(Vec2i{0, 0}),
-            is_resizable(false),
-            is_maximized(false),
-            is_minimized(false),
-            is_fullscreen(false),
-            is_borderless(false),
-            is_hidden(false),
-            is_always_on_top(false),
-            is_mouse_grabbed(false),
-            is_mouse_relative(false),
-            is_keyboard_grabbed(false)
+            m_title(""),
+            m_size(Vec2i{0, 0}),
+            m_position(Vec2i{0, 0}),
+            m_is_resizable(false),
+            m_is_maximized(false),
+            m_is_minimized(false),
+            m_is_fullscreen(false),
+            m_is_borderless(false),
+            m_is_hidden(false),
+            m_is_always_on_top(false),
+            m_is_mouse_grabbed(false),
+            m_is_mouse_relative(false),
+            m_is_keyboard_grabbed(false)
         {}
 
+        auto flags() -> decltype(m_flags) {
+            return m_flags;
+        }
+
         M_Cfg& reset() {
-            flags = flags.defaultVal();
-            title = title.defaultVal();
-            size = size.defaultVal();
-            position = position.defaultVal();
-            is_resizable = is_resizable.defaultVal();
-            is_maximized = is_maximized.defaultVal();
-            is_minimized = is_minimized.defaultVal();
-            is_fullscreen = is_fullscreen.defaultVal();
-            is_borderless = is_borderless.defaultVal();
-            is_hidden = is_hidden.defaultVal();
-            is_always_on_top = is_always_on_top.defaultVal();
-            is_mouse_grabbed = is_mouse_grabbed.defaultVal();
-            is_mouse_relative = is_mouse_relative.defaultVal();
-            is_keyboard_grabbed = is_keyboard_grabbed.defaultVal();
+            m_flags = m_flags.defaultVal();
+            m_title = m_title.defaultVal();
+            m_size = m_size.defaultVal();
+            m_position = m_position.defaultVal();
+            m_is_resizable = m_is_resizable.defaultVal();
+            m_is_maximized = m_is_maximized.defaultVal();
+            m_is_minimized = m_is_minimized.defaultVal();
+            m_is_fullscreen = m_is_fullscreen.defaultVal();
+            m_is_borderless = m_is_borderless.defaultVal();
+            m_is_hidden = m_is_hidden.defaultVal();
+            m_is_always_on_top = m_is_always_on_top.defaultVal();
+            m_is_mouse_grabbed = m_is_mouse_grabbed.defaultVal();
+            m_is_mouse_relative = m_is_mouse_relative.defaultVal();
+            m_is_keyboard_grabbed = m_is_keyboard_grabbed.defaultVal();
             return *this;
         }
     }
@@ -160,6 +164,9 @@ enum VX_NODISCARD Window::Trait : uint64 {
     VULKAN = 1 << 21,
     METAL = 1 << 22,
 };
+
+
+GEN_BITOPS(Window::Trait, underlying_t<Window::Trait>);
 
 
 NAMESPACE_END(vexa)

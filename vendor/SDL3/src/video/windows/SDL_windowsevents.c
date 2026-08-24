@@ -329,7 +329,7 @@ static void WIN_CheckAsyncMouseRelease(Uint64 timestamp, SDL_WindowData *data)
     data->mouse_button_flags = (WPARAM)-1;
 }
 
-static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, DWORD pos)
+static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, LPPOINT pos)
 {
     SDL_WindowData *data = window->internal;
     HWND hwnd = data->hwnd;
@@ -366,8 +366,8 @@ static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, DWORD pos)
 
         // In relative mode we are guaranteed to have mouse focus if we have keyboard focus
         if (!SDL_GetMouse()->relative_mode) {
-            cursorPos.x = (LONG)GET_X_LPARAM(pos);
-            cursorPos.y = (LONG)GET_Y_LPARAM(pos);
+            cursorPos.x = pos->x;
+            cursorPos.y = pos->y;
             ScreenToClient(hwnd, &cursorPos);
             SDL_SendMouseMotion(WIN_GetEventTimestamp(), window, SDL_GLOBAL_MOUSE_ID, false, (float)cursorPos.x, (float)cursorPos.y);
         }
@@ -719,11 +719,11 @@ static void WIN_HandleRawMouseInput(Uint64 timestamp, SDL_VideoData *data, HANDL
         if (rawmouse->usButtonFlags & RI_MOUSE_WHEEL) {
             SHORT amount = (SHORT)rawmouse->usButtonData;
             float fAmount = (float)amount / WHEEL_DELTA;
-            SDL_SendMouseWheel(WIN_GetEventTimestamp(), window, mouseID, 0.0f, fAmount, SDL_MOUSEWHEEL_NORMAL);
+            SDL_SendMouseWheel(timestamp, window, mouseID, 0.0f, fAmount, SDL_MOUSEWHEEL_NORMAL);
         } else if (rawmouse->usButtonFlags & RI_MOUSE_HWHEEL) {
             SHORT amount = (SHORT)rawmouse->usButtonData;
             float fAmount = (float)amount / WHEEL_DELTA;
-            SDL_SendMouseWheel(WIN_GetEventTimestamp(), window, mouseID, fAmount, 0.0f, SDL_MOUSEWHEEL_NORMAL);
+            SDL_SendMouseWheel(timestamp, window, mouseID, fAmount, 0.0f, SDL_MOUSEWHEEL_NORMAL);
         }
 
         /* Invalidate the mouse button flags. If we don't do this then disabling raw input
@@ -1221,8 +1221,13 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
         /* Update the focus here, since it's possible to get WM_ACTIVATE and WM_SETFOCUS without
            actually being the foreground window, but this appears to get called in all cases where
-           the global foreground window changes to and from this window. */
-        WIN_UpdateFocus(data->window, !!wParam, GetMessagePos());
+           the global foreground window changes to and from this window.
+
+           The current cursor position is needed here, as the message position contains old
+           coordinates if the pointer moved while an overlay was active. */
+        POINT pos = { 0, 0 };
+        GetCursorPos(&pos);
+        WIN_UpdateFocus(data->window, !!wParam, &pos);
 
         /* Handle borderless windows; this event is intended for drawing the titlebar, so we need
            to stop that from happening. */
@@ -1246,7 +1251,9 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_ACTIVATE:
     {
         // Update the focus in case we changed focus to a child window and then away from the application
-        WIN_UpdateFocus(data->window, !!LOWORD(wParam), GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, !!LOWORD(wParam), &pos);
     } break;
 
     case WM_MOUSEACTIVATE:
@@ -1269,14 +1276,18 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_SETFOCUS:
     {
         // Update the focus in case it's changing between top-level windows in the same application
-        WIN_UpdateFocus(data->window, true, GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, true, &pos);
     } break;
 
     case WM_KILLFOCUS:
     case WM_ENTERIDLE:
     {
         // Update the focus in case it's changing between top-level windows in the same application
-        WIN_UpdateFocus(data->window, false, GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, false, &pos);
     } break;
 
     case WM_POINTERENTER:
@@ -2243,7 +2254,7 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         SDL_SendDropComplete(data->window);
         DragFinish(drop);
         return 0;
-    } break;
+    }
 
     case WM_DISPLAYCHANGE:
     {
@@ -2475,7 +2486,6 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             data->expected_resize = false;
             return 0;
         }
-        break;
 
     case WM_SETTINGCHANGE:
         if (wParam == 0 && lParam != 0 && SDL_wcscmp((wchar_t *)lParam, L"ImmersiveColorSet") == 0) {
@@ -2489,7 +2499,19 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             WIN_UpdateDisplayUsableBounds(SDL_GetVideoDevice());
         }
         break;
+#else
+    // Xbox does not support WM_WINDOWPOSCHANGED, so use WM_SIZE instead to detect window resizes
+    case WM_SIZE:
+    {
+        RECT rect;
+        int w, h;
 
+        if (GetClientRect(hwnd, &rect) && WIN_WindowRectValid(&rect)) {
+            w = rect.right;
+            h = rect.bottom;
+            SDL_SendWindowEvent(data->window, SDL_EVENT_WINDOW_RESIZED, w, h);
+        }
+    } break;
 #endif // !defined(SDL_PLATFORM_XBOXONE) && !defined(SDL_PLATFORM_XBOXSERIES)
 
     default:

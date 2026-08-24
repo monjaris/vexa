@@ -19,7 +19,6 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 #include "SDL_internal.h"
-#include "events/SDL_events_c.h"
 
 #ifndef SDL_x11xinput2_h_
 #define SDL_x11xinput2_h_

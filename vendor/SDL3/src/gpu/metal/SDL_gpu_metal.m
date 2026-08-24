@@ -26,6 +26,12 @@
 #include <Metal/Metal.h>
 #include <QuartzCore/CoreAnimation.h>
 
+#ifdef HAVE_GPU_OPENXR
+#define XR_USE_GRAPHICS_API_METAL 1
+#include "../xr/SDL_openxr_internal.h"
+#include "../xr/SDL_openxrdyn.h"
+#endif
+
 #include "../SDL_sysgpu.h"
 
 // Defines
@@ -424,6 +430,7 @@ static MTLDepthClipMode SDLToMetal_DepthClipMode(
 // Structs
 
 typedef struct MetalRenderer MetalRenderer;
+typedef struct MetalCommandBuffer MetalCommandBuffer;
 
 typedef struct MetalTexture
 {
@@ -447,7 +454,7 @@ typedef struct MetalTextureContainer
 
 typedef struct MetalFence
 {
-    SDL_AtomicInt complete;
+    id<MTLCommandBuffer> commandBuffer;
     SDL_AtomicInt referenceCount;
 } MetalFence;
 
@@ -1436,10 +1443,10 @@ static MetalTexture *METAL_INTERNAL_CreateTexture(
     // This format isn't natively supported so let's swizzle!
     if (createinfo->format == SDL_GPU_TEXTUREFORMAT_B4G4R4A4_UNORM) {
         if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)) {
-            textureDescriptor.swizzle = MTLTextureSwizzleChannelsMake(MTLTextureSwizzleBlue,
-                                                                      MTLTextureSwizzleGreen,
-                                                                      MTLTextureSwizzleRed,
-                                                                      MTLTextureSwizzleAlpha);
+            textureDescriptor.swizzle = MTLTextureSwizzleChannelsMake(MTLTextureSwizzleGreen,
+                                                                      MTLTextureSwizzleBlue,
+                                                                      MTLTextureSwizzleAlpha,
+                                                                      MTLTextureSwizzleRed);
         } else {
             SET_STRING_ERROR_AND_RETURN("SDL_GPU_TEXTUREFORMAT_B4G4R4A4_UNORM is not supported", NULL);
         }
@@ -2087,7 +2094,6 @@ static Uint8 METAL_INTERNAL_CreateFence(
     MetalFence *fence;
 
     fence = SDL_calloc(1, sizeof(MetalFence));
-    SDL_SetAtomicInt(&fence->complete, 0);
     SDL_SetAtomicInt(&fence->referenceCount, 0);
 
     // Add it to the available pool
@@ -2130,7 +2136,7 @@ static bool METAL_INTERNAL_AcquireFence(
 
     // Associate the fence with the command buffer
     commandBuffer->fence = fence;
-    SDL_SetAtomicInt(&fence->complete, 0); // FIXME: Is this right?
+    fence->commandBuffer = commandBuffer->handle;
     (void)SDL_AtomicIncRef(&commandBuffer->fence->referenceCount);
 
     return true;
@@ -2411,7 +2417,6 @@ static void METAL_BindGraphicsPipeline(
 {
     @autoreleasepool {
         MetalCommandBuffer *metalCommandBuffer = (MetalCommandBuffer *)commandBuffer;
-        MetalGraphicsPipeline *previousPipeline = metalCommandBuffer->graphics_pipeline;
         MetalGraphicsPipeline *pipeline = (MetalGraphicsPipeline *)graphicsPipeline;
         SDL_GPURasterizerState *rast = &pipeline->rasterizerState;
         Uint32 i;
@@ -2438,6 +2443,14 @@ static void METAL_BindGraphicsPipeline(
                 setDepthStencilState:pipeline->depth_stencil_state];
         }
 
+        // Mark that bindings are needed
+        metalCommandBuffer->needVertexSamplerBind = true;
+        metalCommandBuffer->needVertexStorageTextureBind = true;
+        metalCommandBuffer->needVertexStorageBufferBind = true;
+        metalCommandBuffer->needFragmentSamplerBind = true;
+        metalCommandBuffer->needFragmentStorageTextureBind = true;
+        metalCommandBuffer->needFragmentStorageBufferBind = true;
+
         for (i = 0; i < MAX_UNIFORM_BUFFERS_PER_STAGE; i += 1) {
             metalCommandBuffer->needVertexUniformBufferBind[i] = true;
             metalCommandBuffer->needFragmentUniformBufferBind[i] = true;
@@ -2454,17 +2467,6 @@ static void METAL_BindGraphicsPipeline(
             if (metalCommandBuffer->fragmentUniformBuffers[i] == NULL) {
                 metalCommandBuffer->fragmentUniformBuffers[i] = METAL_INTERNAL_AcquireUniformBufferFromPool(
                     metalCommandBuffer);
-            }
-        }
-
-        if (previousPipeline && previousPipeline != pipeline) {
-            // if the number of uniform buffers has changed, the storage buffers will move as well
-            // and need a rebind at their new locations
-            if (previousPipeline->header.num_vertex_uniform_buffers != pipeline->header.num_vertex_uniform_buffers) {
-                metalCommandBuffer->needVertexStorageBufferBind = true;
-            }
-            if (previousPipeline->header.num_fragment_uniform_buffers != pipeline->header.num_fragment_uniform_buffers) {
-                metalCommandBuffer->needFragmentStorageBufferBind = true;
             }
         }
     }
@@ -3182,6 +3184,10 @@ static void METAL_BindComputePipeline(
             }
         }
 
+        metalCommandBuffer->needComputeSamplerBind = true;
+        metalCommandBuffer->needComputeReadOnlyStorageTextureBind = true;
+        metalCommandBuffer->needComputeReadOnlyStorageBufferBind = true;
+
         // Bind write-only resources
         if (pipeline->header.numReadWriteStorageTextures > 0) {
             [metalCommandBuffer->computeEncoder setTextures:metalCommandBuffer->computeReadWriteTextures
@@ -3400,6 +3406,7 @@ static void METAL_ReleaseFence(
     SDL_GPUFence *fence)
 {
     MetalFence *metalFence = (MetalFence *)fence;
+    metalFence->commandBuffer = nil;
     if (SDL_AtomicDecRef(&metalFence->referenceCount)) {
         METAL_INTERNAL_ReleaseFenceToPool(
             (MetalRenderer *)driverData,
@@ -3581,6 +3588,12 @@ static void METAL_INTERNAL_PerformPendingDestroys(
 }
 
 // Fences
+static bool METAL_INTERNAL_IsFenceBusy(
+        MetalFence *fence
+) {
+    MTLCommandBufferStatus status = fence->commandBuffer.status;
+    return status == MTLCommandBufferStatusCommitted || status == MTLCommandBufferStatusScheduled;
+}
 
 static bool METAL_WaitForFences(
     SDL_GPURenderer *driverData,
@@ -3590,20 +3603,19 @@ static bool METAL_WaitForFences(
 {
     @autoreleasepool {
         MetalRenderer *renderer = (MetalRenderer *)driverData;
-        bool waiting;
 
         if (waitAll) {
             for (Uint32 i = 0; i < numFences; i += 1) {
-                while (!SDL_GetAtomicInt(&((MetalFence *)fences[i])->complete)) {
-                    // Spin!
-                }
+                MetalFence *fence = (MetalFence *)fences[i];
+                [fence->commandBuffer waitUntilCompleted];
             }
         } else {
-            waiting = 1;
+            bool waiting = true;
             while (waiting) {
                 for (Uint32 i = 0; i < numFences; i += 1) {
-                    if (SDL_GetAtomicInt(&((MetalFence *)fences[i])->complete) > 0) {
-                        waiting = 0;
+                    MetalFence *fence = (MetalFence *)fences[i];
+                    if (!METAL_INTERNAL_IsFenceBusy(fence)) {
+                        waiting = false;
                         break;
                     }
                 }
@@ -3621,7 +3633,7 @@ static bool METAL_QueryFence(
     SDL_GPUFence *fence)
 {
     MetalFence *metalFence = (MetalFence *)fence;
-    return SDL_GetAtomicInt(&metalFence->complete) == 1;
+    return !METAL_INTERNAL_IsFenceBusy(metalFence);
 }
 
 // Window and Swapchain Management
@@ -4084,11 +4096,6 @@ static bool METAL_Submit(
             windowData->frameCounter = (windowData->frameCounter + 1) % renderer->allowedFramesInFlight;
         }
 
-        // Notify the fence when the command buffer has completed
-        [metalCommandBuffer->handle addCompletedHandler:^(id<MTLCommandBuffer> buffer) {
-          SDL_AtomicIncRef(&metalCommandBuffer->fence->complete);
-        }];
-
         // Submit the command buffer
         [metalCommandBuffer->handle commit];
         metalCommandBuffer->handle = nil;
@@ -4106,7 +4113,7 @@ static bool METAL_Submit(
 
         // Check if we can perform any cleanups
         for (Sint32 i = renderer->submittedCommandBufferCount - 1; i >= 0; i -= 1) {
-            if (SDL_GetAtomicInt(&renderer->submittedCommandBuffers[i]->fence->complete)) {
+            if (!METAL_INTERNAL_IsFenceBusy(renderer->submittedCommandBuffers[i]->fence)) {
                 METAL_INTERNAL_CleanCommandBuffer(
                     renderer,
                     renderer->submittedCommandBuffers[i],
@@ -4159,9 +4166,8 @@ static bool METAL_Wait(
          * Sort of equivalent to vkDeviceWaitIdle.
          */
         for (Uint32 i = 0; i < renderer->submittedCommandBufferCount; i += 1) {
-            while (!SDL_GetAtomicInt(&renderer->submittedCommandBuffers[i]->fence->complete)) {
-                // Spin!
-            }
+            SDL_GPUFence *opaqueFence = (SDL_GPUFence *)renderer->submittedCommandBuffers[i]->fence;
+            METAL_WaitForFences(driverData, true, &opaqueFence, 1);
         }
 
         SDL_LockMutex(renderer->submitLock);
@@ -4341,6 +4347,10 @@ static bool METAL_SupportsTextureFormat(
 
 static bool METAL_PrepareDriver(SDL_VideoDevice *this, SDL_PropertiesID props)
 {
+    if (SDL_GetBooleanProperty(props, SDL_PROP_GPU_DEVICE_CREATE_XR_ENABLE_BOOLEAN, false)) {
+        return false;
+    }
+
     if (!SDL_GetBooleanProperty(props, SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN, false) &&
         !SDL_GetBooleanProperty(props, SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN, false)) {
         return false;
@@ -4501,6 +4511,45 @@ static void METAL_INTERNAL_DestroyBlitResources(
         METAL_ReleaseGraphicsPipeline(driverData, renderer->blitPipelines[i].pipeline);
     }
     SDL_free(renderer->blitPipelines);
+}
+
+static XrResult METAL_DestroyXRSwapchain(
+    SDL_GPURenderer *driverData,
+    XrSwapchain swapchain,
+    SDL_GPUTexture **swapchainImages)
+{
+    SDL_SetError("The metal backend does not currently support OpenXR");
+    return XR_ERROR_FUNCTION_UNSUPPORTED;
+}
+
+static SDL_GPUTextureFormat* METAL_GetXRSwapchainFormats(
+    SDL_GPURenderer *driverData,
+    XrSession session,
+    int *num_formats)
+{
+    SDL_SetError("The metal backend does not currently support OpenXR");
+    return NULL;
+}
+
+static XrResult METAL_CreateXRSwapchain(
+    SDL_GPURenderer *driverData,
+    XrSession session,
+    const XrSwapchainCreateInfo *oldCreateInfo,
+    SDL_GPUTextureFormat format,
+    XrSwapchain *swapchain,
+    SDL_GPUTexture ***textures)
+{
+    SDL_SetError("The metal backend does not currently support OpenXR");
+    return XR_ERROR_FUNCTION_UNSUPPORTED;
+}
+
+static XrResult METAL_CreateXRSession(
+    SDL_GPURenderer *driverData,
+    const XrSessionCreateInfo *createinfo,
+    XrSession *session)
+{
+    SDL_SetError("The metal backend does not currently support OpenXR");
+    return XR_ERROR_FUNCTION_UNSUPPORTED;
 }
 
 static SDL_GPUDevice *METAL_CreateDevice(bool debugMode, bool preferLowPower, SDL_PropertiesID props)

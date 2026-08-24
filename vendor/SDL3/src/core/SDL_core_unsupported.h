@@ -35,6 +35,8 @@ extern SDL_DECLSPEC void SDLCALL SDL_GDKSuspendComplete(void);
 extern SDL_DECLSPEC bool SDLCALL SDL_GetGDKDefaultUser(XUserHandle *outUserHandle);
 extern SDL_DECLSPEC void SDLCALL SDL_GDKSuspendGPU(SDL_GPUDevice *device);
 extern SDL_DECLSPEC void SDLCALL SDL_GDKResumeGPU(SDL_GPUDevice *device);
+extern SDL_DECLSPEC void SDLCALL SDL_GDKSuspendRenderer(SDL_Renderer *renderer);
+extern SDL_DECLSPEC void SDLCALL SDL_GDKResumeRenderer(SDL_Renderer *renderer);
 #endif /* !SDL_PLATFORM_GDK */
 
 #if !defined(SDL_PLATFORM_WINDOWS)
@@ -63,3 +65,7 @@ extern SDL_DECLSPEC bool SDLCALL SDL_IsChromebook(void);
 extern SDL_DECLSPEC bool SDLCALL SDL_IsDeXMode(void);
 extern SDL_DECLSPEC Sint32 SDLCALL JNI_OnLoad(JavaVM *vm, void *reserved);
 #endif /* !SDL_PLATFORM_ANDROID */
+
+#if !defined(SDL_PLATFORM_LINUX)
+extern SDL_DECLSPEC bool SDLCALL SDL_IsUbuntuTouch(void);
+#endif /* !SDL_PLATFORM_LINUX */

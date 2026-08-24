@@ -69,6 +69,14 @@ void SDL_GDKResumeGPU(SDL_GPUDevice *device)
 {
 }
 
+void SDL_GDKSuspendRenderer(SDL_Renderer *renderer)
+{
+}
+
+void SDL_GDKResumeRenderer(SDL_Renderer *renderer)
+{
+}
+
 #endif /* !SDL_PLATFORM_GDK */
 
 #if !defined(SDL_PLATFORM_WINDOWS)
@@ -186,4 +194,13 @@ Sint32 JNI_OnLoad(JavaVM *vm, void *reserved)
     (void)reserved;
     return 0x00010004; // JNI_VERSION_1_4
 }
+#endif
+
+#ifndef SDL_PLATFORM_LINUX
+
+bool SDL_IsUbuntuTouch(void)
+{
+    return false;
+}
+
 #endif

@@ -20,7 +20,7 @@
 */
 
 /**
- * Main include header for the SDL library, version 3.4.8
+ * Main include header for the SDL library, version 3.5.0
  *
  * It is almost always best to include just this one header instead of
  * picking out individual headers included here. There are exceptions to
@@ -66,6 +66,7 @@
 #include <SDL3/SDL_misc.h>
 #include <SDL3/SDL_mouse.h>
 #include <SDL3/SDL_mutex.h>
+#include <SDL3/SDL_notification.h>
 #include <SDL3/SDL_pen.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_platform.h>

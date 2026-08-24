@@ -19,7 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "../../SDL_internal.h"
+#include "SDL_internal.h"
 
 #ifndef SDL_waylandevents_h_
 #define SDL_waylandevents_h_
@@ -43,16 +43,14 @@ typedef struct
 {
     Sint32 repeat_rate;     // Repeat rate in range of [1, 1000] character(s) per second
     Sint32 repeat_delay_ms; // Time to first repeat event in milliseconds
-    Uint32 keyboard_id;     // ID of the source keyboard.
-    bool is_initialized;
 
-    bool is_key_down;
-    Uint32 key;
+    Uint32 key;               // Key code of the repeating key
+    Uint32 scancode;          // Scancode of the repeating key
+    Uint32 keyboard_id;       // ID of the source keyboard
     Uint32 wl_press_time_ms;  // Key press time as reported by the Wayland API in milliseconds
     Uint64 base_time_ns;      // Key press time as reported by the Wayland API in nanoseconds
     Uint64 sdl_press_time_ns; // Key press time expressed in SDL ticks
     Uint64 next_repeat_ns;    // Next repeat event in nanoseconds
-    Uint32 scancode;
     char text[8];
 } SDL_WaylandKeyboardRepeat;
 
@@ -189,6 +187,7 @@ typedef struct SDL_WaylandSeat
         struct zwp_pointer_gesture_pinch_v1 *gesture_pinch;
 
         SDL_WindowData *focus;
+        struct wl_surface *focus_surface;
 
         // According to the spec, a seat can only have one active gesture of any type at a time.
         SDL_WindowData *gesture_focus;
@@ -206,8 +205,11 @@ typedef struct SDL_WaylandSeat
         {
             bool have_absolute;
             bool have_relative;
+            bool have_warp;
             bool have_axis;
-            bool have_enter;
+
+            Uint32 buttons_pressed;
+            Uint32 buttons_released;
 
             struct
             {
@@ -233,6 +235,9 @@ typedef struct SDL_WaylandSeat
 
                 SDL_MouseWheelDirection direction;
             } axis;
+
+            struct wl_surface *enter_surface;
+            struct wl_surface *leave_surface;
 
             // Event timestamp in nanoseconds
             Uint64 timestamp_ns;

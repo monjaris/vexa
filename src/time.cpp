@@ -1,7 +1,7 @@
-#include "alt/SDL3.h"
 #include <thread>
 #include <chrono>
-#include "time.hpp"
+#include "vexa/alt/SDL3.h"
+#include "vexa/time.hpp"
 NAMESPACE_BEGIN(vexa::time)
 
 namespace chrono = std::chrono;

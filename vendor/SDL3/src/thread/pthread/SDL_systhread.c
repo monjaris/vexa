@@ -112,9 +112,11 @@ bool SDL_SYS_CreateThread(SDL_Thread *thread,
     }
 
     // Create the thread and go!
-    if (pthread_create((void*)&thread->handle, &type, RunThread, thread) != 0) {
+    if (pthread_create(&thread->handle, &type, RunThread, thread) != 0) {
         return SDL_SetError("Not enough resources to create thread");
     }
+
+    thread->threadid = (SDL_ThreadID) thread->handle;  // the SDL thread ID is just the pthread_t.
 
     return true;
 }
@@ -252,7 +254,12 @@ bool SDL_SYS_SetThreadPriority(SDL_ThreadPriority priority)
     if (priority == SDL_THREAD_PRIORITY_LOW) {
         sched.sched_priority = sched_get_priority_min(policy);
     } else if (priority == SDL_THREAD_PRIORITY_TIME_CRITICAL) {
+#if defined(__QNX__)
+        /* io_snd complains about a client thread having priority >= 49 */
+        sched.sched_priority = 48;
+#else
         sched.sched_priority = sched_get_priority_max(policy);
+#endif
     } else {
         int min_priority = sched_get_priority_min(policy);
         int max_priority = sched_get_priority_max(policy);

@@ -139,7 +139,7 @@ static SDL_Window *xinput2_get_sdlwindow(SDL_VideoData *videodata, Window window
 #endif // SDL_VIDEO_DRIVER_X11_XINPUT2
 
 #ifdef SDL_VIDEO_DRIVER_X11_XINPUT2_SUPPORTS_SCROLLINFO
-static void xinput2_reset_scrollable_valuators()
+static void xinput2_reset_scrollable_valuators(void)
 {
     for (int i = 0; i < scrollable_device_count; ++i) {
         for (int j = 0; j < scrollable_devices[i].scroll_info_count; ++j) {
@@ -302,6 +302,12 @@ bool X11_InitXinput2(SDL_VideoDevice *_this)
     eventmask.deviceid = XIAllDevices;
     eventmask.mask_len = sizeof(mask);
     eventmask.mask = mask;
+
+#ifndef USE_XINPUT2_KEYBOARD
+    // If not using the full keyboard handling, register for keypresses to get the event source devices.
+    XISetMask(mask, XI_KeyPress);
+    XISetMask(mask, XI_KeyRelease);
+#endif
 
     XISetMask(mask, XI_HierarchyChanged);
     X11_XISelectEvents(data->display, DefaultRootWindow(data->display), &eventmask, 1);
@@ -535,6 +541,8 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
     case XI_KeyRelease:
     {
         const XIDeviceEvent *xev = (const XIDeviceEvent *)cookie->data;
+
+#ifdef USE_XINPUT2_KEYBOARD
         SDL_WindowData *windowdata = X11_FindWindow(videodata, xev->event);
         XEvent xevent;
 
@@ -564,6 +572,13 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
         xevent.xkey.same_screen = 1;
 
         X11_HandleKeyEvent(_this, windowdata, (SDL_KeyboardID)xev->sourceid, &xevent);
+#else
+        /* Keys are handled through core X events, however, note the device ID and
+         * associated serial, so that the source device ID can be passed through.
+         */
+        videodata->xinput_last_key_serial = xev->serial;
+        videodata->xinput_last_keyboard_device = xev->sourceid;
+#endif
     } break;
 
     case XI_RawButtonPress:
@@ -590,6 +605,9 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
         bool pointer_emulated = false;
 #endif
 
+        // Store the button serial to filter out redundant core button events.
+        videodata->xinput_last_button_serial = xev->serial;
+
         if (pen) {
             if (xev->deviceid != xev->sourceid) {
                 // Discard events from "Master" devices to avoid duplicates.
@@ -607,12 +625,11 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
             SDL_WindowData *windowdata = X11_FindWindow(videodata, xev->event);
             int x_ticks = 0, y_ticks = 0;
 
-            // Store the button serial to filter out redundant core button events.
-            videodata->xinput_last_button_serial = xev->serial;
-
             if (xev->deviceid != videodata->xinput_master_pointer_device) {
-                // Ignore slave button events on non-focused windows, or focus can be incorrectly set while a grab is active.
-                if (SDL_GetMouseFocus() != windowdata->window) {
+                /* Ignore slave button events on non-focused windows, as they can arrive before FocusIn events,
+                 * or result in focus being incorrectly set while a grab is active.
+                 */
+                if (SDL_GetMouseFocus() != windowdata->window || SDL_GetKeyboardFocus() != windowdata->window) {
                     break;
                 }
 
@@ -631,7 +648,7 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
 
             if (down) {
                 X11_HandleButtonPress(_this, windowdata, (SDL_MouseID)xev->sourceid, button,
-                                      (float)xev->event_x, (float)xev->event_y, xev->time);
+                                      (float)xev->event_x, (float)xev->event_y, xev->time, xev->serial);
             } else {
                 X11_HandleButtonRelease(_this, windowdata, (SDL_MouseID)xev->sourceid, button, xev->time);
             }
@@ -743,11 +760,11 @@ void X11_HandleXinput2Event(SDL_VideoDevice *_this, XGenericEventCookie *cookie)
         xinput2_normalize_touch_coordinates(window, xev->event_x, xev->event_y, &x, &y);
 
         if (cookie->evtype == XI_GesturePinchBegin) {
-            SDL_SendPinch(SDL_EVENT_PINCH_BEGIN, 0, window, 0);
+            SDL_SendPinch(SDL_EVENT_PINCH_BEGIN, 0, window, 0, -1.0f, -1.0f, -1.0f, -1.0f);
         } else if (cookie->evtype == XI_GesturePinchUpdate) {
-            SDL_SendPinch(SDL_EVENT_PINCH_UPDATE, 0, window, (float)xev->scale);
+            SDL_SendPinch(SDL_EVENT_PINCH_UPDATE, 0, window, (float)xev->scale, -1.0f, -1.0f, -1.0f, -1.0f);
         } else {
-            SDL_SendPinch(SDL_EVENT_PINCH_END, 0, window, 0);
+            SDL_SendPinch(SDL_EVENT_PINCH_END, 0, window, 0, -1.0f, -1.0f, -1.0f, -1.0f);
         }
     } break;
 

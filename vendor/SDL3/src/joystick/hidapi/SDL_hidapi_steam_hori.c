@@ -39,8 +39,6 @@ enum
     SDL_GAMEPAD_BUTTON_HORI_FL,
     SDL_GAMEPAD_BUTTON_HORI_M1,
     SDL_GAMEPAD_BUTTON_HORI_M2,
-    SDL_GAMEPAD_BUTTON_HORI_JOYSTICK_TOUCH_L,
-    SDL_GAMEPAD_BUTTON_HORI_JOYSTICK_TOUCH_R,
     SDL_GAMEPAD_NUM_HORI_BUTTONS
 };
 
@@ -133,6 +131,10 @@ static bool HIDAPI_DriverSteamHori_OpenJoystick(SDL_HIDAPI_Device *device, SDL_J
 
     const Uint64 sensorupdatestep_ms = ctx->wireless ? 8333 : 4000; // Equivalent to 120hz / 250hz respectively
     ctx->simulated_sensor_step_ns = SDL_US_TO_NS(sensorupdatestep_ms);
+
+    SDL_PrivateJoystickAddCapSense(joystick, SDL_GAMEPAD_CAPSENSE_LEFT_STICK);
+    SDL_PrivateJoystickAddCapSense(joystick, SDL_GAMEPAD_CAPSENSE_RIGHT_STICK);
+
     return true;
 }
 
@@ -203,7 +205,7 @@ static void HIDAPI_DriverSteamHori_HandleStatePacket(SDL_Joystick *joystick, SDL
         return;
     }
 
-    #define READ_STICK_AXIS(offset) \
+#define READ_STICK_AXIS(offset) \
     (data[offset] == 0x80 ? 0 : (Sint16)HIDAPI_RemapVal((float)((int)data[offset] - 0x80), -0x80, 0xff - 0x80, SDL_MIN_SINT16, SDL_MAX_SINT16))
     {
         axis = READ_STICK_AXIS(1);
@@ -273,8 +275,8 @@ static void HIDAPI_DriverSteamHori_HandleStatePacket(SDL_Joystick *joystick, SDL
         SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_LEFT_STICK, ((data[7] & 0x02) != 0));
         SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_RIGHT_STICK, ((data[7] & 0x04) != 0));
         SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_HORI_M2, ((data[7] & 0x08) != 0));
-        SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_HORI_JOYSTICK_TOUCH_L, ((data[7] & 0x10) != 0));
-        SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_HORI_JOYSTICK_TOUCH_R, ((data[7] & 0x20) != 0));
+        SDL_SendJoystickCapSense(timestamp, joystick, SDL_GAMEPAD_CAPSENSE_LEFT_STICK, ((data[7] & 0x10) != 0));
+        SDL_SendJoystickCapSense(timestamp, joystick, SDL_GAMEPAD_CAPSENSE_RIGHT_STICK, ((data[7] & 0x20) != 0));
         SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_HORI_FR, ((data[7] & 0x40) != 0));
         SDL_SendJoystickButton(timestamp, joystick, SDL_GAMEPAD_BUTTON_HORI_FL, ((data[7] & 0x80) != 0));
     }
@@ -307,7 +309,7 @@ static void HIDAPI_DriverSteamHori_HandleStatePacket(SDL_Joystick *joystick, SDL
         Uint32 delta;
         Uint16 tick = LOAD16(data[10],
                              data[11]);
-        if (ctx->last_tick < tick) {
+        if (ctx->last_tick <= tick) {
             delta = (tick - ctx->last_tick);
         } else {
             delta = (SDL_MAX_UINT16 - ctx->last_tick + tick + 1);

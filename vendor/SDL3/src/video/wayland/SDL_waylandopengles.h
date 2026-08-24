@@ -18,7 +18,7 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
-#include "../../SDL_internal.h"
+#include "SDL_internal.h"
 
 #ifndef SDL_waylandopengles_h_
 #define SDL_waylandopengles_h_
@@ -43,6 +43,7 @@ extern bool Wayland_GLES_GetSwapInterval(SDL_VideoDevice *_this, int *interval);
 extern bool Wayland_GLES_SwapWindow(SDL_VideoDevice *_this, SDL_Window *window);
 extern bool Wayland_GLES_MakeCurrent(SDL_VideoDevice *_this, SDL_Window *window, SDL_GLContext context);
 extern bool Wayland_GLES_DestroyContext(SDL_VideoDevice *_this, SDL_GLContext context);
+extern void Wayland_GLES_SetDefaultProfileConfig(SDL_VideoDevice *_this);
 extern SDL_EGLSurface Wayland_GLES_GetEGLSurface(SDL_VideoDevice *_this, SDL_Window *window);
 
 #endif // SDL_waylandopengles_h_
