@@ -298,17 +298,12 @@ using KeyCodeValueT = underlying_t<KeyCode>;
 
 
 //  KeyMod methods  //
-constexpr bool operator== (KeyMod left, KeyMod right) noexcept {
-    return CAST(KeyModValueT, left) == CAST(KeyModValueT, right);
+GEN_BITOPS(KeyMod, KeyModValueT);  // wrapped to a macro now
+
+constexpr bool operator== (const KeyMod first, const KeyMod second) {
+    return CAST(KeyModValueT, first) == CAST(KeyModValueT, second);
 }
 
-constexpr KeyMod operator& (KeyMod first, KeyMod second) noexcept {
-    return static_cast<KeyMod>(CAST(KeyModValueT, first) & CAST(KeyModValueT, second));
-}
-
-constexpr KeyMod operator| (KeyMod first, KeyMod second) noexcept {
-    return static_cast<KeyMod>(CAST(KeyModValueT, first) | CAST(KeyModValueT, second));
-}
 
 constexpr bool filterMods(KeyMod source, KeyMod has, KeyMod has_not=KeyMod::NONE) noexcept {
     return bool(source & has) && (source & has_not)==KeyMod::NONE;

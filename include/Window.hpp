@@ -4,6 +4,10 @@ NAMESPACE_BEGIN(vexa)
 
 class VX_NODISCARD Window
 {
+public:
+    enum Trait : uint64;
+
+private:
     class Impl;
     Uptr<Impl> impl;
 
@@ -11,9 +15,9 @@ class VX_NODISCARD Window
     class VX_NODISCARD M_Cfg
     {
         friend class Window;
-    public:
-        CfgVal<Flags> flags;
-    // private:
+
+        CfgVal<Flags<Trait>> flags;
+        //
         CfgVal<const char*> title;
         CfgVal<Vec2i> size;
         CfgVal<Vec2i> position;
@@ -30,7 +34,8 @@ class VX_NODISCARD Window
 
     public:
         constexpr M_Cfg() noexcept:
-            flags(Flags{}),
+            flags(CfgVal<Flags<Trait>>{Trait{}}),
+
             title(""),
             size(Vec2i{0, 0}),
             position(Vec2i{0, 0}),
@@ -67,27 +72,26 @@ class VX_NODISCARD Window
     m_build_config;
 
 
-    using M_WindowPtr = void*;
-    using M_WindowFlags = uint64;
-    static M_WindowFlags _getActiveFlags(M_WindowPtr win);
-    static void _trySetTitle(M_WindowPtr win, const char* title);
-    static void _trySetSize(M_WindowPtr win, int x, int y);
-    static void _trySetPos(M_WindowPtr win, int x, int y);
-    static void _trySetResizable(M_WindowPtr win, bool yes);
-    static void _trySetMinimized(M_WindowPtr win, bool yes);
-    static void _trySetMaximized(M_WindowPtr win, bool yes);
-    static void _trySetFullscreen(M_WindowPtr win, bool yes);
-    static void _trySetBorderless(M_WindowPtr win, bool yes);
-    static void _trySetHidden(M_WindowPtr win, bool yes);
-    static void _trySetAlwaysOnTop(M_WindowPtr win, bool yes);
-    static void _trySetMouseGrabbed(M_WindowPtr win, bool yes);
-    static void _trySetMouseRelative(M_WindowPtr win, bool yes);
-    static void _trySetKeyboardGrabbed(M_WindowPtr win, bool yes);
+    using mWindowPtr = void*;
+    using mWindowFlags = uint64;
+    static mWindowFlags _getActiveFlags(mWindowPtr win);
+    static void _trySetTitle(mWindowPtr win, const char* title);
+    static void _trySetSize(mWindowPtr win, int x, int y);
+    static void _trySetPos(mWindowPtr win, int x, int y);
+    static void _trySetResizable(mWindowPtr win, bool yes);
+    static void _trySetMinimized(mWindowPtr win, bool yes);
+    static void _trySetMaximized(mWindowPtr win, bool yes);
+    static void _trySetFullscreen(mWindowPtr win, bool yes);
+    static void _trySetBorderless(mWindowPtr win, bool yes);
+    static void _trySetHidden(mWindowPtr win, bool yes);
+    static void _trySetAlwaysOnTop(mWindowPtr win, bool yes);
+    static void _trySetMouseGrabbed(mWindowPtr win, bool yes);
+    static void _trySetMouseRelative(mWindowPtr win, bool yes);
+    static void _trySetKeyboardGrabbed(mWindowPtr win, bool yes);
 
 
 public:
     using Cfg = M_Cfg;
-    enum Trait : uint64;
 
     Window(Cfg config = Cfg{});
     ~Window();
@@ -99,11 +103,6 @@ public:
     void destroy();
     bool exists();
     uint32 id() const noexcept;
-
-    // under construction  //
-    // Flags defaultFlags() const noexcept;
-    // Flags& flags() noexcept;
-
 
     Renderer& renderer() noexcept;
     const char* title();
@@ -146,38 +145,20 @@ enum VX_NODISCARD Window::Trait : uint64 {
     NONE = 0,
 
     /* general */
-    // RESIZABLE,
-    // MINIMIZED,
-    // MAXIMIZED,
-    // FULLSCREEN,
-    // BORDERLESS,
-    // HIDDEN,
-    TRANSPARENT,
-    // ALWAYS_ON_TOP,
-    UNFOCUSABLE,
-    DENSE_PIXELS,
+    TRANSPARENT = 1 << 1,
+    UNFOCUSABLE = 1 << 2,
+    DENSE_PIXELS = 1 << 3,
 
-    /* input */
-    // MOUSE_GRABBED,
-    // MOUSE_RELATIVE,
-    // KEYBOARD_GRABBED,
-    // MOUSE_CAPTURE,
-    //// INPUT_FOCUS,
-    //// MOUSE_FOCUS,
-
-    /* misc */
-    // OCCLUDED,
-    // MODAL,
-    SKIP_TASKBAR,
-    TOOLTIP_MENU,
-    POPUP_MENU,
-    // FILL_DOC,
+    /* meta */
+    SKIP_TASKBAR = 1 << 10,
+    TOOLTIP_MENU = 1 << 11,
+    POPUP_MENU = 1 << 12,
+    EXTERN = 1 << 13,
 
     /* platform */
-    OPENGL,
-    VULKAN,
-    METAL,
-    EXTERN,
+    OPENGL = 1 << 20,
+    VULKAN = 1 << 21,
+    METAL = 1 << 22,
 };
 
 

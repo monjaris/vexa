@@ -10,7 +10,6 @@ auto main() -> int
     constexpr auto dt = time::Millis{16.6f};
 
     Window::Cfg window_cfg;
-    window_cfg.is_always_on_top = true;
     auto window = Window ()
         .setResizable()
         .setSize({1280, 720})

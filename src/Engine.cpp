@@ -2,11 +2,11 @@
 #include "Engine.hpp"
 NAMESPACE_BEGIN(vexa)
 
-bool Engine::Init(const Flags initial_subsystems) noexcept {
+bool Engine::Init(Subsystem initial_subsystems) noexcept {
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
-        return SDL_Init(m_subsystems.value());
+        return SDL_Init(m_subsystems.intValue());
     }
     return false;
 }
@@ -21,15 +21,15 @@ void Engine::Close() noexcept {
 }
 
 
-bool Engine::InitSubsystems(Flags subsystems) noexcept {
+bool Engine::InitSubsystems(Subsystem subsystems) noexcept {
     m_subsystems.add(subsystems);
-    return SDL_InitSubSystem(m_subsystems.value());
+    return SDL_InitSubSystem(m_subsystems.intValue());
 }
 
 
-void Engine::CloseSubsystems(Flags subsystems) noexcept {
-    subsystems.sub(subsystems);
-    SDL_QuitSubSystem(subsystems.value());
+void Engine::CloseSubsystems(Subsystem subsystems) noexcept {
+    m_subsystems.sub(subsystems);
+    SDL_QuitSubSystem(m_subsystems.intValue());
 }
 
 

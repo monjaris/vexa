@@ -6,28 +6,38 @@
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/main/linux/x86_64/debug/tests/main.cpp.o", "tests/main.cpp"],
-  "file": "tests/main.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
   "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/size/linux/x86_64/debug/tests/item_size.cpp.o", "tests/item_size.cpp"],
   "file": "tests/item_size.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/sdl3-wl/linux/x86_64/debug/tests/sdl3_wl.cpp.o", "tests/sdl3_wl.cpp"],
-  "file": "tests/sdl3_wl.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/meter/linux/x86_64/debug/tests/meter.cpp.o", "tests/meter.cpp"],
+  "file": "tests/meter.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/time/linux/x86_64/debug/tests/time.cpp.o", "tests/time.cpp"],
-  "file": "tests/time.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Renderer.cpp.o", "src/Renderer.cpp"],
+  "file": "src/Renderer.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/game/linux/x86_64/debug/tests/game.cpp.o", "tests/game.cpp"],
-  "file": "tests/game.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Engine.cpp.o", "src/Engine.cpp"],
+  "file": "src/Engine.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/time.cpp.o", "src/time.cpp"],
+  "file": "src/time.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Window.cpp.o", "src/Window.cpp"],
+  "file": "src/Window.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Event.cpp.o", "src/Event.cpp"],
+  "file": "src/Event.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
@@ -1241,43 +1251,33 @@
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/game/linux/x86_64/debug/tests/game.cpp.o", "tests/game.cpp"],
+  "file": "tests/game.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/main/linux/x86_64/debug/tests/main.cpp.o", "tests/main.cpp"],
+  "file": "tests/main.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
   "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/sdl/linux/x86_64/debug/tests/sdl3.cpp.o", "tests/sdl3.cpp"],
   "file": "tests/sdl3.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/sdl3-wl/linux/x86_64/debug/tests/sdl3_wl.cpp.o", "tests/sdl3_wl.cpp"],
+  "file": "tests/sdl3_wl.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/time/linux/x86_64/debug/tests/time.cpp.o", "tests/time.cpp"],
+  "file": "tests/time.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
   "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/entity/linux/x86_64/debug/tests/entity.cpp.o", "tests/entity.cpp"],
   "file": "tests/entity.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Iinclude", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/meter/linux/x86_64/debug/tests/meter.cpp.o", "tests/meter.cpp"],
-  "file": "tests/meter.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Renderer.cpp.o", "src/Renderer.cpp"],
-  "file": "src/Renderer.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Engine.cpp.o", "src/Engine.cpp"],
-  "file": "src/Engine.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/time.cpp.o", "src/time.cpp"],
-  "file": "src/time.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Window.cpp.o", "src/Window.cpp"],
-  "file": "src/Window.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/alt/SDL3.h", "-Iinclude", "-Ivendor/SDL3/include/build_config", "-Ivendor/SDL3/src", "-Ivendor/SDL3/src/video", "-Ivendor/SDL3/src/video/wayland", "-Ivendor/SDL3/include", "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG", "-stdlib=libc++", "-Wall", "-Wextra", "-fno-exceptions", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-Wuninitialized", "-Werror=uninitialized", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Event.cpp.o", "src/Event.cpp"],
-  "file": "src/Event.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
