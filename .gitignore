@@ -1,9 +1,9 @@
-# Xmake cache
-.xmake/
-build/
-
-# MacOS Cache
+# MacOS
 .DS_Store
+
+# Xmake cache
+/.xmake/
+/build/
 
 # Binaries
 /main
@@ -12,6 +12,9 @@ build/
 /*.a
 /*.o
 
-# Directories
-/vendor/SDL3-upstream
+# Scripts
 /run.sh
+
+# Directories
+/vendor/SDL3-upstream/
+/entity/

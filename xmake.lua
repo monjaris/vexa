@@ -85,8 +85,8 @@ option_end()
 
 
 --- TARGETS
-includes("build-scripts/sdl3-static.xmake.lua")
-includes("build-scripts/vexa-dynamic.xmake.lua")
+includes("build-scripts/sdl3-static.lua")
+includes("build-scripts/vexa-dynamic.lua")
 
 
 -- TESTS
