@@ -85,8 +85,8 @@ option_end()
 
 
 --- TARGETS
-includes("build-scripts/sdl3-static.lua")
-includes("build-scripts/vexa-dynamic.lua")
+includes("scripts/sdl3-static.lua")
+includes("scripts/vexa-dynamic.lua")
 
 
 -- TESTS
