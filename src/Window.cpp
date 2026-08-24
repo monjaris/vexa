@@ -1,6 +1,6 @@
 #include "alt/SDL3.h"
 #include "../include/Window.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 #define FN "Window::{}(): "
 
@@ -503,4 +503,4 @@ Window& This::setMouseRelative(bool yes) {
 }
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

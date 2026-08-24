@@ -1,6 +1,6 @@
 #pragma once
 #include "common.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
 /*
@@ -321,4 +321,4 @@ constexpr KeyCodeValueT sc_to_kc = in | (KeyCodeValueT)KeyCode::SCANCODE_MASK;
 
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

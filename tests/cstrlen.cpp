@@ -1,6 +1,6 @@
-#include "cone.hpp"
+#include "vexa.hpp"
 
-namespace cn = cone;
+namespace cn = vexa;
 
 int main() {
     constexpr const char* cstr = "123456789012";

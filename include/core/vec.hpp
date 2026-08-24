@@ -2,7 +2,7 @@
 #include <concepts>
 #include "defs.hpp"
 #include "math.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 inline NAMESPACE_BEGIN(vec)
 
 
@@ -58,4 +58,4 @@ struct Vec2f {
 
 
 NAMESPACE_END(vec)
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

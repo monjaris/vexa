@@ -1,6 +1,6 @@
 #include "alt/SDL3.h"
 #include "../include/Renderer.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
 #define FN "Renderer::{}(): "
@@ -249,4 +249,4 @@ template<usize N> void This::rectLinesN(Rect<> (&rectangle_array)[N], ColorF32 c
 }
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

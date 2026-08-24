@@ -1,17 +1,17 @@
 #pragma once
 #include "alt/memory.hpp"
 #include "core/common.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
-class CN_NODISCARD Renderer
+class VX_NODISCARD Renderer
 {
     // friend needs to access this->impl
     friend class Window;
     class Impl;
     std::unique_ptr<Impl> impl;
 
-    class CN_NODISCARD M_Cfg
+    class VX_NODISCARD M_Cfg
     {
         friend class Renderer;
         friend class Window;
@@ -95,4 +95,4 @@ public:
     void circleLines(Vec2f size, Vec2f pos, ColorU8 color);
 };
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

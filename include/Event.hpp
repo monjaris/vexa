@@ -1,10 +1,10 @@
 #pragma once
 #include "core/common.hpp"
 #include "core/Key.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
-class CN_NODISCARD Event
+class VX_NODISCARD Event
 {
 public:
     enum Type : uint64;
@@ -17,7 +17,7 @@ private:
     };
 
 
-    struct KB CN_STATIC_CLASS
+    struct KB VX_STATIC_CLASS
     {
         struct Input : AnyBase {
             uint32 device_id;
@@ -33,7 +33,7 @@ private:
         };
     };
 
-    struct Gamepad CN_STATIC_CLASS
+    struct Gamepad VX_STATIC_CLASS
     {
         struct Device : AnyBase {
             uint32 device_id;
@@ -65,7 +65,7 @@ private:
         };
     };
 
-    struct Joystick CN_STATIC_CLASS
+    struct Joystick VX_STATIC_CLASS
     {
         struct Device : AnyBase {
             uint32 device_id;
@@ -104,7 +104,7 @@ private:
     };
 
 
-    struct Text CN_STATIC_CLASS
+    struct Text VX_STATIC_CLASS
     {
         struct Input : AnyBase {
             uint32 window_id;
@@ -128,7 +128,7 @@ private:
     };
 
 
-    struct Mouse CN_STATIC_CLASS
+    struct Mouse VX_STATIC_CLASS
     {
         struct Device : AnyBase {
             uint32 device_id;
@@ -168,7 +168,7 @@ private:
     };
 
 
-    struct Touch CN_STATIC_CLASS
+    struct Touch VX_STATIC_CLASS
     {
         struct Finger : AnyBase {
             uint32 window_id;
@@ -332,50 +332,50 @@ public:
 
 
     //  Get event type  //
-    CN_NODISCARD Type type() const noexcept;
+    VX_NODISCARD Type type() const noexcept;
 
     //  Bool-Getters  //
-    CN_NODISCARD bool is_first() const noexcept;
-    CN_NODISCARD bool is_last() const noexcept;
+    VX_NODISCARD bool is_first() const noexcept;
+    VX_NODISCARD bool is_last() const noexcept;
 
     //  Getters  //
-    CN_NODISCARD auto kb() const noexcept { return m.kb; }
-    CN_NODISCARD auto kbDevice() const noexcept { return m.kb_device; };
-    CN_NODISCARD auto text() const noexcept { return m.text; };
-    CN_NODISCARD auto textEdit() const noexcept { return m.text_edit; };
-    CN_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candidates; };
-    CN_NODISCARD auto mouseButton() const noexcept { return m.mouse; };
-    CN_NODISCARD auto mouseDevice() const noexcept { return m.mouse_device; };
-    CN_NODISCARD auto mouseMotion() const noexcept { return m.mouse_motion; };
-    CN_NODISCARD auto mouseWheel() const noexcept { return m.mouse_wheel; };
-    CN_NODISCARD auto joystickDevice() const noexcept { return m.joystick_device; };
-    CN_NODISCARD auto joystickAxis() const noexcept { return m.joystick_axis; };
-    CN_NODISCARD auto joystickBall() const noexcept { return m.joystick_ball; };
-    CN_NODISCARD auto joystickHat() const noexcept { return m.joystick_hat; };
-    CN_NODISCARD auto joystickButton() const noexcept { return m.joystick_button; };
-    CN_NODISCARD auto joystickBattery() const noexcept { return m.joystick_battery; };
-    CN_NODISCARD auto gamepadDevice() const noexcept { return m.gamepad_device; };
-    CN_NODISCARD auto gamepadAxis() const noexcept { return m.gamepad_axis; };
-    CN_NODISCARD auto gamepadButton() const noexcept { return m.gamepad_button; };
-    CN_NODISCARD auto gamepadTouchpad() const noexcept { return m.gamepad_touchpad; };
-    CN_NODISCARD auto gamepadSensor() const noexcept { return m.gamepad_sensor; };
-    CN_NODISCARD auto touchFinger() const noexcept { return m.touch_finger; };
-    CN_NODISCARD auto touchPinch() const noexcept { return m.touch_pinch; };
-    CN_NODISCARD auto touchPen() const noexcept { return m.touch_pen; };
-    CN_NODISCARD auto touchProximity() const noexcept { return m.touch_proximity; };
-    CN_NODISCARD auto pmotion() const noexcept { return m.pen_motion; };
-    CN_NODISCARD auto pbutton() const noexcept { return m.pen_button; };
-    CN_NODISCARD auto paxis() const noexcept { return m.pen_axis; };
-    CN_NODISCARD auto windowEvent() const noexcept { return m.window_ev; };
-    CN_NODISCARD auto renderEvent() const noexcept { return m.render_ev; };
-    CN_NODISCARD auto sensorEvent() const noexcept { return m.sensor_ev; };
-    CN_NODISCARD auto displayEvent() const noexcept { return m.display_ev; };
-    CN_NODISCARD auto clipboardEvent() const noexcept { return m.clipboard_ev; };
-    CN_NODISCARD auto externalDropEvent() const noexcept { return m.extern_drop_ev; };
-    CN_NODISCARD auto audioDevice() const noexcept { return m.audio_device; };
-    CN_NODISCARD auto cameraDevice() const noexcept { return m.camera_device; };
-    CN_NODISCARD auto quitEvent() const noexcept { return m.quit_ev; };
-    CN_NODISCARD auto customEvent() const noexcept { return m.custom_ev; };
+    VX_NODISCARD auto kb() const noexcept { return m.kb; }
+    VX_NODISCARD auto kbDevice() const noexcept { return m.kb_device; };
+    VX_NODISCARD auto text() const noexcept { return m.text; };
+    VX_NODISCARD auto textEdit() const noexcept { return m.text_edit; };
+    VX_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candidates; };
+    VX_NODISCARD auto mouseButton() const noexcept { return m.mouse; };
+    VX_NODISCARD auto mouseDevice() const noexcept { return m.mouse_device; };
+    VX_NODISCARD auto mouseMotion() const noexcept { return m.mouse_motion; };
+    VX_NODISCARD auto mouseWheel() const noexcept { return m.mouse_wheel; };
+    VX_NODISCARD auto joystickDevice() const noexcept { return m.joystick_device; };
+    VX_NODISCARD auto joystickAxis() const noexcept { return m.joystick_axis; };
+    VX_NODISCARD auto joystickBall() const noexcept { return m.joystick_ball; };
+    VX_NODISCARD auto joystickHat() const noexcept { return m.joystick_hat; };
+    VX_NODISCARD auto joystickButton() const noexcept { return m.joystick_button; };
+    VX_NODISCARD auto joystickBattery() const noexcept { return m.joystick_battery; };
+    VX_NODISCARD auto gamepadDevice() const noexcept { return m.gamepad_device; };
+    VX_NODISCARD auto gamepadAxis() const noexcept { return m.gamepad_axis; };
+    VX_NODISCARD auto gamepadButton() const noexcept { return m.gamepad_button; };
+    VX_NODISCARD auto gamepadTouchpad() const noexcept { return m.gamepad_touchpad; };
+    VX_NODISCARD auto gamepadSensor() const noexcept { return m.gamepad_sensor; };
+    VX_NODISCARD auto touchFinger() const noexcept { return m.touch_finger; };
+    VX_NODISCARD auto touchPinch() const noexcept { return m.touch_pinch; };
+    VX_NODISCARD auto touchPen() const noexcept { return m.touch_pen; };
+    VX_NODISCARD auto touchProximity() const noexcept { return m.touch_proximity; };
+    VX_NODISCARD auto pmotion() const noexcept { return m.pen_motion; };
+    VX_NODISCARD auto pbutton() const noexcept { return m.pen_button; };
+    VX_NODISCARD auto paxis() const noexcept { return m.pen_axis; };
+    VX_NODISCARD auto windowEvent() const noexcept { return m.window_ev; };
+    VX_NODISCARD auto renderEvent() const noexcept { return m.render_ev; };
+    VX_NODISCARD auto sensorEvent() const noexcept { return m.sensor_ev; };
+    VX_NODISCARD auto displayEvent() const noexcept { return m.display_ev; };
+    VX_NODISCARD auto clipboardEvent() const noexcept { return m.clipboard_ev; };
+    VX_NODISCARD auto externalDropEvent() const noexcept { return m.extern_drop_ev; };
+    VX_NODISCARD auto audioDevice() const noexcept { return m.audio_device; };
+    VX_NODISCARD auto cameraDevice() const noexcept { return m.camera_device; };
+    VX_NODISCARD auto quitEvent() const noexcept { return m.quit_ev; };
+    VX_NODISCARD auto customEvent() const noexcept { return m.custom_ev; };
 
 
 private:
@@ -390,7 +390,7 @@ private:
 
 
 
-enum CN_NODISCARD Event::Type : uint64 {
+enum VX_NODISCARD Event::Type : uint64 {
     FIRST = 0,
 
     QUIT = 0x100,
@@ -540,4 +540,4 @@ enum CN_NODISCARD Event::Type : uint64 {
 
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

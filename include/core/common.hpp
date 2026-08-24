@@ -10,7 +10,7 @@
 #include "core/vec.hpp"
 #include "core/log.hpp"
 #include "core/Flags.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
 inline consteval usize cstr_len(const char* cstr) noexcept {
@@ -98,7 +98,7 @@ class Ref {
 public:
     Ref(T& data): m_data(&data) {}
 
-    CN_NODISCARD const T& get() const noexcept { return *m_data; }
+    VX_NODISCARD const T& get() const noexcept { return *m_data; }
 };
 
 
@@ -115,4 +115,4 @@ public:
 };
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

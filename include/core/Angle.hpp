@@ -1,7 +1,7 @@
 #pragma once
 #include "defs.hpp"
 #include "math.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 struct Angle {
     fp32 radians;
@@ -24,4 +24,4 @@ struct Angle {
 };
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

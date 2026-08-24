@@ -1,38 +1,36 @@
-#include "cone.hpp"
+#include "vexa.hpp"
 #include "alt/SDL3.h"
 
-namespace cn = cone;
-#include <iostream>
+using namespace vexa;
+
 auto main() -> int
 {
-    cn::Engine::Init(cn::Engine::VIDEO);
+    Engine::Init(Engine::VIDEO);
 
-    constexpr auto dt = cn::time::Millis{16.6f};
+    constexpr auto dt = time::Millis{16.6f};
 
-    auto window = cn::Window ()
+    Window::Cfg window_cfg;
+    window_cfg.is_always_on_top = true;
+    auto window = Window ()
         .setResizable()
         .setSize({1280, 720})
-        .setRenderer(cn::Renderer::Cfg{})
+        .setRenderer(Renderer::Cfg{})
     .create();
 
     auto& gfx = window.renderer();
 
     for (;;)
     {
-        auto begin = cn::time::now();
+        auto begin = time::now();
 
         bool running = true;
         auto quit = [&running] { running = false; };
 
-        while (auto event = cn::Event::Poll()) {
-            using cn::Key;
-            using cn::KeyMod;
-            using cn::filterMods;
-
+        while (auto event = Event::Poll()) {
             switch (event->type())
             {
-                case cn::Event::QUIT: { cn::log::info("quit.."); quit(); break; }
-                case cn::Event::KEY_DOWN: {
+                case Event::QUIT: { log::info("quit.."); quit(); break; }
+                case Event::KEY_DOWN: {
                     auto key = event->kb().key;
                     auto mods = event->kb().mods;
                     if (key == Key::ESC) { running = false; }
@@ -54,14 +52,14 @@ auto main() -> int
         }
         if (!running) break;
 
-        gfx.start(cn::ColorU8::BLACK);
+        gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill({cn::Rect{100, 100, 250, 250}}, cn::ColorU8::CYAN);
-        gfx.triangleFill(cn::Triangle({400,400},{500,600},{600,400}), cn::ColorU8::GREEN);
-        gfx.triangleLines(cn::Triangle({100, 600}, {175, 500}, {250, 670}), cn::ColorU8::MAGENTA);
+        gfx.rectFill({Rect{100, 100, 250, 250}}, ColorU8::CYAN);
+        gfx.triangleFill(Triangle({400,400},{500,600},{600,400}), ColorU8::GREEN);
+        gfx.triangleLines(Triangle({100, 600}, {175, 500}, {250, 670}), ColorU8::MAGENTA);
 
         gfx.finish();
-        cn::time::sleep(cn::time::Millis(dt.millis() - begin.elapsed().millis()));
+        time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
     }
 
     // cn::Engine::Close();

@@ -1,6 +1,6 @@
 #pragma once
 #include "defs.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 inline NAMESPACE_BEGIN(colors)
 
 // class declarations
@@ -142,4 +142,4 @@ constexpr inline const ColorF32 ColorF32::MAGENTA = {1.0f, 0.0f, 1.0f};
 
 
 NAMESPACE_END(colors)
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

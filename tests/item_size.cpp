@@ -1,6 +1,6 @@
 #include "../include/core/common.hpp"
 
-namespace mk = cone;
+namespace mk = vexa;
 
 int main() {
     constexpr usize BUFFER_SIZE = { 24 };

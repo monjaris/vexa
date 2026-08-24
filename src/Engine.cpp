@@ -1,6 +1,6 @@
 #include "alt/SDL3.h"
 #include "Engine.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 bool Engine::Init(const Flags initial_subsystems) noexcept {
     if (!m_init) {
@@ -37,9 +37,9 @@ bool Engine::setMouseCaptured(bool yes) noexcept {
     return SDL_CaptureMouse(yes);
 }
 
-CN_NODISCARD bool Engine::IsMouseCaptured() noexcept {
+VX_NODISCARD bool Engine::IsMouseCaptured() noexcept {
     return (SDL_GetWindowFlags(nullptr) & SDL_WINDOW_MOUSE_CAPTURE);
 }
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

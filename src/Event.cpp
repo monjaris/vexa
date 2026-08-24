@@ -8,7 +8,7 @@ namespace internal {
 };
 
 
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 using This = Event;
 
@@ -587,4 +587,4 @@ bool This::is_last() const noexcept {
 }
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

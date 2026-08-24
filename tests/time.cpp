@@ -1,10 +1,10 @@
-#include "cone.hpp"
+#include "vexa.hpp"
 
-#define LOGGER  cone::log::info
+#define LOGGER  vexa::log::info
 #define LOG(_msg)  LOGGER(_msg);
 #define LOGV(_msg, ...)  LOGGER(_msg, __VA_ARGS__);
 
-namespace mt = cone::time;
+namespace mt = vexa::time;
 
 int main()
 {

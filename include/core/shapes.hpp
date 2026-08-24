@@ -4,7 +4,7 @@
 #include "vec.hpp"
 #include "math.hpp"
 // forward declare cmath functions
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 inline NAMESPACE_BEGIN(shapes)
 
 
@@ -130,4 +130,4 @@ struct Circle {
 
 
 NAMESPACE_END(shapes)
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

@@ -1,14 +1,14 @@
 #pragma once
 #include "Renderer.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
-class CN_NODISCARD Window
+class VX_NODISCARD Window
 {
     class Impl;
     Uptr<Impl> impl;
 
 
-    class CN_NODISCARD M_Cfg
+    class VX_NODISCARD M_Cfg
     {
         friend class Window;
     public:
@@ -17,7 +17,6 @@ class CN_NODISCARD Window
         CfgVal<const char*> title;
         CfgVal<Vec2i> size;
         CfgVal<Vec2i> position;
-        //
         CfgVal<bool> is_resizable;
         CfgVal<bool> is_maximized;
         CfgVal<bool> is_minimized;
@@ -101,7 +100,7 @@ public:
     bool exists();
     uint32 id() const noexcept;
 
-    /** under construction **/
+    // under construction  //
     // Flags defaultFlags() const noexcept;
     // Flags& flags() noexcept;
 
@@ -143,7 +142,7 @@ private:
 };
 
 
-enum CN_NODISCARD Window::Trait : uint64 {
+enum VX_NODISCARD Window::Trait : uint64 {
     NONE = 0,
 
     /* general */
@@ -182,4 +181,4 @@ enum CN_NODISCARD Window::Trait : uint64 {
 };
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

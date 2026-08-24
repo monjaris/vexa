@@ -1,6 +1,6 @@
-#include "cone.hpp"
+#include "vexa.hpp"
 
-namespace mk = cone;
+namespace mk = vexa;
 
 int main()
 {
@@ -10,5 +10,5 @@ int main()
     mk::Ref<int> r1 = mk::Ref(x);
     mk::RefMut r2 = {x};
 
-    CN_UNUSE(x, r1, r2);
+    VX_UNUSE(x, r1, r2);
 }

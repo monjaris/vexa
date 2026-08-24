@@ -3,7 +3,7 @@
 #include <cstring>
 #include "defs.hpp"
 #include "common.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(log)
 
 
@@ -65,4 +65,4 @@ inline void fatal(std::format_string<Args...> fmt, Args&&... args) {
 
 
 NAMESPACE_END(log)
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

@@ -2,7 +2,7 @@
 #include <thread>
 #include <chrono>
 #include "time.hpp"
-NAMESPACE_BEGIN(cone::time)
+NAMESPACE_BEGIN(vexa::time)
 
 namespace chrono = std::chrono;
 
@@ -19,4 +19,4 @@ Date now() {
 }
 
 
-NAMESPACE_END(cone::time)
+NAMESPACE_END(vexa::time)

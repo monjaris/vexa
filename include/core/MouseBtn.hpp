@@ -1,6 +1,6 @@
 #pragma once
 #include "common.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
 
 enum class MouseBtn : uint8
@@ -32,4 +32,4 @@ enum class MouseBtnMask : uint8
 };
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

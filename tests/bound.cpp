@@ -1,11 +1,11 @@
 #include <vector>
 #include <csetjmp>
 #include <csignal>
-#include "cone.hpp"
+#include "vexa.hpp"
 
 #define TEST_TEMPLATE  "TEST {}(): - {}"
 
-namespace mk = cone;
+namespace mk = vexa;
 constexpr const char* bool_to_msg(bool status);
 static sigjmp_buf jump_env;
 void bounds_signal_handler(int);

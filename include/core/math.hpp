@@ -2,7 +2,7 @@
 #include "defs.hpp"
 #include <cmath>
 #include <type_traits>
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(math)
 
 // compile time PI as fp32 and fp64
@@ -81,4 +81,4 @@ constexpr auto clamp(V value, T min, U max) -> std::common_type_t<V, T, U> {
 
 
 NAMESPACE_END(math)
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

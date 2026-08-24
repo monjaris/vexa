@@ -1,8 +1,8 @@
 #pragma once
 #include "Window.hpp"
-NAMESPACE_BEGIN(cone)
+NAMESPACE_BEGIN(vexa)
 
-class Engine CN_STATIC_CLASS
+class Engine VX_STATIC_CLASS
 {
     static inline bool m_init = false;
     static inline Flags m_subsystems;
@@ -21,4 +21,4 @@ public:
 
 
 
-NAMESPACE_END(cone)
+NAMESPACE_END(vexa)

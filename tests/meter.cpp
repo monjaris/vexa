@@ -1,17 +1,17 @@
-#include "cone.hpp"
+#include "vexa.hpp"
 #include "alt/SDL3.h"
 
-namespace cn = cone;
+namespace cn = vexa;
 
 auto main() -> int
 {
-    using cone::Engine;
-    using cone::Window;
-    using cone::Renderer;
-    using cone::ColorU8;
-    using cone::Rect;
-    namespace log = cone::log;
-    namespace time = cone::time;
+    using vexa::Engine;
+    using vexa::Window;
+    using vexa::Renderer;
+    using vexa::ColorU8;
+    using vexa::Rect;
+    namespace log = vexa::log;
+    namespace time = vexa::time;
     Engine::Init(Engine::VIDEO);
 
     Window::Cfg window_cfg = {};

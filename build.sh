@@ -22,5 +22,5 @@ fi
 
 xmake build -j$(nproc) "${PROJ}" || exit $?
 command cp "$copy_bin" ./"${PROJ}"
-command cp "$(dirname "$copy_bin")"/libcone.so ./libcone.so
+command cp "$(dirname "$copy_bin")"/libvexa.so ./libvexa.so
 ./"${PROJ}" "$@"

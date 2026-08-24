@@ -1,12 +1,12 @@
 #pragma once
 #include <concepts>
 #include "core/defs.hpp"
-NAMESPACE_BEGIN(cone::time)
+NAMESPACE_BEGIN(vexa::time)
 
 
 // Duration and variants
 template<typename ValueT, uint64> requires std::is_arithmetic_v<ValueT>
-class CN_NODISCARD Duration;
+class VX_NODISCARD Duration;
 using Nanos = Duration<int64, 1lu>;
 using Micros = Duration<int64, 1'000lu>;
 using Millis = Duration<fp64, 1'000'000lu>;
@@ -35,7 +35,7 @@ Date now();
 // @arg t_ratio - 1:nano, 1000:micro, etc.
 template<typename ValueType, uint64 t_ratio>
 requires std::is_arithmetic_v<ValueType>
-class CN_NODISCARD Duration
+class VX_NODISCARD Duration
 {
     ValueType m_nanos = 0;
 
@@ -139,4 +139,4 @@ void sleep(DurationT amount) {
 
 
 
-NAMESPACE_END(cone::time)
+NAMESPACE_END(vexa::time)
