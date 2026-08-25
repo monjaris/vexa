@@ -68,12 +68,7 @@ set_pcxxheader("include/vexa/alt/SDL3.h")
 add_cxxflags(table.unpack(cxx_flags))
 add_ldflags(table.unpack(ld_flags))
 
---- OPTIONS
-option("backend")
-    set_default("wayland")
-    set_values("x11", "wayland")
-option_end()
-
+--- OPTIONS (i put target-specific options to `./scripts/*` ;D)
 option("stdcxx")
     set_default("libstdc++")
     set_values("libstdc++", "libc++")

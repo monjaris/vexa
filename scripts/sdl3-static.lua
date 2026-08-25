@@ -1,4 +1,10 @@
--- CMake-builds vendor/SDL3 into build/sdl3-local/lib/libSDL3.a
+-- via CMake, Build vendor/SDL3 into a static library
+
+option("backend")
+    set_default("wayland")
+    set_values("x11", "wayland")
+option_end()
+
 
 target("sdl3")
     set_kind("phony")
