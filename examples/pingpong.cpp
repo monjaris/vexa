@@ -12,17 +12,17 @@ class Ball
     * But who am i kidding, the api is likely to change for such a new framework.
 */
 public:
-    float x, y;
-    float radius;
-    int speed_x, speed_y;
+    Vec2i pos = {window_size.x/2, window_size.y/2};
+    Vec2i speed  = {10,10};
+    float radius = 5;
 
     void Draw(Renderer& gfx)
     {
 
         Rect CircleRect = Rect
         {
-        x - radius,
-        y - radius,
+        pos.x - radius,
+        pos.y - radius,
         radius * 2,
         radius * 2
         };
@@ -32,13 +32,13 @@ public:
 
     void Update()
     {
-        x += speed_x;
-        y += speed_y;
+        pos.x += speed.x;
+        pos.y += speed.y;
 
-        if ((x + radius >= window_size.x) || (x - radius <= 0))
-            speed_x *= -1;
-        if ((y + radius >= window_size.y) || (y - radius <= 0))
-            speed_y *= -1;
+        if ((pos.x + radius >= window_size.x) || (pos.x - radius <= 0))
+            speed.x *= -1;
+        if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
+            speed.y *= -1;
     }
 };
 
@@ -85,11 +85,13 @@ int main(void)
     auto& gfx = window.renderer();
 
     Paddle player;
-    Ball ball;
-
     player.body.pos = {10, 10};
     player.body.size = {10, 100};
     player.speed = 5;
+
+    Ball ball;
+
+
 
     bool running = true;
     while (running)
