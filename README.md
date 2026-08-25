@@ -29,7 +29,7 @@ using namespace vexa;
 int main()
 {
     // Initialize Vexa
-    Engine::Init();
+    Engine::Init(Engine::VIDEO);
 
     // create a window with 1280x720 size and default renderer
     auto window = Window{}
@@ -43,7 +43,7 @@ int main()
     {
         // poll events
         while (auto event = Event::Poll) {
-            switch (event.type()) {
+            switch (event->type()) {
                 case Event::QUIT: { running = false; break; }
                 default: { break; }
             }
@@ -51,7 +51,7 @@ int main()
 
         gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill({960, 540, 320, 320}, ColorF32::CYAN);
+        gfx.rectFill(Rect{480, 200, 320, 320}, ColorF32::CYAN);
 
         gfx.finish();
         time::sleep(time::Millis(16.67));

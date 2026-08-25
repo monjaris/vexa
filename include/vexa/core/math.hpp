@@ -1,7 +1,6 @@
 #pragma once
-#include "defs.hpp"
 #include <cmath>
-#include <type_traits>
+#include "defs.hpp"
 NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(math)
 

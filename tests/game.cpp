@@ -1,5 +1,4 @@
 #include "vexa/vexa.hpp"
-#include "vexa/alt/SDL3.h"
 
 using namespace vexa;
 
@@ -42,9 +41,9 @@ auto main() -> int
                         quit();
                     }
                 }
-                // case cn::Event::TEXT_INPUT: {
-                    // cn::log::info("{}", event->text().content);  break;
-                // }
+                case Event::TEXT_INPUT: {
+                    log::info("{}", event->text().content);  break;
+                }
                 default: { break; }
             }
         }
@@ -52,7 +51,7 @@ auto main() -> int
 
         gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill({Rect{100, 100, 250, 250}}, ColorU8::CYAN);
+        gfx.rectFill(Rect{100, 100, 250, 250}, ColorU8::CYAN);
         gfx.triangleFill(Triangle({400,400},{500,600},{600,400}), ColorU8::GREEN);
         gfx.triangleLines(Triangle({100, 600}, {175, 500}, {250, 670}), ColorU8::MAGENTA);
 
@@ -60,5 +59,5 @@ auto main() -> int
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
     }
 
-    // cn::Engine::Close();
+    Engine::Close();
 }
