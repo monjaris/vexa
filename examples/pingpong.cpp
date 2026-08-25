@@ -1,33 +1,37 @@
 #include "vexa/vexa.hpp"
 
 using namespace vexa;
+Vec2i window_size = {600, 400};
 
-struct Player
+class Paddle
 {
-    Rect<Vec2f> body;
+protected:
+    void KeepIn()
+    {
+        body.pos.y  = math::clamp(body.pos.y, 0, window_size.y - body.size.y);
+    }
+
+public:
+    Rect body;
     int speed;
+
+    void Draw(Renderer& gfx)
+    {
+        gfx.rectFill(body, ColorF32::WHITE);
+    }
+
+    void Update(enum Key key)
+    {
+        if (key == Key::UP) body.pos.y -= speed;
+        else if (key == Key::DOWN) body.pos.y += speed;
+
+        KeepIn();
+    }
 };
 
-struct Ball
-{
-    Rect<Vec2f> body;
-    Vec2f vel = {0.0f,0.0f};
-};
 
 int main(void)
 {
-    Vec2i window_size = {600, 400};
-    struct Player player1 =
-    {
-        .body = Rect{20, 20, 20, 100},
-        .speed = 5
-    };
-    struct Ball main_ball;
-    main_ball.body.pos =
-    {
-        window_size.x / 2.0f,
-        window_size.y / 2.0f
-    };
 
     Engine::Init(Engine::VIDEO);
 
@@ -52,10 +56,7 @@ int main(void)
                 case Event::KEY_DOWN:
                 {
                     auto key = event->kb().key;
-
                     if (key == Key::Q) running = false;
-                    if (key == Key::DOWN) player1.body.pos.y += player1.speed;
-                    if (key == Key::UP) player1.body.pos.y -= player1.speed;
 
                     break;
                 }
@@ -68,15 +69,10 @@ int main(void)
             }
         }
 
-        player1.body.pos.y  = math::clamp(player1.body.pos.y, 0, window_size.y - player1.body.size.y);
-
-        if (main_ball.pos)
-
         if (!running) break;
-
         gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill(player1.body, ColorU8::CYAN);
+        gfx.rectFill(Rect{100, 100, 250, 250}, ColorF32::CYAN);
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
