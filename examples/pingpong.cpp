@@ -69,6 +69,18 @@ public:
 
 };
 
+class MachinePaddle : public Paddle
+{
+public:
+    void Update(int ball_y)
+    {
+        int center_y = body.pos.y + (body.size.y / 2);
+        if (center_y > ball_y) body.pos.y -= speed;
+        if (center_y < ball_y) body.pos.y += speed;
+
+        KeepIn();
+    }
+};
 
 int main(void)
 {
@@ -89,9 +101,13 @@ int main(void)
     player.body.size = {10, 100};
     player.speed = 5;
 
+    MachinePaddle machine;
+    machine.body.pos = {(float)window_size.x - 20, (float)window_size.y - 10};
+    machine.body.size = {10, 100};
+    machine.speed = 5;
+
+
     Ball ball;
-
-
 
     bool running = true;
     while (running)
@@ -119,6 +135,7 @@ int main(void)
             }
         }
 
+        machine.Update(ball.pos.y);
         ball.Update();
 
         if (!running) break;
@@ -126,6 +143,7 @@ int main(void)
 
         player.Draw(gfx);
         ball.Draw(gfx);
+        machine.Draw(gfx);
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
