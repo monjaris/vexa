@@ -70,11 +70,11 @@ public:
     template<usize N> void rectLinesN(Rect (&rectangle_array)[N], ColorU8 color);
     template<usize N> void rectLinesN(Rect (&rectangle_array)[N], ColorF32 color);
     //
-    void PolyFill(Vec2f size, Vec2f pos, ColorU8 color);
-    void PolyLines(Vec2f size, Vec2f pos, ColorU8 color);
+    void PolyFill(Vec2 size, Vec2 pos, ColorU8 color);
+    void PolyLines(Vec2 size, Vec2 pos, ColorU8 color);
     //
-    void circleFill(Vec2f size, Vec2f pos, ColorU8 color);
-    void circleLines(Vec2f size, Vec2f pos, ColorU8 color);
+    void circleFill(Vec2 size, Vec2 pos, ColorU8 color);
+    void circleLines(Vec2 size, Vec2 pos, ColorU8 color);
 };
 
 NAMESPACE_END(vexa)

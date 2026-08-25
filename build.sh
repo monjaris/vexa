@@ -5,7 +5,8 @@ PROJ="vexa"
 OS="linux"
 PLAT="x86_64"
 MODE="release"  # or debug
-VIDEO="x11"  # or x11
+VIDEO="wayland"  # or x11
+RENDERER="sdl"  # or gpu
 LIBCPP="libstdc++"  # or libc++
 
 
@@ -16,8 +17,14 @@ fi
 copy_bin="./build/${OS}/${PLAT}/${MODE}/${PROJ}"
 
 
+xmake config \
+    --mode="$MODE" \
+    --window-backend="$VIDEO" \
+    --renderer-backend="$RENDERER" \
+    --libcxx="$LIBCPP" \
+    -y
+
 nproc="$(getconf _NPROCESSORS_ONLN)"
-xmake config --mode=${MODE} --backend="$VIDEO" --stdcxx="$LIBCPP" -y
 xmake build -j"$(nproc)" "${PROJ}" || exit $?
 
 command cp "$(dirname "$copy_bin")"/libvexa.so ./libvexa.so

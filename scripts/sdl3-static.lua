@@ -1,15 +1,18 @@
 -- via CMake, Build vendor/SDL3 into a static library
 
-option("backend")
-    set_default("wayland")
-    set_values("x11", "wayland")
+o_X11="x11"
+o_WL="wayland"
+
+option("window-backend")
+    set_default(o_WL)
+    set_values(o_X11, o_WL)
 option_end()
 
 
 target("sdl3")
     set_kind("phony")
+    set_policy("build.fence", true)
     set_default(false)
-    set_policy("build.fence", false)
 
     on_build(function (target)
         import("core.base.option")
@@ -27,26 +30,39 @@ target("sdl3")
 
         local build_type = (config.mode() == "debug") and "Debug" or "Release"
         local jobs = tostring(option.get("jobs") or os.default_njob())
+        local video = option.get("window-backend") or o_WL
 
         local args = {
             "-S", src, "-B", bdir,
+            -- build/install
             "-DCMAKE_BUILD_TYPE=" .. build_type,
             "-DCMAKE_INSTALL_PREFIX=" .. idir,
             "-DCMAKE_INSTALL_LIBDIR=lib",
-            "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+            -- compiler choices
             "-DCMAKE_C_COMPILER=clang",
             "-DCMAKE_CXX_COMPILER=clang++",
             "-DSDL_SHARED=OFF",
-            "-DSDL_STATIC=ON",
             "-DBUILD_SHARED_LIBS=OFF",
+            "-DSDL_STATIC=ON",
+            "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+            -- misc
             "-DSDL_INSTALL=ON",
             "-DSDL_TEST_LIBRARY=OFF",
             "-DSDL_TESTS=OFF",
             "-DSDL_EXAMPLES=OFF",
-            "-DSDL_WAYLAND=ON",
-            "-DSDL_X11=ON",
             "-DSDL_DEPS_SHARED=ON",
         }
+
+        if video == o_WL then
+            table.insert(args, "-DSDL_X11=OFF")
+            table.insert(args, "-DSDL_WAYLAND=ON")
+        elseif video == o_X11 then
+            table.insert(args, "-DSDL_X11=ON")
+            table.insert(args, "-DSDL_WAYLAND=OFF")
+        else
+            raise("unsupported window-backend: use o_X11 or o_WL")
+        end
+
 
         local ninja = find_tool("ninja")
         if ninja then

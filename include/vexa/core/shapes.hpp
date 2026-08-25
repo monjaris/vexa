@@ -102,26 +102,30 @@ struct Rect {
 
 
 
-constexpr uint32 CIRCLE_SEGMENTS = 1000;
-template<const uint32 segments = CIRCLE_SEGMENTS, class Position = Vec2f, class Size = Vec2f>
+constexpr uint32 SEGMENTS = 1000;
+template<uint32 t_segments = SEGMENTS>
 struct Circle {
-    Position pos;
-    Size::ValueT radius;
+    Vec2f pos;
+    Vec2f::ValueT radius;
 
     // create a circle: ({x, y}, r)
-    explicit constexpr inline Circle(Position position, Size::ValueT radius) noexcept
+    explicit constexpr inline Circle(Vec2f position, Vec2f::ValueT radius) noexcept
         : pos(position), radius(radius) {}
 
 
-    constexpr fp32 area() const noexcept {
+    constexpr Vec2f::ValueT area() const noexcept {
         return math::PI32 * math::pow(radius, 2);
     }
 
-    constexpr fp32 perimeter() const noexcept {
+    constexpr Vec2f::ValueT perimeter() const noexcept {
         return 2.f * math::PI32 * radius;
     }
 
-    Circle& enlarge(const fp32 percent) noexcept {
+    constexpr auto segments() const noexcept -> decltype(t_segments) {
+        return t_segments;
+    }
+
+    Circle& enlarge(const fp64 percent) noexcept {
         radius += radius * percent * 0.01f;
         return *this;
     }

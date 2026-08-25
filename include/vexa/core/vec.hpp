@@ -57,5 +57,8 @@ struct Vec2f {
 };
 
 
+using Vec2 = Vec2f;
+
+
 NAMESPACE_END(vec)
 NAMESPACE_END(vexa)

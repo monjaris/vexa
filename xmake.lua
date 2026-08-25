@@ -69,15 +69,24 @@ add_cxxflags(table.unpack(cxx_flags))
 add_ldflags(table.unpack(ld_flags))
 
 --- OPTIONS (i put target-specific options to `./scripts/*` ;D)
-option("stdcxx")
+option("libcxx")
     set_default("libstdc++")
     set_values("libstdc++", "libc++")
 option_end()
 
-
--- LIBC++
--- add_defines("_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG")
--- add_cxxflags("-stdlib=libc++") add_ldflags("-stdlib=libc++") add_shflags("-stdlib=libc++")
+--- config-time stuff
+on_config(function ()
+    local libcxx = get_config("libcxx")
+    if libcxx == "libc++" then
+        add_cxxflags("-stdlib=libc++")
+        add_ldflags("-stdlib=libc++")
+        add_shflags("-stdlib=libc++")
+    elseif libcxx == "libstdc++" then
+        -- gnu's C++ is default anyway
+    else
+        raise("unsupported libcxx '%s': use 'libstdc++' or 'libc++'", tostring(libcxx))
+    end
+end)
 
 
 --- TARGETS

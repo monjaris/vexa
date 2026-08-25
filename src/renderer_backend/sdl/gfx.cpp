@@ -11,24 +11,24 @@ namespace detail {
 namespace det = detail;
 
 
-constexpr inline bool set_rgba_u8(void* sdl_renderer, ColorU8 color) {
+bool set_rgba_u8(void* sdl_renderer, ColorU8 color) {
     return SDL_SetRenderDrawColor(SDL_REND(), color.r, color.g, color.b, color.a);
 }
 
-constexpr inline bool set_rgba_f32(void* sdl_renderer, ColorF32 color) {
+bool set_rgba_f32(void* sdl_renderer, ColorF32 color) {
     det::rgba_f32_triangle = {color.r, color.g, color.b, color.a};
     return SDL_SetRenderDrawColorFloat(SDL_REND(), color.r, color.g, color.b, color.a);
 }
 
 
 
-void line_xy(void* sdl_renderer, Vec2f pos1, Vec2f pos2) {
-    
-}
+// void line_xy(void* sdl_renderer, Vec2f pos1, Vec2f pos2) {
+    // 
+// }
 
-void line_xy_w(void* sdl_renderer, Vec2f pos1, Vec2f pos2, uint32 thickness) {
-    
-}
+// void line_xy_w(void* sdl_renderer, Vec2f pos1, Vec2f pos2, uint32 thickness) {
+    // 
+// }
 
 
 
@@ -74,7 +74,7 @@ template<usize N> inline void line_N_triangle_rgbaF32(Triangle (&triangle_array)
 
 
 
-inline void fill_rectangle(void* sdl_renderer, Rect rect) {
+void fill_rectangle(void* sdl_renderer, Rect rect) {
     const SDL_FRect sdl_rect = {rect.pos.x, rect.pos.y, rect.size.x, rect.size.y};
     SDL_RenderFillRect(SDL_REND(), &sdl_rect);
 }
