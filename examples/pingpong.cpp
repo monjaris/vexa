@@ -13,7 +13,7 @@ class Ball
 */
 public:
     Vec2i pos = {window_size.x/2, window_size.y/2};
-    Vec2i speed  = {10,10};
+    Vec2f speed  = {3,3};
     float radius = 5;
 
     void Draw(Renderer& gfx)
@@ -36,9 +36,9 @@ public:
         pos.y += speed.y;
 
         if ((pos.x + radius >= window_size.x) || (pos.x - radius <= 0))
-            speed.x *= -1;
+            speed.x *= -1.1;
         if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
-            speed.y *= -1;
+            speed.y *= -1.1;
     }
 };
 
