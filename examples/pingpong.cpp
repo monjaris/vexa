@@ -2,20 +2,31 @@
 
 using namespace vexa;
 
-typedef struct
+struct Player
 {
     Rect<Vec2f> body;
     int speed;
-}
-Player;
+};
+
+struct Ball
+{
+    Rect<Vec2f> body;
+    Vec2f vel = {0.0f,0.0f};
+};
 
 int main(void)
 {
     Vec2i window_size = {600, 400};
-    Player player1 =
+    struct Player player1 =
     {
         .body = Rect{20, 20, 20, 100},
         .speed = 5
+    };
+    struct Ball main_ball;
+    main_ball.body.pos =
+    {
+        window_size.x / 2.0f,
+        window_size.y / 2.0f
     };
 
     Engine::Init(Engine::VIDEO);
@@ -58,6 +69,9 @@ int main(void)
         }
 
         player1.body.pos.y  = math::clamp(player1.body.pos.y, 0, window_size.y - player1.body.size.y);
+
+        if (main_ball.pos)
+
         if (!running) break;
 
         gfx.start(ColorU8::BLACK);
