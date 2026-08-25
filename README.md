@@ -42,7 +42,7 @@ int main()
     while (running)
     {
         // poll events
-        while (auto event = Event::Poll) {
+        while (auto event = Event::Poll()) {
             switch (event->type()) {
                 case Event::QUIT: { running = false; break; }
                 default: { break; }
@@ -59,7 +59,6 @@ int main()
 
     Engine::Close();
 }
-
 ```
 
 # Layout
