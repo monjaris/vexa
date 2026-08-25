@@ -2,13 +2,21 @@
 
 using namespace vexa;
 
-
+typedef struct
+{
+    Rect<Vec2f> body;
+    int speed;
+}
+Player;
 
 int main(void)
 {
     Vec2i window_size = {600, 400};
-    auto player1 = Rect{20, 20, 20, 100};
-    auto player_speed = 6;
+    Player player1 =
+    {
+        .body = Rect{20, 20, 20, 100},
+        .speed = 5
+    };
 
     Engine::Init(Engine::VIDEO);
 
@@ -35,8 +43,8 @@ int main(void)
                     auto key = event->kb().key;
 
                     if (key == Key::Q) running = false;
-                    if (key == Key::DOWN) player1.pos.y += player_speed;
-                    if (key == Key::UP) player1.pos.y -= player_speed;
+                    if (key == Key::DOWN) player1.body.pos.y += player1.speed;
+                    if (key == Key::UP) player1.body.pos.y -= player1.speed;
 
                     break;
                 }
@@ -48,11 +56,13 @@ int main(void)
                 default: break;
             }
         }
+
+        player1.body.pos.y  = math::clamp(player1.body.pos.y, 0, window_size.y - player1.body.size.y);
         if (!running) break;
 
         gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill(player1, ColorU8::CYAN);
+        gfx.rectFill(player1.body, ColorU8::CYAN);
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
