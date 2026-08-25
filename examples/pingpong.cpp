@@ -3,6 +3,45 @@
 using namespace vexa;
 Vec2i window_size = {600, 400};
 
+class Ball
+{
+/*
+    * Vexa currently doesnt support circles, so ill use a rectangle and pretend its a ball
+    * so it can be easily changed into a ball when circles are implemented
+    * e.g. by simply modifying the draw method to something like drawcircle()
+    * But who am i kidding, the api is likely to change for such a new framework.
+*/
+public:
+    float x, y;
+    float radius;
+    int speed_x, speed_y;
+
+    void Draw(Renderer& gfx)
+    {
+
+        Rect CircleRect = Rect
+        {
+        x - radius,
+        y - radius,
+        radius * 2,
+        radius * 2
+        };
+
+        gfx.rectFill(CircleRect, ColorF32::RED);
+    }
+
+    void Update()
+    {
+        x += speed_x;
+        y += speed_y;
+
+        if ((x + radius >= window_size.x) || (x - radius <= 0))
+            speed_x *= -1;
+        if ((y + radius >= window_size.y) || (y - radius <= 0))
+            speed_y *= -1;
+    }
+};
+
 class Paddle
 {
 protected:
@@ -46,6 +85,7 @@ int main(void)
     auto& gfx = window.renderer();
 
     Paddle player;
+    Ball ball;
 
     player.body.pos = {10, 10};
     player.body.size = {10, 100};
@@ -77,10 +117,13 @@ int main(void)
             }
         }
 
+        ball.Update();
+
         if (!running) break;
         gfx.start(ColorU8::BLACK);
 
         player.Draw(gfx);
+        ball.Draw(gfx);
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
