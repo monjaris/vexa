@@ -106,3 +106,5 @@ target("sdl")  add_files("tests/sdl3.cpp")  add_deps("vexa")
 target("bound")  add_files("tests/bound.cpp")  add_deps("vexa")
 target("time")  add_files("tests/time.cpp")  add_deps("vexa")
 target("entity")  add_files("tests/entity.cpp")  add_deps("vexa")
+target("pingpong")  add_files("examples/pingpong.cpp")  add_deps("vexa")
+
