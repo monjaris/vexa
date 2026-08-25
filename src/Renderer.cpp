@@ -1,4 +1,5 @@
 #include "vexa/Renderer.hpp"
+#include "vexa/renderer_backend/gfx.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -107,76 +108,6 @@ bool This::exists() {
 
 
 
-constexpr bool This::_setColorU8(ColorU8 color) {
-    return SDL_SetRenderDrawColor(impl->m_renderer, color.r, color.g, color.b, color.a);
-}
-
-constexpr bool This::_setColorF32(ColorF32 color) {
-    return SDL_SetRenderDrawColorFloat(impl->m_renderer, color.r, color.g, color.b, color.a);
-}
-
-void This::_line(Vec2f pos1, Vec2f pos2) {
-    SDL_RenderLine(impl->m_renderer, pos1.x, pos1.y, pos2.x, pos2.y);
-}
-
-
-void This::_triangleFill(Triangle triangle, ColorF32 color) {
-    const SDL_Vertex vertices[3] = {
-        SDL_Vertex {
-            .position = {triangle.first.x, triangle.first.y},
-            .color = {color.r, color.g, color.b, color.a},
-            .tex_coord = {0.0, 0.0},
-        },
-        SDL_Vertex {
-            .position = {triangle.middle.x, triangle.middle.y},
-            .color = {color.r, color.g, color.b, color.a},
-            .tex_coord = {0.0, 0.0},
-        },
-        SDL_Vertex {
-            .position = {triangle.last.x, triangle.last.y},
-            .color = {color.r, color.g, color.b, color.a},
-            .tex_coord = {0.0, 0.0},
-        }
-    };
-
-    SDL_RenderGeometry(impl->m_renderer,
-        nullptr, vertices, 3, nullptr, 0
-    );
-}
-
-void This::_triangleLines(Triangle triangle, ColorF32 color) {
-    _setColorF32(color);
-
-    SDL_FPoint points[4] = {
-        {triangle.first.x, triangle.first.y},
-        {triangle.middle.x, triangle.middle.y},
-        {triangle.last.x, triangle.last.y},
-        {triangle.first.x, triangle.first.y},
-    };
-
-    SDL_RenderLines(impl->m_renderer, points, 4);
-}
-
-
-void This::_rectFill(Rect<> rect) {
-    const SDL_FRect sdl_rect = {rect.pos.x, rect.pos.y, rect.size.x, rect.size.y};
-    SDL_RenderFillRect(impl->m_renderer, &sdl_rect);
-}
-
-void This::_rectLines(Rect<> rect) {
-    const SDL_FRect sdl_rect = {rect.size.x, rect.size.y, rect.pos.x, rect.pos.y};
-    SDL_RenderRect(impl->m_renderer, &sdl_rect);
-}
-
-template<usize N> void This::_rectFillN(Rect<> (&rectangle_array)[N]) {
-    SDL_RenderFillRects(impl->m_renderer, rectangle_array, N);
-}
-
-template<usize N> void This::_rectLinesN(Rect<> (&rectangle_array)[N]) {
-    SDL_RenderRects(impl->m_renderer, rectangle_array, N);
-}
-
-
 
 Renderer& This::setVsync(bool enabled) {
     m_build_config.vsync = enabled;
@@ -189,12 +120,12 @@ void This::start() {
 }
 // overload for clearing with Color8
 void This::start(ColorU8 color) {
-    _setColorU8(color);
+    gfx::set_rgba_u8(impl->m_renderer, color);
     SDL_RenderClear(impl->m_renderer);
 }
 // overload for clearing with Color8
 void This::start(ColorF32 color) {
-    _setColorF32(color);
+    gfx::set_rgba_f32(impl->m_renderer, color);
     SDL_RenderClear(impl->m_renderer);
 }
 
@@ -206,49 +137,59 @@ void This::finish() {
 
 
 void This::triangleFill(Triangle triangle, ColorU8 color) {
-    _triangleFill(triangle, color.toF32());
+    gfx::set_rgba_f32(impl->m_renderer, color.toF32());
+    gfx::fill_triangle_rgbaF32(impl->m_renderer, triangle);
 }
 
 void This::triangleFill(Triangle triangle, ColorF32 color) {
-    _triangleFill(triangle, color);
+    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::fill_triangle_rgbaF32(impl->m_renderer, triangle);
 }
 
 void This::triangleLines(Triangle triangle, ColorU8 color) {
-    _triangleLines(triangle, color.toF32());
+    
 }
 
 void This::triangleLines(Triangle triangle, ColorF32 color) {
-    _triangleLines(triangle, color);
+    
 }
 
 
 
-void This::rectFill(Rect<> rectangle, ColorU8 color) {
-    _setColorU8(color); _rectFill(rectangle);
+void This::rectFill(Rect rectangle, ColorU8 color) {
+    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::fill_rectangle(impl->m_renderer, rectangle);
 }
-void This::rectFill(Rect<> rectangle, ColorF32 color) {
-    _setColorF32(color); _rectFill(rectangle);
-}
-
-void This::rectLines(Rect<> rectangle, ColorU8 color) {
-    _setColorU8(color); _rectLines(rectangle);
-}
-void This::rectLines(Rect<> rectangle, ColorF32 color) {
-    _setColorF32(color); _rectLines(rectangle);
+void This::rectFill(Rect rectangle, ColorF32 color) {
+    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::fill_rectangle(impl->m_renderer, rectangle);
 }
 
-template<usize N> void This::rectFillN(Rect<> (&rectangle_array)[N], ColorU8 color) {
-    _setColorU8(color); _rectFillN(rectangle_array);
+void This::rectLines(Rect rectangle, ColorU8 color) {
+    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::line_rectangle(impl->m_renderer, rectangle);
 }
-template<usize N> void This::rectFillN(Rect<> (&rectangle_array)[N], ColorF32 color) {
-    _setColorF32(color); _rectFillN(rectangle_array);
+void This::rectLines(Rect rectangle, ColorF32 color) {
+    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::line_rectangle(impl->m_renderer, rectangle);
 }
 
-template<usize N> void This::rectLinesN(Rect<> (&rectangle_array)[N], ColorU8 color) {
-    _setColorU8(color); _rectLinesN(rectangle_array);
+template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorU8 color) {
+    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
 }
-template<usize N> void This::rectLinesN(Rect<> (&rectangle_array)[N], ColorF32 color) {
-    _setColorF32(color); _rectLinesN(rectangle_array);
+template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorF32 color) {
+    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
+}
+
+template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorU8 color) {
+    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::line_N_rectangle(impl->m_renderer, rectangle_array);
+}
+template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorF32 color) {
+    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::line_N_rectangle(impl->m_renderer, rectangle_array);
 }
 
 

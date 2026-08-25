@@ -74,12 +74,12 @@ static constexpr TypeMap type_maps[] = {
 
     { This::KEY_DOWN, SDL_EVENT_KEY_DOWN },
     { This::KEY_UP, SDL_EVENT_KEY_UP },
-    { This::TEXT_EDITING, SDL_EVENT_TEXT_EDITING },
+    { This::TEXT_EDIT, SDL_EVENT_TEXT_EDITING },
     { This::TEXT_INPUT, SDL_EVENT_TEXT_INPUT },
     { This::KEYMAP_CHANGED, SDL_EVENT_KEYMAP_CHANGED },
     { This::KEYBOARD_ADDED, SDL_EVENT_KEYBOARD_ADDED },
     { This::KEYBOARD_REMOVED, SDL_EVENT_KEYBOARD_REMOVED },
-    { This::TEXT_EDITING_CANDIDATES, SDL_EVENT_TEXT_EDITING_CANDIDATES },
+    { This::TEXT_EDIT_CANDID, SDL_EVENT_TEXT_EDITING_CANDIDATES },
     { This::SCREEN_KEYBOARD_SHOWN, SDL_EVENT_SCREEN_KEYBOARD_SHOWN },
     { This::SCREEN_KEYBOARD_HIDDEN, SDL_EVENT_SCREEN_KEYBOARD_HIDDEN },
 
@@ -177,23 +177,53 @@ consteval inline uint64 This::M_ToSDL3EventTypeCompt(This::Type type) noexcept
     return M_ToSDL3EventTypeRuntime(type);
 }
 
-constexpr inline This::Type This::M_ToConeEventTypeRuntime(uint64 sdl_type) noexcept
+constexpr inline This::Type This::M_ToVexaEventTypeRuntime(uint64 sdl_type) noexcept
 {
     for(const auto& [mk_type, _sdl_type] : type_maps)  if(_sdl_type == sdl_type)  return mk_type;
     std::unreachable();
 }
-consteval inline This::Type This::M_ToConeEventTypeCompt(uint64 type) noexcept
+consteval inline This::Type This::M_ToVexaEventTypeCompt(uint64 type) noexcept
 {
-    return M_ToConeEventTypeRuntime(type);
+    return M_ToVexaEventTypeRuntime(type);
 }
 
 
 
-This::Event() noexcept = default;
+This::Event() noexcept {
+    m.kb.date = m.kb_device.date =
+    m.text.date = m.text_edit.date = m.text_edit_candidates.date =
+    m.mouse.date = m.mouse_device.date = m.mouse_motion.date = m.mouse_wheel.date =
+    m.joystick_device.date = m.joystick_axis.date = m.joystick_ball.date =
+    m.joystick_ball.date = m.joystick_button.date = m.joystick_battery.date =
+    m.gamepad_device.date = m.gamepad_axis.date = m.gamepad_button.date =
+    m.gamepad_touchpad.date = m.gamepad_sensor.date =
+    m.touch_finger.date = m.touch_pinch.date = m.touch_pen.date = m.touch_proximity.date =
+    m.pen_motion.date = m.pen_button.date = m.pen_axis.date =
+    m.window_ev.date = m.render_ev.date = m.sensor_ev.date = m.display_ev.date =
+    m.clipboard_ev.date = m.extern_drop_ev.date = m.audio_device.date = m.camera_device.date =
+    m.quit_ev.date = m.custom_ev.date
+        =
+            m_date.sinceEpoch().millis();
+
+    m.kb.type = m.kb_device.type =
+    m.text.type = m.text_edit.type = m.text_edit_candidates.type =
+    m.mouse.type = m.mouse_device.type = m.mouse_motion.type = m.mouse_wheel.type =
+    m.joystick_device.type = m.joystick_axis.type = m.joystick_ball.type =
+    m.joystick_ball.type = m.joystick_button.type = m.joystick_battery.type =
+    m.gamepad_device.type = m.gamepad_axis.type = m.gamepad_button.type =
+    m.gamepad_touchpad.type = m.gamepad_sensor.type =
+    m.touch_finger.type = m.touch_pinch.type = m.touch_pen.type = m.touch_proximity.type =
+    m.pen_motion.type = m.pen_button.type = m.pen_axis.type =
+    m.window_ev.type = m.render_ev.type = m.sensor_ev.type = m.display_ev.type =
+    m.clipboard_ev.type = m.extern_drop_ev.type = m.audio_device.type = m.camera_device.type =
+    m.quit_ev.type = m.custom_ev.type
+        =
+            m_type;
+}
 
 
 
-void This::FillEvent(Event& ev) {
+void This::Fill(Event& ev) {
     namespace i = internal;
 
     switch (ev.m_type)
@@ -222,15 +252,15 @@ void This::FillEvent(Event& ev) {
         //  TEXT INPUT  //
         case Type::TEXT_INPUT: {
             ev.m.text = Text::Input {
-    {ev.m_type, i::event.text.timestamp},
+                {ev.m_type, i::event.text.timestamp},
                 i::event.text.windowID,
                 i::event.text.text
             };
             break;
         }
-        case Type::TEXT_EDITING: {
+        case Type::TEXT_EDIT: {
             ev.m.text_edit = Text::Editing {
-    {ev.m_type, i::event.edit.timestamp},
+                {ev.m_type, i::event.edit.timestamp},
                 i::event.edit.windowID,
                 i::event.edit.text,
                 i::event.edit.start,
@@ -238,9 +268,9 @@ void This::FillEvent(Event& ev) {
             };
             break;
         }
-        case Type::TEXT_EDITING_CANDIDATES: {
+        case Type::TEXT_EDIT_CANDID: {
             ev.m.text_edit_candidates = Text::EditingCandidates {
-    {ev.m_type, i::event.edit_candidates.timestamp},
+                {ev.m_type, i::event.edit_candidates.timestamp},
                 i::event.edit_candidates.windowID,
                 i::event.edit_candidates.candidates,
                 i::event.edit_candidates.num_candidates,
@@ -253,7 +283,7 @@ void This::FillEvent(Event& ev) {
         //  MOUSE  //
         case Type::MOUSE_MOTION: {
             ev.m.mouse_motion = Mouse::Motion {
-    {ev.m_type, i::event.motion.timestamp},
+                {ev.m_type, i::event.motion.timestamp},
                 i::event.motion.which,
                 i::event.motion.windowID,
                 i::event.motion.state,
@@ -266,7 +296,7 @@ void This::FillEvent(Event& ev) {
         }
         CASE_OR(MOUSE_BUTTON_DOWN, MOUSE_BUTTON_UP): {
             ev.m.mouse = Mouse::Input {
-    {ev.m_type, i::event.button.timestamp},
+                {ev.m_type, i::event.button.timestamp},
                 i::event.button.which,
                 i::event.button.windowID,
                 i::event.button.button,
@@ -279,7 +309,7 @@ void This::FillEvent(Event& ev) {
         }
         case Type::MOUSE_WHEEL: {
             ev.m.mouse_wheel = Mouse::Wheel {
-    {ev.m_type, i::event.wheel.timestamp},
+                {ev.m_type, i::event.wheel.timestamp},
                 i::event.wheel.which,
                 i::event.wheel.windowID,
                 i::event.wheel.x,
@@ -298,7 +328,7 @@ void This::FillEvent(Event& ev) {
         }
         CASE_OR(MOUSE_ADDED, MOUSE_REMOVED): {
             ev.m.mouse_device = Mouse::Device {
-    {ev.m_type, i::event.mdevice.timestamp},
+                {ev.m_type, i::event.mdevice.timestamp},
                 i::event.mdevice.which
             };
             break;
@@ -307,7 +337,7 @@ void This::FillEvent(Event& ev) {
         //  JOYSTICK  //
         case Type::JOYSTICK_AXIS_MOTION: {
             ev.m.joystick_axis = Joystick::Axis {
-    {ev.m_type, i::event.jaxis.timestamp},
+                {ev.m_type, i::event.jaxis.timestamp},
                 i::event.jaxis.which,
                 i::event.jaxis.value,
                 i::event.jaxis.axis
@@ -316,7 +346,7 @@ void This::FillEvent(Event& ev) {
         }
         case Type::JOYSTICK_BALL_MOTION: {
             ev.m.joystick_ball = Joystick::Ball {
-    {ev.m_type, i::event.jball.timestamp},
+                {ev.m_type, i::event.jball.timestamp},
                 i::event.jball.which,
                 i::event.jball.xrel,
                 i::event.jball.yrel,
@@ -326,7 +356,7 @@ void This::FillEvent(Event& ev) {
         }
         case Type::JOYSTICK_HAT_MOTION: {
             ev.m.joystick_hat = Joystick::Hat {
-    {ev.m_type, i::event.jhat.timestamp},
+                {ev.m_type, i::event.jhat.timestamp},
                 i::event.jhat.which,
                 i::event.jhat.hat,
                 i::event.jhat.value
@@ -428,7 +458,7 @@ void This::FillEvent(Event& ev) {
         case Type::PEN_PROXIMITY_IN:
         case Type::PEN_PROXIMITY_OUT: {
             ev.m.touch_proximity = Touch::Proximity {
-    {ev.m_type, i::event.pproximity.timestamp},
+                {ev.m_type, i::event.pproximity.timestamp},
                 i::event.pproximity.which,
                 i::event.pproximity.windowID
             };
@@ -565,8 +595,8 @@ std::optional<Event> Event::Poll() noexcept {
     if (!SDL_PollEvent(&i::event)) return std::nullopt;
 
     Event build;
-    build.m_type = M_ToConeEventTypeRuntime(i::event.type);
-    FillEvent(build);
+    build.m_type = M_ToVexaEventTypeRuntime(i::event.type);
+    Fill(build);
 
     return build;
 }

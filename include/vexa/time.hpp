@@ -12,16 +12,26 @@ using Micros = Duration<int64, 1'000lu>;
 using Millis = Duration<fp64, 1'000'000lu>;
 using Seconds = Duration<fp64, 1'000'000'000lu>;
 
-// Date (time point)
-class Date;
-
 // Concepts
 template<typename T>
 struct is_duration : std::false_type {};
-template<typename ValueT, uint64 ratio>
-struct is_duration<Duration<ValueT, ratio>> : std::true_type {};
+
+template<typename ValueT, uint64_t Scale>
+struct is_duration<Duration<ValueT, Scale>> : std::true_type {};
+
 template<typename T>
-concept DurationConcept = is_duration<std::remove_cvref_t<T>>::value;
+inline constexpr bool is_duration_v = is_duration<std::decay_t<T>>::value;
+
+template<typename T>
+concept DurationConcept = is_duration_v<T>;
+
+
+
+// Date (time point)
+template<DurationConcept> class TimePoint;
+using Date = TimePoint<Nanos>;
+using LongDate = TimePoint<Millis>;
+
 
 // function declarations
 void sleep(Nanos amount);
@@ -32,7 +42,7 @@ Date now();
 
 
 // @arg ValueT - the underlying type to store duration as nanoseconds
-// @arg t_ratio - 1:nano, 1000:micro, etc.
+// @arg t_ratio - nano:1, micro:1000, etc.
 template<typename ValueType, uint64 t_ratio>
 requires std::is_arithmetic_v<ValueType>
 class VX_NODISCARD Duration
@@ -75,56 +85,54 @@ public:
 
 
 
+template<DurationConcept DurationType>
+class TimePoint {
+public:
+    using DurationT = DurationType;
 
-class Date {
-    Nanos m_since_epoch;
+private:
+    DurationT m_since_epoch;
+
 
 public:
     // default ctor
-    constexpr Date(): m_since_epoch(0) {};
+    constexpr TimePoint(): m_since_epoch(0) {};
 
     // main ctor
     template<DurationConcept DurationT>
-    explicit constexpr Date(DurationT dur_since_epoch): m_since_epoch(dur_since_epoch) {}
-
-    // assignment operator (<Date>=<Duration>)
-    // template<DurationConcept DurationT>
-    // constexpr Date& operator= (const DurationT& dur_since_epoch) {
-        // m_since_epoch = dur_since_epoch;
-        // return *this;
-    // }
+    explicit constexpr TimePoint(DurationT dur_since_epoch): m_since_epoch(dur_since_epoch) {}
 
     // { +=, -=, +, - } operators
-    // <Date> += <Nanos>
-    constexpr Date& operator+= (Nanos duration) noexcept {
+    // <Date> += <DurationT>
+    constexpr TimePoint& operator+= (DurationT duration) noexcept {
         m_since_epoch += duration;
         return *this;
     }
-    // <Date> -= <Nanos>
-    constexpr Date& operator-= (Nanos duration) noexcept {
+    // <Date> -= <DurationT>
+    constexpr TimePoint& operator-= (DurationT duration) noexcept {
         m_since_epoch -= duration;
         return *this;
     }
-    // <Date> + <Nanos>
-    friend constexpr Date operator+ (Date date, Nanos duration) noexcept {
+    // <Date> + <DurationT>
+    friend constexpr TimePoint operator+ (TimePoint date, DurationT duration) noexcept {
         return date += duration;
     }
-    // <Date> - <Nanos>
-    friend constexpr Date operator- (Date date, Nanos duration) noexcept {
+    // <Date> - <DurationT>
+    friend constexpr TimePoint operator- (TimePoint date, DurationT duration) noexcept {
         return date -= duration;
     }
     // <Date> - <Date>
-    friend constexpr Nanos operator- (const Date& left, const Date& right) noexcept {
+    friend constexpr DurationT operator- (const TimePoint& left, const TimePoint& right) noexcept {
         return left.m_since_epoch - right.m_since_epoch;
     }
 
 
-    const Nanos& sinceEpoch() {
+    const DurationT& sinceEpoch() {
         return m_since_epoch;
     }
 
-    Nanos elapsed() {
-        return Nanos{now().m_since_epoch.nanos() - m_since_epoch.nanos()};
+    DurationT elapsed() {
+        return DurationT{now().m_since_epoch.nanos() - m_since_epoch.nanos()};
     }
 };
 

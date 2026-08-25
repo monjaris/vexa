@@ -1,6 +1,7 @@
 #pragma once
 #include "core/common.hpp"
 #include "core/Key.hpp"
+#include "time.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -9,6 +10,7 @@ class VX_NODISCARD Event
 public:
     enum Type : uint64;
 
+    using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
 
 private:
     struct AnyBase {
@@ -108,7 +110,7 @@ private:
     {
         struct Input : AnyBase {
             uint32 window_id;
-            const char *content;
+            const char* content;
         };
 
         struct Editing : AnyBase {
@@ -273,6 +275,7 @@ private:
 
 private:
     Type m_type;
+    Event::Date m_date;
 
     union {
         KB::Input kb;
@@ -327,7 +330,7 @@ private:
 public:
     Event() noexcept;
 
-    static void FillEvent(Event& ev);
+    static void Fill(Event& ev);
     static std::optional<Event> Poll() noexcept;
 
 
@@ -383,8 +386,8 @@ private:
     constexpr static inline uint64 M_ToSDL3EventTypeRuntime(Type type) noexcept;
     consteval static inline uint64 M_ToSDL3EventTypeCompt(Type type) noexcept;
     // ..
-    constexpr static inline Type M_ToConeEventTypeRuntime(uint64 type) noexcept;
-    consteval static inline Type M_ToConeEventTypeCompt(uint64 type) noexcept;
+    constexpr static inline Type M_ToVexaEventTypeRuntime(uint64 type) noexcept;
+    consteval static inline Type M_ToVexaEventTypeCompt(uint64 type) noexcept;
 };
 
 
@@ -444,12 +447,12 @@ enum VX_NODISCARD Event::Type : uint64 {
 
     KEY_DOWN = 0x300,
     KEY_UP,
-    TEXT_EDITING,
+    TEXT_EDIT,
     TEXT_INPUT,
     KEYMAP_CHANGED,
     KEYBOARD_ADDED,
     KEYBOARD_REMOVED,
-    TEXT_EDITING_CANDIDATES,
+    TEXT_EDIT_CANDID,
     SCREEN_KEYBOARD_SHOWN,
     SCREEN_KEYBOARD_HIDDEN,
 

@@ -52,51 +52,50 @@ struct Triangle {
 
 
 
-template<class Position = Vec2f, class Size = Vec2f>
 struct Rect {
-    Position pos;
-    Size size;
+    Vec2f pos;
+    Vec2f size;
 
     // create a rectangle: (x, y, w, h)
     explicit constexpr inline Rect(
-        Position::ValueT x, Position::ValueT y, Size::ValueT width, Size::ValueT height
+        Vec2f::ValueT x, Vec2f::ValueT y, Vec2f::ValueT width, Vec2f::ValueT height
     ) noexcept: pos({x, y}), size(width, height) {}
 
     // create a rectangle: ({x, y}, {w, h})
-    constexpr inline Rect(Position position, Size size) noexcept
+    constexpr inline Rect(Vec2f position, Vec2f size) noexcept
         : pos(position), size(size) {}
 
     // create a square: ({x, y}, a)
-    constexpr inline Rect(Position position, Size::ValueT side) noexcept
+    constexpr inline Rect(Vec2f position, Vec2f::ValueT side) noexcept
         : pos(position), size({side, side}) {}
 
 
     // methods: area(), perimeter(), center()
-    constexpr inline Size::ValueT area()
+    constexpr inline Vec2f::ValueT area()
     const noexcept { return size.x * size.y; }
-    constexpr inline Size::ValueT perimeter()
+    constexpr inline Vec2f::ValueT perimeter()
     const noexcept { return 2*(size.x + size.y); }
-    constexpr inline Position center()
+    constexpr inline Vec2f center()
     const noexcept { return {pos.x + size.x / 2, pos.y + size.y / 2}; }
 
     // methods: left(), right(), top(), bottom()
-    constexpr inline Position left()
+    constexpr inline Vec2f left()
     const noexcept { return {pos.x, pos.y + size.y / 2}; }
-    constexpr inline Position right()
+    constexpr inline Vec2f right()
     const noexcept { return {pos.x + size.x, pos.y + size.y / 2}; }
-    constexpr inline Position top() 
+    constexpr inline Vec2f top() 
     const noexcept { return {pos.x + size.x / 2, pos.y}; }
-    constexpr inline Position bottom()
+    constexpr inline Vec2f bottom()
     const noexcept { return {pos.x + size.x / 2, pos.y + size.y}; }
 
     // methods: topLeft(), topRight(), bottomLeft(), bottomRight()
-    constexpr inline Position topLeft()
+    constexpr inline Vec2f topLeft()
     const noexcept { return pos; }
-    constexpr inline Position topRight()
+    constexpr inline Vec2f topRight()
     const noexcept { return {pos.x + size.x, pos.y}; }
-    constexpr inline Position bottomLeft()
+    constexpr inline Vec2f bottomLeft()
     const noexcept { return {pos.x,pos.y + size.y}; }
-    constexpr inline Position bottomRight()
+    constexpr inline Vec2f bottomRight()
     const noexcept { return {pos.x + size.x, pos.y + size.y}; }
 };
 
