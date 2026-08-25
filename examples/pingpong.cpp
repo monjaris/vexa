@@ -12,7 +12,7 @@ protected:
     }
 
 public:
-    Rect body;
+    Rect body = Rect{0,0,0,0};
     int speed;
 
     void Draw(Renderer& gfx)
@@ -27,6 +27,7 @@ public:
 
         KeepIn();
     }
+
 };
 
 
@@ -44,6 +45,11 @@ int main(void)
     .create();
     auto& gfx = window.renderer();
 
+    Paddle player;
+
+    player.body.pos = {10, 10};
+    player.body.size = {10, 100};
+    player.speed = 5;
 
     bool running = true;
     while (running)
@@ -57,6 +63,8 @@ int main(void)
                 {
                     auto key = event->kb().key;
                     if (key == Key::Q) running = false;
+
+                    player.Update(key);
 
                     break;
                 }
@@ -72,7 +80,7 @@ int main(void)
         if (!running) break;
         gfx.start(ColorU8::BLACK);
 
-        gfx.rectFill(Rect{100, 100, 250, 250}, ColorF32::CYAN);
+        player.Draw(gfx);
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
