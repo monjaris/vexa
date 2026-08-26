@@ -120,12 +120,12 @@ void This::start() {
 }
 // overload for clearing with Color8
 void This::start(ColorU8 color) {
-    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::set_brush_color8(impl->m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(impl->m_renderer);
 }
 // overload for clearing with Color8
 void This::start(ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::set_brush_color32(impl->m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(impl->m_renderer);
 }
 
@@ -137,13 +137,22 @@ void This::finish() {
 
 
 void This::triangleFill(Triangle triangle, ColorU8 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color.toF32());
-    gfx::fill_triangle_rgbaF32(impl->m_renderer, triangle);
+    ColorF32 color_f32 = color.toF32();
+    gfx::set_triangle_color32(color_f32.r, color_f32.g, color_f32.b, color_f32.a);
+    gfx::fill_triangle(impl->m_renderer,
+        triangle.first.x, triangle.first.y,
+        triangle.middle.x, triangle.middle.y,
+        triangle.last.x, triangle.last.y
+    );
 }
 
 void This::triangleFill(Triangle triangle, ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
-    gfx::fill_triangle_rgbaF32(impl->m_renderer, triangle);
+    gfx::set_triangle_color32(color.r, color.g, color.b, color.a);
+    gfx::fill_triangle(impl->m_renderer,
+        triangle.first.x, triangle.first.y,
+        triangle.middle.x, triangle.middle.y,
+        triangle.last.x, triangle.last.y
+    );
 }
 
 void This::triangleLines(Triangle triangle, ColorU8 color) {
@@ -157,40 +166,93 @@ void This::triangleLines(Triangle triangle, ColorF32 color) {
 
 
 void This::rectFill(Rect rectangle, ColorU8 color) {
-    gfx::set_rgba_u8(impl->m_renderer, color);
-    gfx::fill_rectangle(impl->m_renderer, rectangle);
+    gfx::set_rectangle_color8(color.r, color.g, color.b, color.a);
+    gfx::fill_rectangle(impl->m_renderer,
+        rectangle.pos.x, rectangle.pos.y,
+        rectangle.size.x, rectangle.size.y
+    );
 }
 void This::rectFill(Rect rectangle, ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
-    gfx::fill_rectangle(impl->m_renderer, rectangle);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
+    gfx::fill_rectangle(impl->m_renderer,
+        rectangle.pos.x, rectangle.pos.y,
+        rectangle.size.x, rectangle.size.y
+    );
 }
 
 void This::rectLines(Rect rectangle, ColorU8 color) {
-    gfx::set_rgba_u8(impl->m_renderer, color);
-    gfx::line_rectangle(impl->m_renderer, rectangle);
+    gfx::set_rectangle_color8(color.r, color.g, color.b, color.a);
+    gfx::line_rectangle(impl->m_renderer,
+        rectangle.pos.x, rectangle.pos.y,
+        rectangle.size.x, rectangle.size.y
+    );
 }
 void This::rectLines(Rect rectangle, ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
-    gfx::line_rectangle(impl->m_renderer, rectangle);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
+    gfx::line_rectangle(impl->m_renderer,
+        rectangle.pos.x, rectangle.pos.y,
+        rectangle.size.x, rectangle.size.y
+    );
 }
 
 template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorU8 color) {
-    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
 }
 template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
 }
 
 template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorU8 color) {
-    gfx::set_rgba_u8(impl->m_renderer, color);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::line_N_rectangle(impl->m_renderer, rectangle_array);
 }
 template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorF32 color) {
-    gfx::set_rgba_f32(impl->m_renderer, color);
+    gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::line_N_rectangle(impl->m_renderer, rectangle_array);
 }
+
+
+
+
+void This::PolyFill(Vec2 pos, Vec2 size, ColorU8 color) {
+    
+}
+
+void This::PolyLines(Vec2 pos, Vec2 size, ColorU8 color) {
+    
+}
+
+
+
+void This::circleFill(Circle circle, ColorU8 color, fp32 quality) {
+    ColorF32 color_f32 = color.toF32();
+    gfx::set_circle_color32(color_f32.r, color_f32.g, color_f32.b, color_f32.a);
+    gfx::fill_circle(impl->m_renderer,
+        circle.pos.x, circle.pos.y, circle.radius,
+        circle.segments(quality)
+    );
+}
+
+void This::circleFill(Circle circle, ColorF32 color, fp32 quality) {
+    gfx::set_circle_color32(color.r, color.g, color.b, color.a);
+    gfx::fill_circle(impl->m_renderer,
+        circle.pos.x, circle.pos.y, circle.radius,
+        circle.segments(quality)
+    );
+}
+
+void This::circleLines(Circle circle, ColorU8 color) {
+    
+}
+
+void This::circleLines(Circle circle, ColorF32 color) {
+    
+}
+
+
+
 
 
 NAMESPACE_END(vexa)

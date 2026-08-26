@@ -13,14 +13,21 @@ constexpr fp64 PI64_INV = 1.0f/3.14159265358979323846;
 
 
 //  SQRT (consteval)  //
-template <const fp32 x>
-consteval inline auto sqrtCT() -> decltype(x) {
-    return std::sqrtf(x);
+consteval auto sqrtCT(auto x) {
+    using T = decltype(x);
+    if (x < CAST(T, 0)) static_assert(true, "sqrt of negative number is undefined");
+    IF_THEN(x == CAST(T, 0) || x != x,   return x;)  // x!=x can return true with NANs
+
+    auto prev = CAST(T, 0);
+    auto curr = (x < CAST(T, 1))?  CAST(T, 1) : x;
+
+    while (curr != prev) {
+        prev = curr;
+        curr = static_cast<T>(0.5) * (curr + x / curr);
+    }
+    return curr;
 }
-template <const fp64 x>
-consteval inline auto sqrtCT() -> decltype(x) {
-    return std::sqrt(x);
-}
+
 //  SQRT  //
 constexpr inline auto sqrt(fp32 x) -> decltype(x) {
     return std::sqrtf(x);

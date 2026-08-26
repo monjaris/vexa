@@ -32,6 +32,15 @@ constexpr VectorT::ValueT VecDist(const VectorT& first, const VectorT& second) {
 }
 
 
+struct Vec2 {
+    using ValueT = fp32;
+    ValueT x;
+    ValueT y;
+    constexpr Vec2(ValueT x, ValueT y): x(x), y(y) {}
+    constexpr bool operator== (Vec2 other) const noexcept { return VecEqu(*this, other); }
+};
+
+
 struct Vec2i {
     using ValueT = int32;
     ValueT x;
@@ -40,6 +49,7 @@ struct Vec2i {
     constexpr bool operator== (Vec2i other) const noexcept { return VecEqu(*this, other); }
 };
 
+
 struct Vec2u {
     using ValueT = uint32;
     ValueT x;
@@ -47,17 +57,6 @@ struct Vec2u {
     constexpr Vec2u(ValueT x, ValueT y): x(x), y(y) {}
     constexpr bool operator== (Vec2u other) const noexcept { return VecEqu(*this, other); }
 };
-
-struct Vec2f {
-    using ValueT = fp32;
-    ValueT x;
-    ValueT y;
-    constexpr Vec2f(ValueT x, ValueT y): x(x), y(y) {}
-    constexpr bool operator== (Vec2f other) const noexcept { return VecEqu(*this, other); }
-};
-
-
-using Vec2 = Vec2f;
 
 
 NAMESPACE_END(vec)

@@ -23,12 +23,12 @@ template<typename T, usize N>
 inline consteval usize elemSize(const T (&array)[N]) noexcept {
     return sizeof(T);  (void)array;
 }
-// overload for containers with the underlying type that has ::value_type or ::ValueType
+// overload for containers with the underlying type that has ::value_type or ::ValueT
 template<typename T> requires
-( requires { typename T::ValueType; } ||
+( requires { typename T::ValueT; } ||
 requires { typename T::value_type; } )
 inline consteval usize elemSize(const T&) noexcept {
-    if constexpr (requires { typename T::ValueType; }) return sizeof(typename T::ValueType);
+    if constexpr (requires { typename T::ValueT; }) return sizeof(typename T::ValueT);
     else return sizeof(typename T::value_type);
 }
 

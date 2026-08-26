@@ -29,11 +29,12 @@ set_toolchains("vexa-llvm")
             "-fno-exceptions",
             -- "-fsanitize=address",
             -- "-fno-omit-frame-pointer",
+            "-Wuninitialized", "-Werror=uninitialized",
+            "-Wno-unused-parameter",
             "-Wno-unused-function",
             "-Wno-unused-variable",
             "-Wno-unused-const-variable",
-            "-Wuninitialized", "-Werror=uninitialized",
-            -- "-ftime-trace",
+            "-ftime-trace",
         };
         ld_flags = {
             -- "-fsanitize=address",
@@ -48,6 +49,10 @@ set_toolchains("vexa-llvm")
         cxx_flags = {
             "-Wall",
             "-fno-exceptions",
+            "-Wno-unused-parameter",
+            "-Wno-unused-function",
+            "-Wno-unused-variable",
+            "-Wno-unused-const-variable",
         };
         ld_flags = {
             "-flto=full"
