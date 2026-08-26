@@ -1,9 +1,10 @@
-/*\
- * Small implementation of pingpong in C++
- *
- * Date: Aug 26 2026
- * Autor: gitduck6 on github
-\*/
+/*=============================================*\
+
+vexa implementation of pingpong (vexa-0.0.1)
+
+Copyright (c) 2026 @gitduck6
+
+\*=============================================*/
 #include "vexa/vexa.hpp"
 #include <random>
 #include <iostream>
