@@ -109,10 +109,10 @@ struct VX_NODISCARD Circle {
 
     //  quality of the circle (scales segments)  //
     static constexpr fp32 POOR = 0.03;
-    static constexpr fp32 FAIR = 0.055;
-    static constexpr fp32 NORMAL = 0.10;
-    static constexpr fp32 CRISP = 0.14;
-    static constexpr fp32 PERFECT = 0.20;
+    static constexpr fp32 FAIR = 0.06;
+    static constexpr fp32 NORMAL = 0.125;
+    static constexpr fp32 CRISP = 0.18;
+    static constexpr fp32 PERFECT = 0.27;
 
     // create a circle: ({x, y}, r)
     explicit constexpr inline Circle(Vec2 position, Vec2::ValueT radius) noexcept
