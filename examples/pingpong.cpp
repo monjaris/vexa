@@ -38,7 +38,7 @@ class Ball
 */
 public:
     Vec2i pos = {window_size.x/2, window_size.y/2};
-    Vec2f speed  = {3,3};
+    Vec2 speed  = {3,3};
     float radius = 5;
 
     int score_player = 0, score_cpu = 0; // The ball can keep the scores cos why not

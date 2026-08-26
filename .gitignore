@@ -6,11 +6,13 @@
 /build/
 
 # Binaries
-/main
-/game
 /*.so
 /*.a
 /*.o
+/*.release
+/*.debug
+/main
+/game
 
 # Scripts
 /run.sh

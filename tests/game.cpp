@@ -30,8 +30,14 @@ int main()
         }
 
         gfx.start(ColorU8::BLACK);
-        gfx.rectFill(Rect{100, 100, 250, 250}, ColorF32::CYAN);
+        gfx.rectFill(Rect{250, 200, 200, 200}, ColorF32::CYAN);
+        gfx.circleFill(Circle{{200, 400}, 80}, ColorF32::RED, Circle::POOR);
+        gfx.circleFill(Circle{{400, 400}, 80}, ColorF32::RED, Circle::FAIR);
+        gfx.circleFill(Circle{{600, 400}, 80}, ColorF32::RED, Circle::NORMAL);
+        gfx.circleFill(Circle{{800, 400}, 80}, ColorF32::RED, Circle::CRISP);
+        gfx.circleFill(Circle{{1000, 400}, 80}, ColorF32::RED, Circle::PERFECT);
         gfx.finish();
+        time::sleep(time::Millis{16.67});
     }
 
     Engine::Close();

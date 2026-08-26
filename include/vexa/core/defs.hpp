@@ -49,6 +49,8 @@
 
 
 
+// allocate memory on the stack
+#define SALLOC($TYPE, $BYTES) ( static_cast<$TYPE*>(__builtin_alloca($BYTES)) )
 
 #define VX_NODISCARD  [[nodiscard]]
 

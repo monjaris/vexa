@@ -1,0 +1,6 @@
+CompileFlags:
+  Add:
+    - -Ivendor/SDL3/include
+    - -Ivendor/SDL3/src          # sometimes helps
+Index:
+  Background: Build
