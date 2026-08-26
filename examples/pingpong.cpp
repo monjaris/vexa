@@ -61,26 +61,34 @@ public:
         if (pos.x - radius <= 0)
         {
             score_cpu++;
-            std::cout << score_player << ":" << score_cpu << std::endl;
-            if (score_cpu >= scoreToWin)
-            {
-                std::cout << "You lose!" << std::endl;
-            }
-
+            CheckWin();
             Reset();
         }
         else if (pos.x + radius >= window_size.x)
         {
             score_player++;
-            std::cout << score_player << ":" << score_cpu << std::endl;
-            if (score_player >= scoreToWin)
-            {
-                std::cout << "You win!" << std::endl;
-            }
+            CheckWin();
             Reset();
         }
         if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
             speed.y *= -1.1; // -1.1 so every hit the direction switches and the speed grows a little (exponentially)
+    }
+
+    void CheckWin()
+    {
+        std::cout << score_player << ":" << score_cpu << std::endl; // i know this isnt exactly supposed to be here but its staying..,
+        if (score_player >= scoreToWin)
+        {
+            std::cout << "You win!" << std::endl;
+            Engine::Close();
+            std::exit(0);
+        }
+        else if (score_cpu >= scoreToWin)
+        {
+            std::cout << "You lose!" << std::endl;
+            Engine::Close();
+            std::exit(0);
+        }
     }
 
     void Reset()
