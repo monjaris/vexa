@@ -94,7 +94,7 @@ includes("scripts/sdl3-static.lua")
 includes("scripts/vexa-dynamic.lua")
 
 
--- TESTS
+--- TESTS
 target("game")  add_files("tests/game.cpp")  add_deps("vexa")
 target("main")  add_files("tests/main.cpp")  add_deps("vexa")
 target("meter")  add_files("tests/meter.cpp")  add_deps("vexa")
@@ -106,3 +106,7 @@ target("sdl")  add_files("tests/sdl3.cpp")  add_deps("vexa")
 target("bound")  add_files("tests/bound.cpp")  add_deps("vexa")
 target("time")  add_files("tests/time.cpp")  add_deps("vexa")
 target("entity")  add_files("tests/entity.cpp")  add_deps("vexa")
+
+--- EXAMPLES
+target("pingpong")  add_files("examples/pingpong.cpp")  add_deps("vexa")
+
