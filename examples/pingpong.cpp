@@ -182,6 +182,11 @@ int main(void)
             }
         }
 
+        if (ball.CheckCollisionRect(player.body))
+            ball.speed.x *= -1.1;
+        if (ball.CheckCollisionRect(machine.body))
+            ball.speed.x *= -1.1;
+
         machine.Update(ball.pos.y);
         ball.Update();
 
