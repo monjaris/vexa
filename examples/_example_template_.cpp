@@ -1,6 +1,15 @@
+/*=============================
+
+vexa implementation of <GAME> (vexa-<version>)
+
+Copyright (c) <YEAR> @<USER>
+
+=============================*/
+
 #include "vexa/vexa.hpp"
 
 using namespace vexa;
+
 
 int main()
 {
