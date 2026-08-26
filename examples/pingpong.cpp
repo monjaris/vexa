@@ -1,5 +1,12 @@
+/*\
+ * Small implementation of pingpong in C++
+ *
+ * Date: Aug 26 2026
+ * Autor: gitduck6 on github
+\*/
 #include "vexa/vexa.hpp"
 #include <random>
+#include <iostream>
 
 using namespace vexa;
 Vec2i window_size = {600, 400};
@@ -151,7 +158,7 @@ int main(void)
     MachinePaddle machine;
     machine.body.pos = {(float)window_size.x - 20, (float)window_size.y - 10};
     machine.body.size = {10, 100};
-    machine.speed = 5;
+    machine.speed = 3;
 
 
     Ball ball;
