@@ -1,10 +1,10 @@
-/*============================================*\
+/*=============================================*\
 
-vexa implementation of <GAME> (vexa-<version>)
+ vexa implementation of <GAME> (vexa-<VERSION>)
 
-Copyright (c) <YEAR> @<USER>
+ Copyright (c) <YEAR> @<USER>
 
-\*============================================*/
+\*=============================================*/
 
 #include "vexa/vexa.hpp"
 

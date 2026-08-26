@@ -1,15 +1,18 @@
 /*=============================================*\
 
-vexa implementation of pingpong (vexa-0.0.1)
+ vexa implementation of pingpong (vexa-0.0.1)
 
-Copyright (c) 2026 @gitduck6
+ Copyright (c) 2026 @gitduck6
 
 \*=============================================*/
+
 #include "vexa/vexa.hpp"
 #include <random>
 #include <iostream>
 
 using namespace vexa;
+
+
 Vec2i window_size = {600, 400};
 int scoreToWin = 5;
 

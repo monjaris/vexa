@@ -102,9 +102,9 @@ struct Rect {
 
 
 
-constexpr uint32 SEGMENTS = 1000;
-template<uint32 t_segments = SEGMENTS>
 struct Circle {
+    constexpr static uint32 SEGMENTS = 1000;
+
     Vec2f pos;
     Vec2f::ValueT radius;
 
@@ -119,10 +119,6 @@ struct Circle {
 
     constexpr Vec2f::ValueT perimeter() const noexcept {
         return 2.f * math::PI32 * radius;
-    }
-
-    constexpr auto segments() const noexcept -> decltype(t_segments) {
-        return t_segments;
     }
 
     Circle& enlarge(const fp64 percent) noexcept {

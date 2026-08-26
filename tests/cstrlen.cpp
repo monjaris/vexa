@@ -14,7 +14,7 @@ int main() {
 
     cn::log::print(cstr);
     auto start = cn::time::now<Dur>();
-    auto sz = cn::cstr_len(cstr);
+    auto sz = cn::cStrLen(cstr);
     auto finish = cn::time::now<Dur>();
     cn::log::print(cstr);
 
