@@ -4,6 +4,18 @@
 using namespace vexa;
 Vec2i window_size = {600, 400};
 
+bool pointInRect(Rect rect, Vec2i point)
+{
+    if ((point.x > rect.pos.x) && (point.x < (rect.pos.x + rect.size.x)))
+    {
+        if ((point.y > rect.pos.y) && (point.y < (rect.pos.y + rect.size.y)))
+        {
+            return true;
+        }
+    }
+    return false;
+} // a bit of a C-style function but im too lazy to add internals to Rect
+
 class Ball
 {
 /*
@@ -58,6 +70,23 @@ public:
         speed.x = 3 * speed_choices[dist(engine)];
         speed.y = 3 * speed_choices[dist(engine)];
     }
+
+    bool CheckCollisionRect(Rect rect)
+    {
+        // My idea is to just to check 4 corners of the ball
+        // i know it isnt perfect, but will do for now
+        Vec2i bottom_right = {pos.x + (int)(2*radius), pos.y + (int)(2*radius)};
+        Vec2i bottom_left = {pos.x, pos.y + (int)(2*radius)};
+        Vec2i top_right = {pos.x + (int)(2*radius), pos.y};
+        // pos itself is top left
+
+        if (pointInRect(rect, bottom_right)) return true;
+        if (pointInRect(rect, bottom_left)) return true;
+        if (pointInRect(rect, top_right)) return true;
+        if (pointInRect(rect, pos)) return true;
+        return false;
+    }
+
 };
 
 class Paddle
@@ -162,6 +191,7 @@ int main(void)
         player.Draw(gfx);
         ball.Draw(gfx);
         machine.Draw(gfx);
+
 
         gfx.finish();
         time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
