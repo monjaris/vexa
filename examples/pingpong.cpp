@@ -1,4 +1,5 @@
 #include "vexa/vexa.hpp"
+#include <random>
 
 using namespace vexa;
 Vec2i window_size = {600, 400};
@@ -36,9 +37,26 @@ public:
         pos.y += speed.y;
 
         if ((pos.x + radius >= window_size.x) || (pos.x - radius <= 0))
-            speed.x *= -1.1;
+            Reset();
         if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
-            speed.y *= -1.1;
+            speed.y *= -1.1; // -1.1 so every hit the direction switches and the speed grows a little (exponentially)
+    }
+
+    void Reset()
+    {
+        pos.x = window_size.x / 2;
+        pos.y = window_size.y / 2;
+
+        std::random_device rd;
+        std::default_random_engine engine(rd());
+        std::bernoulli_distribution dist(0.5);
+        // i dont fully understand this part
+        // but it basically generates a random number "object"
+        // and the later used dist function uses this object to get a random boolean
+
+        int speed_choices[2] = {-1, 1};
+        speed.x = 3 * speed_choices[dist(engine)];
+        speed.y = 3 * speed_choices[dist(engine)];
     }
 };
 
