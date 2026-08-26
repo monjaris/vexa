@@ -10,6 +10,7 @@
 
 using namespace vexa;
 Vec2i window_size = {600, 400};
+int scoreToWin = 5;
 
 bool pointInRect(Rect rect, Vec2i point)
 {
@@ -36,6 +37,8 @@ public:
     Vec2f speed  = {3,3};
     float radius = 5;
 
+    int score_player = 0, score_cpu = 0; // The ball can keep the scores cos why not
+
     void Draw(Renderer& gfx)
     {
 
@@ -55,8 +58,27 @@ public:
         pos.x += speed.x;
         pos.y += speed.y;
 
-        if ((pos.x + radius >= window_size.x) || (pos.x - radius <= 0))
+        if (pos.x - radius <= 0)
+        {
+            score_cpu++;
+            std::cout << score_player << ":" << score_cpu << std::endl;
+            if (score_cpu >= scoreToWin)
+            {
+                std::cout << "You lose!" << std::endl;
+            }
+
             Reset();
+        }
+        else if (pos.x + radius >= window_size.x)
+        {
+            score_player++;
+            std::cout << score_player << ":" << score_cpu << std::endl;
+            if (score_player >= scoreToWin)
+            {
+                std::cout << "You win!" << std::endl;
+            }
+            Reset();
+        }
         if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
             speed.y *= -1.1; // -1.1 so every hit the direction switches and the speed grows a little (exponentially)
     }
