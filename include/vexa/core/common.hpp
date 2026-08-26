@@ -13,22 +13,21 @@
 NAMESPACE_BEGIN(vexa)
 
 
-inline consteval usize cstr_len(const char* cstr) noexcept {
+inline consteval usize cstrLen(const char* cstr) noexcept {
     usize n = 0;
     while (*cstr++ != '\0') ++n;
     return n;
 }
 
 template<typename T, usize N>
-inline consteval usize item_size(const T (&array)[N]) noexcept {
+inline consteval usize elemSize(const T (&array)[N]) noexcept {
     return sizeof(T);  (void)array;
 }
 // overload for containers with the underlying type that has ::value_type or ::ValueType
-template<typename T> requires (
-    requires { typename T::ValueType; } ||
-    requires { typename T::value_type; }
-) inline
-consteval usize item_size(const T&) noexcept {
+template<typename T> requires
+( requires { typename T::ValueType; } ||
+requires { typename T::value_type; } )
+inline consteval usize elemSize(const T&) noexcept {
     if constexpr (requires { typename T::ValueType; }) return sizeof(typename T::ValueType);
     else return sizeof(typename T::value_type);
 }
