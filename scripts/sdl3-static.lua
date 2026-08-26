@@ -31,7 +31,8 @@ target("sdl3")
         local build_type = (config.mode() == "debug") and "Debug" or "Release"
         local jobs = tostring(option.get("jobs") or os.default_njob())
         local video = option.get("window-backend") or o_WL
-
+        local cc = find_tool("clang") and "clang" or "gcc"
+        local cxx = find_tool("clang++") and "clang++" or "g++"
         local args = {
             "-S", src, "-B", bdir,
             -- build/install
@@ -39,8 +40,8 @@ target("sdl3")
             "-DCMAKE_INSTALL_PREFIX=" .. idir,
             "-DCMAKE_INSTALL_LIBDIR=lib",
             -- compiler choices
-            "-DCMAKE_C_COMPILER=clang",
-            "-DCMAKE_CXX_COMPILER=clang++",
+            "-DCMAKE_C_COMPILER=" .. cc,
+            "-DCMAKE_CXX_COMPILER=" .. cxx,
             "-DSDL_SHARED=OFF",
             "-DBUILD_SHARED_LIBS=OFF",
             "-DSDL_STATIC=ON",
