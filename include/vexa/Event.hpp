@@ -25,7 +25,7 @@ private:
             uint32 device_id;
             uint32 window_id;
             Key key;
-            KeyCode key_code;
+            Keycode key_code;
             KeyMod mods;
             bool repeated;
         };

@@ -30,8 +30,10 @@ int main()
         }
 
         gfx.start(ColorU8::BLACK);
+
         gfx.rectFill(Rect{250, 200, 200, 200}, ColorF32::CYAN);
         gfx.circleFill(Circle{{600, 400}, 80}, ColorF32::RED, Circle::CRISP);
+
         gfx.finish();
         time::sleep(time::Millis{16.67});
     }

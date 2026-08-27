@@ -235,7 +235,7 @@ void This::Fill(Event& ev) {
                 i::event.key.which,
                 i::event.key.windowID,
                 CAST(Key, i::event.key.scancode),
-                CAST(KeyCode, i::event.key.key),
+                CAST(Keycode, i::event.key.key),
                 CAST(KeyMod, i::event.key.mod),
                 i::event.key.repeat
             };
