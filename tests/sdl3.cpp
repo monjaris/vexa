@@ -1,22 +1,37 @@
-#include "alt/SDL3.h"
+// 02_held.cpp
+#include <SDL3/SDL.h>
 
-int main()
-{
+int main() {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window* swin = SDL_CreateWindow("", 500, 500, 0);
-    SDL_SetWindowBordered(swin, false);
-    SDL_Renderer* sren = SDL_CreateRenderer(swin, nullptr);
+    SDL_Window* win; SDL_Renderer* ren;
+    SDL_CreateWindowAndRenderer("held", 800, 600, 0, &win, &ren);
 
-    while (true)
-    {
-        bool running = true;
+    SDL_FRect circle = {0, 250, 80, 80};
+    const float speed = 6.0f;
+    float velx = 0;
 
-        SDL_SetRenderDrawColor(sren, 150, 0, 150, 255);
-        SDL_RenderClear(sren);
+    bool running = true;
+    while (running) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_EVENT_QUIT) running = false;
+        }
 
-        SDL_RenderPresent(sren);
-        if (!running) break;
+
+        velx = 0;
+
+        const bool* key = SDL_GetKeyboardState(nullptr);
+        if (key[SDL_SCANCODE_RIGHT]) velx += speed;
+        if (key[SDL_SCANCODE_LEFT]) velx -= speed;
+
+        circle.x += velx;
+
+        SDL_SetRenderDrawColor(ren, 0,0,0,255);
+        SDL_RenderClear(ren);
+        SDL_SetRenderDrawColor(ren, 255,80,80,255);
+        SDL_RenderFillRect(ren, &circle);
+        SDL_RenderPresent(ren);
         SDL_Delay(16);
     }
+    SDL_Quit();
 }
-

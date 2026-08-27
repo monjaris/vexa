@@ -9,15 +9,34 @@ class VX_NODISCARD Event
 {
 public:
     enum Type : uint64;
+    enum Behaviour : uint8;
 
     using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
 
+
+    struct VX_NODISCARD KeyStateType {
+        using ValueT = bool;
+
+        ValueT data[enum_len<Key>];
+        const usize len = (usize)Key::COUNT;
+
+        KeyStateType(usize len): len(len) {}
+
+        constexpr auto length() const noexcept { return len; }
+
+        constexpr bool operator[] (Key key) {
+            return data[CAST(usize, key)] == true;
+        }
+    };
+
+
 private:
+    static inline KeyStateType m_kb_state{CAST(usize, Key::COUNT)};
+
     struct AnyBase {
         Type type;
         uint64 date;
     };
-
 
     struct KB VX_STATIC_CLASS
     {
@@ -27,7 +46,7 @@ private:
             Key key;
             Keycode key_code;
             KeyMod mods;
-            bool repeated;
+            Behaviour behave;  // repeat style
         };
 
         struct Device : AnyBase {
@@ -277,6 +296,7 @@ private:
     Type m_type;
     Event::Date m_date;
 
+
     union {
         KB::Input kb;
         KB::Device kb_device;
@@ -330,7 +350,8 @@ private:
 public:
     Event() noexcept;
 
-    static void Fill(Event& ev);
+    static KeyStateType Keys() noexcept;
+    static void Fill(Event& ev) noexcept;
     static std::optional<Event> Poll() noexcept;
 
 
@@ -445,7 +466,7 @@ enum VX_NODISCARD Event::Type : uint64 {
     WINDOW_FIRST = WINDOW_SHOWN,
     WINDOW_LAST = WINDOW_HDR_STATE_CHANGED,
 
-    KEY_DOWN = 0x300,
+    KEY_DOWN = 0x250,
     KEY_UP,
     TEXT_EDIT,
     TEXT_INPUT,
@@ -541,6 +562,13 @@ enum VX_NODISCARD Event::Type : uint64 {
     ENUM_PADDING = 0x7FFFFFFF
 };
 
+
+
+enum Event::Behaviour : uint8 {
+    ONCE = 0,
+    CONT = 1,
+    REPS = 2
+};
 
 
 NAMESPACE_END(vexa)

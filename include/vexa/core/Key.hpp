@@ -181,6 +181,8 @@ enum class Key : uint16
 
     // DYNAMIC KEYS //
     RESERVED = 400,
+
+    COUNT = 512
 };
 
 
@@ -284,7 +286,9 @@ enum class Keycode : uint32
     LEFT_TAB = EXTENDED_MASK | 0x1u, LEVEL5_SHIFT = EXTENDED_MASK | 0x2u,
     MULTI_KEY_COMPOSE = EXTENDED_MASK | 0x3u,
     META_L = EXTENDED_MASK | 0x4u, META_R = EXTENDED_MASK | 0x5u,
-    HYPER_L = EXTENDED_MASK | 0x6u, YPER_R = EXTENDED_MASK | 0x7u
+    HYPER_L = EXTENDED_MASK | 0x6u, HYPER_R = EXTENDED_MASK | 0x7u,
+
+    COUNT = 536'870'920
 };
 
 
@@ -293,7 +297,6 @@ enum class Keycode : uint32
 using KeyModValueT = underlying_t<KeyMod>;
 using KeyValueT = underlying_t<Key>;
 using KeycodeValueT = underlying_t<Keycode>;
-
 
 
 

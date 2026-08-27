@@ -5,21 +5,20 @@ using namespace vexa;
 struct Player {
     Rect body = {{0, 0}, {75, 75}};
     Vec2 vel;
-    fp32 speed = 5;
+    fp32 speed = 1;
 
     void input(const Event& ev) {
         vel = {0, 0};
 
-        auto kb = ev.kb();
-        if (kb.key == Key::A) vel.x += speed;
-        if (kb.key == Key::D) vel.x -= speed;
-        if (kb.key == Key::W) vel.y -= speed;
-        if (kb.key == Key::S) vel.y += speed;
+        if (Event::Keys()[Key::LEFT]) vel.x = -speed;
+        if (Event::Keys()[Key::RIGHT]) vel.x = speed;
+        if (Event::Keys()[Key::UP]) vel.y = -speed;
+        if (Event::Keys()[Key::DOWN]) vel.y = speed;
     }
 
     void update(fp32 dt) {
-        body.pos.x += vel.x * dt;
-        body.pos.y += vel.y * dt;
+
+        body.pos += { vel.x*dt, vel.y*dt };
     }
 
     void render(Renderer& gfx) {

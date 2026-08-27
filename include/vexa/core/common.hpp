@@ -1,6 +1,4 @@
 #pragma once
-#include <concepts>
-#include <print>
 #include "vexa/alt/ini_list.hpp"
 #include "defs.hpp"
 // modules
@@ -12,6 +10,12 @@
 #include "vexa/core/Flags.hpp"
 NAMESPACE_BEGIN(vexa)
 
+
+template<class EnumType>
+constexpr usize enum_len = CAST(usize, EnumType::COUNT);
+
+template<class StdContainerType>
+constexpr usize stdcont_len = std::tuple_size_v<StdContainerType>;
 
 inline consteval usize cstrLen(const char* cstr) noexcept {
     usize n = 0;
