@@ -35,6 +35,8 @@ enum class KeyMod : uint16
     SHIFT =  SHIFT_L | SHIFT_R,
     ALT   =  ALT_L   | ALT_R,
     META  =  META_L  | META_R,
+
+    COUNT = 18
 };
 
 

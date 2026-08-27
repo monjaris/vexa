@@ -223,13 +223,17 @@ This::Event() noexcept {
 
 
 
-This::KeyStateType This::Keys() noexcept {
+This::ActiveKey This::Keys() noexcept {
     int key_c;
     auto sdl_kb_state = SDL_GetKeyboardState(&key_c);
+    SDL_Keymod sdl_mod_state = SDL_GetModState();
 
-    std::copy(sdl_kb_state, sdl_kb_state+(usize)Key::COUNT-1, m_kb_state.data);
+    // copy to key state address
+    std::copy(sdl_kb_state, sdl_kb_state+(usize)Key::COUNT-1, m_key_n_mod_state.keyDataPtr());
+    // assign to SDL_KeyMod
+    m_key_n_mod_state.modData() = sdl_mod_state;
 
-    return m_kb_state;
+    return m_key_n_mod_state;
 }
 
 
