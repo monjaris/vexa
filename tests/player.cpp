@@ -3,15 +3,15 @@
 using namespace vexa;
 
 struct Player {
-    Rect body = {{0, 0}, {75, 75}};
+    Rect body = {{600, 400}, {75, 75}};
     Vec2 vel;
     fp32 speed = 1;
 
     void input(const Event& ev) {
         vel = {0, 0};
 
-        if (Event::Keys()[Key::LEFT]) vel.x = -speed;
-        if (Event::Keys()[Key::RIGHT]) vel.x = speed;
+        if (Event::Keys()[Key::LEFT][KeyMod::ALT]) vel.x = -speed;
+        if (Event::Keys()[Key::RIGHT][KeyMod::CTRL]) vel.x = speed;
         if (Event::Keys()[Key::UP]) vel.y = -speed;
         if (Event::Keys()[Key::DOWN]) vel.y = speed;
     }
