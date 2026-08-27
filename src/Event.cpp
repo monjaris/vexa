@@ -223,7 +223,7 @@ This::Event() noexcept {
 
 
 
-This::ActiveKey This::Keys() noexcept {
+This::ActiveKeyState This::ActiveKeys() noexcept {
     int key_c;
     auto sdl_kb_state = SDL_GetKeyboardState(&key_c);
     SDL_Keymod sdl_mod_state = SDL_GetModState();
