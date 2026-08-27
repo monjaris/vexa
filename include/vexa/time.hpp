@@ -49,6 +49,8 @@ class VX_NODISCARD Duration
 {
     ValueType m_nanos = 0;
 
+    Duration(void* null, ValueType nanos): m_nanos(nanos) {}
+
 public:
     using ValueT = ValueType;
     static constexpr auto RATIO = t_ratio;
@@ -66,11 +68,11 @@ public:
     constexpr Duration& operator-= (const Duration& duration) noexcept {
         m_nanos -= duration.m_nanos;  return *this;
     }
-    friend constexpr Duration operator+ (Duration left, const Duration& right) noexcept {
-        left += right;  return left;
+    constexpr Duration operator+ (const Duration& other) const noexcept {
+        return Duration{nullptr, m_nanos + other.m_nanos};
     }
-    friend constexpr Duration operator- (Duration left, const Duration& right) noexcept {
-        left -= right;  return left;
+    constexpr Duration operator- (const Duration& other) const noexcept {
+        return Duration{nullptr, m_nanos - other.m_nanos};
     }
 
 
