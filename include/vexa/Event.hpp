@@ -14,26 +14,20 @@ public:
     using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
 
 
-    class VX_NODISCARD ActiveKey {
+    class VX_NODISCARD ActiveKeyState {
         struct {
             bool key_data[enum_len<Key>];
             uint16 mod_data;
             const usize key_len = (usize)Key::COUNT;
             const usize mod_len = (usize)KeyMod::COUNT;
             //
-            bool last_key_res;
-            bool last_mod_res;
-            //
-            usize last_key_idx;
-            usize last_mod_idx;
-            //
+            bool last_key_res;  bool last_mod_res;
+            usize last_key_idx; usize last_mod_idx;
             bool is_key_the_last_and_not_mod;
-            //
-            // std::array<128>
         } m;
 
     public:
-        ActiveKey(usize key_count, usize mod_count)
+        ActiveKeyState(usize key_count, usize mod_count)
             : m {
                 .key_data = {}, .mod_data = {}, .key_len = key_count, .mod_len = mod_count,
                 .last_key_res = true, .last_mod_res = true, .last_key_idx = {}, .last_mod_idx = {},
@@ -44,28 +38,20 @@ public:
         constexpr auto* keyDataPtr() noexcept { return m.key_data; }
         constexpr auto& modData() noexcept { return m.mod_data; }
 
-        void lastChainIsKey(bool key_is_the_last) noexcept {
-            m.is_key_the_last_and_not_mod = key_is_the_last;
-        }
-
-        constexpr ActiveKey& operator[] (Key key) noexcept {
-            if (!lastRes()) return *this;
+        constexpr ActiveKeyState& operator[] (Key key) noexcept {
+            if (CAST(bool, *this)) return *this;
             m.last_key_idx = CAST(usize, key);
             m.last_key_res = m.key_data[m.last_key_idx] == true;
-            lastChainIsKey(true);
+            m.is_key_the_last_and_not_mod = true;
             return *this;
         }
 
-        constexpr ActiveKey& operator[] (KeyMod key) noexcept {
-            if (!lastRes()) return *this;
+        constexpr ActiveKeyState& operator[] (KeyMod key) noexcept {
+            if (CAST(bool, *this)) return *this;
             m.last_mod_idx = CAST(usize, key);
             m.last_mod_res = m.mod_data & CAST(uint16, key);
-            lastChainIsKey(false);
+            m.is_key_the_last_and_not_mod = false;
             return *this;
-        }
-
-        bool lastRes() const noexcept {
-            return m.is_key_the_last_and_not_mod? (m.last_key_res):(m.last_mod_res);
         }
 
         operator bool() const noexcept {
@@ -75,7 +61,7 @@ public:
 
 
 private:
-    static inline ActiveKey m_key_n_mod_state{CAST(usize, Key::COUNT), CAST(usize, KeyMod::COUNT)};
+    static inline ActiveKeyState m_key_n_mod_state{CAST(usize, Key::COUNT), CAST(usize, KeyMod::COUNT)};
 
     struct AnyBase {
         Type type;
@@ -394,7 +380,7 @@ private:
 public:
     Event() noexcept;
 
-    static ActiveKey Keys() noexcept;
+    static ActiveKeyState ActiveKeys() noexcept;
     static void Fill(Event& ev) noexcept;
     static std::optional<Event> Poll() noexcept;
 

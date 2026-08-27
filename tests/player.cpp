@@ -10,10 +10,10 @@ struct Player {
     void input(const Event& ev) {
         vel = {0, 0};
 
-        if (Event::Keys()[Key::LEFT][KeyMod::ALT]) vel.x = -speed;
-        if (Event::Keys()[Key::RIGHT][KeyMod::CTRL]) vel.x = speed;
-        if (Event::Keys()[Key::UP]) vel.y = -speed;
-        if (Event::Keys()[Key::DOWN]) vel.y = speed;
+        if (Event::ActiveKeys()[Key::LEFT][KeyMod::ALT]) vel.x = -speed;
+        if (Event::ActiveKeys()[Key::RIGHT][KeyMod::CTRL]) vel.x = speed;
+        if (Event::ActiveKeys()[Key::UP]) vel.y = -speed;
+        if (Event::ActiveKeys()[Key::DOWN]) vel.y = speed;
     }
 
     void update(fp32 dt) {
