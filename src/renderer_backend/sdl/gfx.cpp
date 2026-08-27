@@ -6,7 +6,7 @@
 // forward declare so we can use them without including <cmath>
 extern "C" { float cosf(float);  float sinf(float); }
 // also lets put math::'s PI32 here instead of including a header
-constexpr fp32 PI32 = 3.14159265f;
+constexpr vexa::fp32 PI32 = 3.14159265f;
 
 
 NAMESPACE_BEGIN(vexa)

@@ -223,13 +223,24 @@ This::Event() noexcept {
 
 
 
-void This::Fill(Event& ev) {
+This::KeyStateType This::Keys() noexcept {
+    int key_c;
+    auto sdl_kb_state = SDL_GetKeyboardState(&key_c);
+
+    std::copy(sdl_kb_state, sdl_kb_state+(usize)Key::COUNT-1, m_kb_state.data);
+
+    return m_kb_state;
+}
+
+
+
+void This::Fill(Event& ev) noexcept {
     namespace i = internal;
 
     switch (ev.m_type)
     {
         //  KEYBOARD  //
-        CASE_OR(KEY_DOWN, KEY_UP): {
+        CASE_OR (KEY_DOWN, KEY_UP): {
             ev.m.kb = KB::Input {
                 {ev.m_type, i::event.key.timestamp},
                 i::event.key.which,
@@ -237,8 +248,9 @@ void This::Fill(Event& ev) {
                 CAST(Key, i::event.key.scancode),
                 CAST(Keycode, i::event.key.key),
                 CAST(KeyMod, i::event.key.mod),
-                i::event.key.repeat
+                i::event.key.repeat? (Behaviour::REPS):(Behaviour::ONCE)
             };
+
             break;
         }
         CASE_OR(KEYBOARD_ADDED, KEYBOARD_REMOVED): {

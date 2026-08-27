@@ -21,7 +21,7 @@ int main()
             {
                 case Event::QUIT: { running = false; }
 
-                case Event::KEY_DOWN: {
+                case Event::KEY_REPEAT: {
                     if (event->kb().key == Key::ESC) { running = false; }
                 }
 

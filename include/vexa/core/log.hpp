@@ -1,7 +1,5 @@
 #pragma once
 #include <print>
-#include <cstring>
-#include "defs.hpp"
 #include "common.hpp"
 NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(log)
@@ -26,11 +24,9 @@ static constexpr const char* const FATAL_POSTFIX  = "!\n";
 
 template<typename... Args>
 inline void print(std::format_string<Args...> fmt, Args&&... args) {
-    char8 buffer[4096];
-    std::format_to_n(buffer, std::strlen(PRINT_PREFIX), fmt, args...);
-    std::print("{}{}{}",
-        PRINT_PREFIX, std::format(fmt, std::forward<Args>(args)...), PRINT_POSTFIX
-    );
+    std::print(stdout, PRINT_PREFIX);
+    std::print(stdout, fmt, std::forward<Args>(args)...);
+    std::print(stdout, PRINT_POSTFIX);
 }
 
 

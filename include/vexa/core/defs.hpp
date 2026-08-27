@@ -1,6 +1,8 @@
 #pragma once
-#include "types.hpp"
 
+namespace vexa {
+    #include "types.hpp"
+}
 
 #define NAMESPACE_BEGIN($NAME) namespace $NAME {
 #define NAMESPACE_END($NS_NAME_OPTIN) }

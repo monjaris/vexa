@@ -205,7 +205,7 @@ int main(void)
         {
             switch (event->type())
             {
-                case Event::KEY_DOWN:
+                case Event::KEY_REPEAT:
                 {
                     auto key = event->kb().key;
                     if (key == Key::Q) running = false;
