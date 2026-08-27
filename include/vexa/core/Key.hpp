@@ -188,7 +188,7 @@ enum class Key : uint16
 
 
 //  KEYCODES  // physical key codes
-enum class KeyCode : uint32
+enum class Keycode : uint32
 {
     EXTENDED_MASK = (1u << 29),
     SCANCODE_MASK = (1u << 30),
@@ -292,7 +292,7 @@ enum class KeyCode : uint32
 
 using KeyModValueT = underlying_t<KeyMod>;
 using KeyValueT = underlying_t<Key>;
-using KeyCodeValueT = underlying_t<KeyCode>;
+using KeycodeValueT = underlying_t<Keycode>;
 
 
 
@@ -312,7 +312,7 @@ constexpr bool filterMods(KeyMod source, KeyMod has, KeyMod has_not=KeyMod::NONE
 
 // Key/KeyCode methods
 template<KeyValueT in>  // this is a c++14 template variable if you are a boomer
-constexpr KeyCodeValueT sc_to_kc = in | (KeyCodeValueT)KeyCode::SCANCODE_MASK;
+constexpr KeycodeValueT keyToKeycode = in | (KeycodeValueT)Keycode::SCANCODE_MASK;
 
 
 

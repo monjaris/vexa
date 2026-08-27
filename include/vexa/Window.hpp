@@ -21,6 +21,8 @@ private:
         CfgVal<const char*> m_title;
         CfgVal<Vec2i> m_size;
         CfgVal<Vec2i> m_position;
+        CfgVal<Vec2> m_aspect_ratio_min_max;
+        //
         CfgVal<bool> m_is_resizable;
         CfgVal<bool> m_is_maximized;
         CfgVal<bool> m_is_minimized;
@@ -39,6 +41,7 @@ private:
             m_title(""),
             m_size(Vec2i{0, 0}),
             m_position(Vec2i{0, 0}),
+            m_aspect_ratio_min_max(Vec2{1, 1}),
             m_is_resizable(false),
             m_is_maximized(false),
             m_is_minimized(false),
@@ -60,6 +63,7 @@ private:
             m_title = m_title.defaultVal();
             m_size = m_size.defaultVal();
             m_position = m_position.defaultVal();
+            m_aspect_ratio_min_max = m_aspect_ratio_min_max.defaultVal();
             m_is_resizable = m_is_resizable.defaultVal();
             m_is_maximized = m_is_maximized.defaultVal();
             m_is_minimized = m_is_minimized.defaultVal();
@@ -79,9 +83,12 @@ private:
     using mWindowPtr = void*;
     using mWindowFlags = uint64;
     static mWindowFlags _getActiveFlags(mWindowPtr win);
+    //
     static void _trySetTitle(mWindowPtr win, const char* title);
     static void _trySetSize(mWindowPtr win, int x, int y);
     static void _trySetPos(mWindowPtr win, int x, int y);
+    static void _trySetAspectRatio(mWindowPtr win, fp32 min, fp32 max);
+    //
     static void _trySetResizable(mWindowPtr win, bool yes);
     static void _trySetMinimized(mWindowPtr win, bool yes);
     static void _trySetMaximized(mWindowPtr win, bool yes);
@@ -89,9 +96,9 @@ private:
     static void _trySetBorderless(mWindowPtr win, bool yes);
     static void _trySetHidden(mWindowPtr win, bool yes);
     static void _trySetAlwaysOnTop(mWindowPtr win, bool yes);
+    static void _trySetKeyboardGrabbed(mWindowPtr win, bool yes);
     static void _trySetMouseGrabbed(mWindowPtr win, bool yes);
     static void _trySetMouseRelative(mWindowPtr win, bool yes);
-    static void _trySetKeyboardGrabbed(mWindowPtr win, bool yes);
 
 
 public:
@@ -128,6 +135,7 @@ public:
     Window& setTitle(const char* title);
     Window& setSize(Vec2i size);
     Window& setPosition(Vec2i position);
+    Window& setAspectRatio(fp32 min_ratio, fp32 max_ratio);
     Window& setResizable(bool yes = true);
     Window& setMaximized(bool yes = true);  Window& toggleMaximized();
     Window& setMinimized(bool yes = true);

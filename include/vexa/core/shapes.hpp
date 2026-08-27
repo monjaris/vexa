@@ -56,17 +56,21 @@ struct Rect {
     Vec2 pos;
     Vec2 size;
 
+
+    // default ctor
+    constexpr Rect() noexcept: pos({0, 0}), size({0, 0}) {}
+
     // create a rectangle: (x, y, w, h)
     explicit constexpr inline Rect(
         Vec2::ValueT x, Vec2::ValueT y, Vec2::ValueT width, Vec2::ValueT height
     ) noexcept: pos({x, y}), size(width, height) {}
 
     // create a rectangle: ({x, y}, {w, h})
-    constexpr inline Rect(Vec2 position, Vec2 size) noexcept
+    constexpr Rect(Vec2 position, Vec2 size) noexcept
         : pos(position), size(size) {}
 
     // create a square: ({x, y}, a)
-    constexpr inline Rect(Vec2 position, Vec2::ValueT side) noexcept
+    constexpr Rect(Vec2 position, Vec2::ValueT side) noexcept
         : pos(position), size({side, side}) {}
 
 

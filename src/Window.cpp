@@ -302,6 +302,7 @@ This::mWindowFlags This::_getActiveFlags(mWindowPtr win) {
     return SDL_GetWindowFlags((SDL_Window*)win);
 }
 
+
 #define TRY_SET_FAILED(_prop)  "Failed to set " _prop " property "
 
 void This::_trySetTitle(This::mWindowPtr win, const char* title) {
@@ -324,6 +325,16 @@ void This::_trySetPos(This::mWindowPtr win, int x, int y) {
         );
     }
 }
+
+void This::_trySetAspectRatio(This::mWindowPtr win, fp32 min, fp32 max) {
+    if (!SDL_SetWindowAspectRatio((SDL_Window*)win, min, max)) {
+        log::error(
+            TRY_SET_FAILED("aspect-ratio") "to {{{}, {}}}, "
+            "Hence, are you on wayland?", min, max
+        );
+    }
+}
+
 
 void This::_trySetResizable(This::mWindowPtr win, bool yes) {
     if (!SDL_SetWindowResizable((SDL_Window*)win, yes)) {
@@ -433,6 +444,12 @@ Window& This::setPosition(Vec2i position) {
     return *this;
 }
 
+Window& This::setAspectRatio(fp32 min, fp32 max) {
+    if (impl && impl->window_exists) { _trySetAspectRatio(impl->ptr(), min, max); }
+    m_build_config.m_aspect_ratio_min_max = {min, max};
+    return *this;
+}
+
 
 Window& This::setResizable(bool yes) {
     if (impl && impl->window_exists) { _trySetResizable(impl->ptr(), yes); }
@@ -501,6 +518,7 @@ Window& This::setMouseRelative(bool yes) {
     m_build_config.m_is_mouse_relative = yes;
     return *this;
 }
+
 
 
 NAMESPACE_END(vexa)
