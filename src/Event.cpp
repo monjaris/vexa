@@ -222,6 +222,15 @@ This::Event() noexcept {
 }
 
 
+// set all default
+This::~Event() noexcept = default;
+This::Event(Event&&) noexcept = default;
+This::Event(const Event&) noexcept = default;
+Event& This::operator= (const Event&) noexcept = default;
+Event& This::operator= (Event&&) noexcept = default;
+
+
+
 
 This::ActiveKeysState This::ActiveKeys() noexcept {
     ActiveKeysState aks;
@@ -624,11 +633,11 @@ This::Type This::type() const noexcept {
 
 
 
-bool This::is_first() const noexcept {
+bool This::isFirst() const noexcept {
     return m_type == Type::FIRST;
 }
 
-bool This::is_last() const noexcept {
+bool This::isLast() const noexcept {
     return m_type == Type::LAST;
 }
 

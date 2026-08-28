@@ -108,6 +108,7 @@ public:
     ~Window();
     Window(Window&& other);
     Window& operator= (Window&& other);
+    Window(Window& other) = delete;
     Window& operator= (const Window& copy_ctor) = delete;
 
     Window create();

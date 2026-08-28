@@ -45,6 +45,7 @@ public:
     bool exists();
 
     Renderer& setVsync(bool enabled = true);
+    bool getVsync();
 
     void start();
     void start(ColorU8 color);

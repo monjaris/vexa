@@ -262,8 +262,8 @@ void gfx::fill_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segment
     {
         fp32 angle = step_rad * static_cast<fp32>(i);
 
-        fp32 x_i = x + cosf(angle) * r;
-        fp32 y_i = y + sinf(angle) * r;
+        fp32 x_i = x + ::cosf(angle) * r;
+        fp32 y_i = y + ::sinf(angle) * r;
 
         vertices[i + 1] = {
             .position  = {x_i, y_i},
