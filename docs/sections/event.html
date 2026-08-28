@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="section"><a href="../index.html">Main</a></li>
+            <li class="section"><a  href="engine.html">Engine</a></li>
+            <li class="section"><a  href="window.html">Window</a></li>
+            <li class="section"><a  href="renderer.html">Renderer</a></li>
+            <li class="current section"><a>Event</a></li>
+            <li class="section"><a  href="time.html">time</a></li>
+        </ul>
+  </nav>
+  <main>
+    <h1>Event (class)</h1>
+    <hr>
+    <h3>Types</h3>
+    <ul>
+      <li>enum Type : uint64;</li>
+      <li>enum Behaviour : uint8;</li>
+      <li>using Date = time::TimePoint&lt;time::Duration&lt;uint64,
+      time::Millis::RATIO&gt;&gt;;</li>
+      <li>class ActiveKeysState;</li>
+      <li>struct ActiveKeysState::Proxy;</li>
+    </ul>
+    <br>
+    <h3>Special methods</h3>
+    <ul>
+      <li>Event();</li>
+      <li>~Event();</li>
+      <li>Event(Event&amp;&amp;);</li>
+      <li>Event(const Event&amp;);</li>
+      <li>Event&amp; operator= (const Event&amp;);</li>
+      <li>Event&amp; operator= (Event&amp;&amp;);</li>
+    </ul>
+    <br>
+    <h3>Static methods</h3>
+    <ul>
+      <li>ActiveKeysState ActiveKeys();</li>
+      <li>void Fill(Event&amp; ev);</li>
+      <li>std::optional<Event> Poll();</li>
+    </ul>
+    <br>
+    <h3>Getter methods</h3>
+    <ul>
+      <li>Type type() const;</li>
+      <li>bool isFirst() const;</li>
+      <li>bool isLast() const;</li>
+      <li>auto kb() const { return m.kb; }</li>
+      <li>auto kbDevice() const { return m.kb_device; };</li>
+      <li>auto text() const { return m.text; };</li>
+      <li>auto textEdit() const { return m.text_edit; };</li>
+      <li>auto textEditCandidates() const { return m.text_edit_candids;
+      };</li>
+      <li>auto mouseButton() const { return m.mouse; };</li>
+      <li>auto mouseDevice() const { return m.mouse_device; };</li>
+      <li>auto mouseMotion() const { return m.mouse_motion; };</li>
+      <li>auto mouseWheel() const { return m.mouse_wheel; };</li>
+      <li>auto joystickDevice() const { return m.joystick_device; };</li>
+      <li>auto joystickAxis() const { return m.joystick_axis; };</li>
+      <li>auto joystickBall() const { return m.joystick_ball; };</li>
+      <li>auto joystickHat() const { return m.joystick_hat; };</li>
+      <li>auto joystickButton() const { return m.joystick_button; };</li>
+      <li>auto joystickBattery() const { return m.joystick_battery; };</li>
+      <li>auto gamepadDevice() const { return m.gamepad_device; };</li>
+      <li>auto gamepadAxis() const { return m.gamepad_axis; };</li>
+      <li>auto gamepadButton() const { return m.gamepad_button; };</li>
+      <li>auto gamepadTouchpad() const { return m.gamepad_touchpad; };</li>
+      <li>auto gamepadSensor() const { return m.gamepad_sensor; };</li>
+      <li>auto touchFinger() const { return m.touch_finger; };</li>
+      <li>auto touchPinch() const { return m.touch_pinch; };</li>
+      <li>auto touchPen() const { return m.touch_pen; };</li>
+      <li>auto touchProximity() const { return m.touch_proximity; };</li>
+      <li>auto pmotion() const { return m.pen_motion; };</li>
+      <li>auto pbutton() const { return m.pen_button; };</li>
+      <li>auto paxis() const { return m.pen_axis; };</li>
+      <li>auto windowEvent() const { return m.window; };</li>
+      <li>auto renderEvent() const { return m.render; };</li>
+      <li>auto sensorEvent() const { return m.sensor; };</li>
+      <li>auto displayEvent() const { return m.display; };</li>
+      <li>auto clipboardEvent() const { return m.clipboard; };</li>
+      <li>auto externalDropEvent() const { return m.extern_drop; };</li>
+      <li>auto audioDevice() const { return m.audio_device; };</li>
+      <li>auto cameraDevice() const { return m.camera_device; };</li>
+      <li>auto quitEvent() const { return m.quit_ev; };</li>
+      <li>auto customEvent() const { return m.custom_ev; };</li>
+    </ul>
+  </main>
+</body>
