@@ -29,8 +29,8 @@ static constexpr inline VectorT VecSub(const VectorT& left, const VectorT& right
 template<VectorConcept VectorT>
 constexpr VectorT::ValueT VecDist(const VectorT& first, const VectorT& second) {
     return math::sqrt(
-        math::pow(CAST(fp32, first.x-second.x), 2) +
-        math::pow(CAST(fp32, first.y-second.y), 2)
+        math::pow(CAST<fp32>(first.x-second.x), 2) +
+        math::pow(CAST<fp32>(first.y-second.y), 2)
     );
 }
 

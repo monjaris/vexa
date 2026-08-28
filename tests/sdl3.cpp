@@ -1,37 +1,60 @@
-// 02_held.cpp
+#include <print>
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+
+struct Player {
+    SDL_Texture* texture;
+    float x, y = 0;
+
+    void start(SDL_Renderer* renderer) {
+        texture = IMG_LoadTexture(renderer, "../assets/gd.png");
+        if (texture == nullptr) std::println("texture not loaded");
+    }
+
+    void render(SDL_Renderer* renderer) {
+        SDL_FRect dest{
+            100.0f, 100.0f,
+            256.0f, 256.0f
+        };
+
+        SDL_RenderTexture(renderer, texture, nullptr, &dest);
+    }
+
+    void finish() {
+        SDL_DestroyTexture(texture);
+    }
+};
+
 
 int main() {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window* win; SDL_Renderer* ren;
-    SDL_CreateWindowAndRenderer("held", 800, 600, 0, &win, &ren);
+    SDL_Window* win;
+    SDL_Renderer* ren;
+    SDL_CreateWindowAndRenderer("", 1280, 720, 0, &win, &ren);
 
-    SDL_FRect circle = {0, 250, 80, 80};
-    const float speed = 6.0f;
-    float velx = 0;
+    Player p;
+
+    p.start(ren);
 
     bool running = true;
-    while (running) {
+    while (running)
+    {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_EVENT_QUIT) running = false;
         }
 
 
-        velx = 0;
-
-        const bool* key = SDL_GetKeyboardState(nullptr);
-        if (key[SDL_SCANCODE_RIGHT]) velx += speed;
-        if (key[SDL_SCANCODE_LEFT]) velx -= speed;
-
-        circle.x += velx;
-
         SDL_SetRenderDrawColor(ren, 0,0,0,255);
         SDL_RenderClear(ren);
-        SDL_SetRenderDrawColor(ren, 255,80,80,255);
-        SDL_RenderFillRect(ren, &circle);
+
+        p.render(ren);
+
         SDL_RenderPresent(ren);
         SDL_Delay(16);
     }
+
+    p.finish();
+
     SDL_Quit();
 }

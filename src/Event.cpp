@@ -191,7 +191,7 @@ consteval inline This::Type This::M_ToVexaEventTypeCompt(uint64 type) noexcept
 
 This::Event() noexcept {
     m.kb.date = m.kb_device.date =
-    m.text.date = m.text_edit.date = m.text_edit_candidates.date =
+    m.text.date = m.text_edit.date = m.text_edit_candids.date =
     m.mouse.date = m.mouse_device.date = m.mouse_motion.date = m.mouse_wheel.date =
     m.joystick_device.date = m.joystick_axis.date = m.joystick_ball.date =
     m.joystick_ball.date = m.joystick_button.date = m.joystick_battery.date =
@@ -199,14 +199,14 @@ This::Event() noexcept {
     m.gamepad_touchpad.date = m.gamepad_sensor.date =
     m.touch_finger.date = m.touch_pinch.date = m.touch_pen.date = m.touch_proximity.date =
     m.pen_motion.date = m.pen_button.date = m.pen_axis.date =
-    m.window_ev.date = m.render_ev.date = m.sensor_ev.date = m.display_ev.date =
-    m.clipboard_ev.date = m.extern_drop_ev.date = m.audio_device.date = m.camera_device.date =
+    m.window.date = m.render.date = m.sensor.date = m.display.date =
+    m.clipboard.date = m.extern_drop.date = m.audio_device.date = m.camera_device.date =
     m.quit_ev.date = m.custom_ev.date
         =
             m_date.sinceEpoch().millis();
 
     m.kb.type = m.kb_device.type =
-    m.text.type = m.text_edit.type = m.text_edit_candidates.type =
+    m.text.type = m.text_edit.type = m.text_edit_candids.type =
     m.mouse.type = m.mouse_device.type = m.mouse_motion.type = m.mouse_wheel.type =
     m.joystick_device.type = m.joystick_axis.type = m.joystick_ball.type =
     m.joystick_ball.type = m.joystick_button.type = m.joystick_battery.type =
@@ -214,8 +214,8 @@ This::Event() noexcept {
     m.gamepad_touchpad.type = m.gamepad_sensor.type =
     m.touch_finger.type = m.touch_pinch.type = m.touch_pen.type = m.touch_proximity.type =
     m.pen_motion.type = m.pen_button.type = m.pen_axis.type =
-    m.window_ev.type = m.render_ev.type = m.sensor_ev.type = m.display_ev.type =
-    m.clipboard_ev.type = m.extern_drop_ev.type = m.audio_device.type = m.camera_device.type =
+    m.window.type = m.render.type = m.sensor.type = m.display.type =
+    m.clipboard.type = m.extern_drop.type = m.audio_device.type = m.camera_device.type =
     m.quit_ev.type = m.custom_ev.type
         =
             m_type;
@@ -223,17 +223,16 @@ This::Event() noexcept {
 
 
 
-This::ActiveKeyState This::ActiveKeys() noexcept {
-    int key_c;
-    auto sdl_kb_state = SDL_GetKeyboardState(&key_c);
-    SDL_Keymod sdl_mod_state = SDL_GetModState();
+This::ActiveKeysState This::ActiveKeys() noexcept {
+    ActiveKeysState aks;
 
-    // copy to key state address
-    std::copy(sdl_kb_state, sdl_kb_state+(usize)Key::COUNT-1, m_key_n_mod_state.keyDataPtr());
-    // assign to SDL_KeyMod
-    m_key_n_mod_state.modData() = sdl_mod_state;
+    // copy sdl keyboard state to internal buffer
+    std::copy_n(SDL_GetKeyboardState(nullptr), enum_v(Key::COUNT), aks.key_data);
 
-    return m_key_n_mod_state;
+    // copy sdl key modifier state to internal variable
+    aks.mod_data = SDL_GetModState();
+
+    return aks;
 }
 
 
@@ -249,9 +248,9 @@ void This::Fill(Event& ev) noexcept {
                 {ev.m_type, i::event.key.timestamp},
                 i::event.key.which,
                 i::event.key.windowID,
-                CAST(Key, i::event.key.scancode),
-                CAST(Keycode, i::event.key.key),
-                CAST(KeyMod, i::event.key.mod),
+                CAST<Key>(i::event.key.scancode),
+                CAST<Keycode>(i::event.key.key),
+                CAST<KeyMod>(i::event.key.mod),
                 i::event.key.repeat? (Behaviour::REPS):(Behaviour::ONCE)
             };
 
@@ -285,7 +284,7 @@ void This::Fill(Event& ev) noexcept {
             break;
         }
         case Type::TEXT_EDIT_CANDID: {
-            ev.m.text_edit_candidates = Text::EditingCandidates {
+            ev.m.text_edit_candids = Text::EditingCandids {
                 {ev.m_type, i::event.edit_candidates.timestamp},
                 i::event.edit_candidates.windowID,
                 i::event.edit_candidates.candidates,
@@ -526,7 +525,7 @@ void This::Fill(Event& ev) noexcept {
         case Type::DROP_BEGIN:
         case Type::DROP_COMPLETE:
         case Type::DROP_POSITION: {
-            ev.m.extern_drop_ev = ExternalDropEvent {
+            ev.m.extern_drop = ExternalDropEvent {
                 {ev.m_type, i::event.drop.timestamp},
                 i::event.drop.windowID,
                 i::event.drop.x,
@@ -539,7 +538,7 @@ void This::Fill(Event& ev) noexcept {
 
         //  WINDOW EVENTS  //
         case Type::WINDOW_SHOWN ... Type::WINDOW_HDR_STATE_CHANGED: {
-            ev.m.window_ev = WindowEvent {
+            ev.m.window = WindowEvent {
                 {ev.m_type, i::event.window.timestamp},
                 i::event.window.windowID,
                 i::event.window.data1,
@@ -550,7 +549,7 @@ void This::Fill(Event& ev) noexcept {
 
         //  DISPLAY EVENTS  //
         case Type::DISPLAY_ORIENTATION ... Type::DISPLAY_USABLE_BOUNDS_CHANGED: {
-            ev.m.display_ev = DisplayEvent {
+            ev.m.display = DisplayEvent {
                 {ev.m_type, i::event.display.timestamp},
                 i::event.display.displayID
             };
@@ -559,7 +558,7 @@ void This::Fill(Event& ev) noexcept {
 
         //  SENSOR EVENTS  //
         case Type::SENSOR_UPDATE: {
-            ev.m.sensor_ev = SensorEvent {
+            ev.m.sensor = SensorEvent {
                 {ev.m_type, i::event.sensor.timestamp},
                 i::event.sensor.which,
                 {
@@ -573,7 +572,7 @@ void This::Fill(Event& ev) noexcept {
 
         //  CLIPBOARD EVENTS  //
         case Type::CLIPBOARD_UPDATE: {
-            ev.m.clipboard_ev = ClipboardEvent {
+            ev.m.clipboard = ClipboardEvent {
                 {ev.m_type, i::event.clipboard.timestamp},
                 i::event.clipboard.owner,
                 i::event.clipboard.num_mime_types,

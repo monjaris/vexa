@@ -174,7 +174,7 @@ enum VX_NODISCARD Window::Trait : uint64 {
 };
 
 
-GEN_BITOPS(Window::Trait, underlying_t<Window::Trait>);
+GEN_BITOPS(Window::Trait, enum_t<Window::Trait>);
 
 
 NAMESPACE_END(vexa)

@@ -6,10 +6,14 @@ namespace vexa {
 
 #define NAMESPACE_BEGIN($NAME) namespace $NAME {
 #define NAMESPACE_END($NS_NAME_OPTIN) }
-#define CAST($TYPE, $VALUE) static_cast<$TYPE>($VALUE)
+#define CAST static_cast
 #define TODO($MESSAGE) auto _vexa_todo = $MESSAGE
 #define IF_THEN($CONDITION, $STATEMENT) if(($CONDITION)) {DEFINE_STMT($STATEMENT)}
 #define CASE_OR($CASE_1, $CASE_2)  case $CASE_1: case $CASE_2
+
+// throw error at compile time - only should be used inside `consteval` functions
+#define CASSERT($COND, $MESSAGE) { if(!($COND)) vx_force_compile_time_error($MESSAGE); }
+consteval void vx_force_compile_time_error(const char*) {}
 
 // #define DEBUG_LN() (void)(vexa::log::debug("{}:{} -> {}()", __FILE__, __LINE__, __func__), "")
 // #define DEBUG_FUNC_MODE __func__
@@ -31,14 +35,14 @@ namespace vexa {
 
 #define GEN_BITOPS($TYPE, $UNDERLYING) \
     constexpr $TYPE operator~ ($TYPE right) noexcept { \
-        return CAST($TYPE, ~CAST($UNDERLYING, right)); \
+        return CAST<$TYPE>(~CAST<$UNDERLYING>(right)); \
     } \
     constexpr $TYPE operator& ($TYPE left, $TYPE right) noexcept { \
-        return static_cast<$TYPE>(CAST($UNDERLYING, left) & CAST($UNDERLYING, right)); \
+        return static_cast<$TYPE>(CAST<$UNDERLYING>(left) & CAST<$UNDERLYING>(right)); \
     } \
     \
     constexpr $TYPE operator| ($TYPE left, $TYPE right) noexcept { \
-        return static_cast<$TYPE>(CAST($UNDERLYING, left) | CAST($UNDERLYING, right)); \
+        return static_cast<$TYPE>(CAST<$UNDERLYING>(left) | CAST<$UNDERLYING>(right)); \
     } \
     \
     constexpr $TYPE& operator&= ($TYPE& left, const $TYPE& right) noexcept { \
@@ -50,9 +54,6 @@ namespace vexa {
     } \
 
 
-
-// allocate memory on the stack
-#define SALLOC($TYPE, $BYTES) ( static_cast<$TYPE*>(__builtin_alloca($BYTES)) )
 
 #define VX_NODISCARD  [[nodiscard]]
 

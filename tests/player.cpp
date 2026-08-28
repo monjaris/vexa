@@ -5,20 +5,37 @@ using namespace vexa;
 struct Player {
     Rect body = {{600, 400}, {75, 75}};
     Vec2 vel;
-    fp32 speed = 1;
-
-    void input(const Event& ev) {
-        vel = {0, 0};
-
-        if (Event::ActiveKeys()[Key::LEFT][KeyMod::ALT]) vel.x = -speed;
-        if (Event::ActiveKeys()[Key::RIGHT][KeyMod::CTRL]) vel.x = speed;
-        if (Event::ActiveKeys()[Key::UP]) vel.y = -speed;
-        if (Event::ActiveKeys()[Key::DOWN]) vel.y = speed;
-    }
+    fp32 speed = 400;
 
     void update(fp32 dt) {
+        vel = {0, 0};
 
-        body.pos += { vel.x*dt, vel.y*dt };
+        const auto& active_keys = Event::ActiveKeys();
+
+        // Modifers
+        if (active_keys[Key::LEFT][Key::UP]) {
+            vel.x -= speed * math::SQRT2_INV;
+            vel.y -= speed * math::SQRT2_INV;
+        }
+        else if (active_keys[Key::LEFT][Key::DOWN]) {
+            vel.x -= speed * math::SQRT2_INV;
+            vel.y += speed * math::SQRT2_INV;
+        }
+        else if (active_keys[Key::RIGHT][Key::UP]) {
+            vel.x += speed * math::SQRT2_INV;
+            vel.y -= speed * math::SQRT2_INV;
+        }
+        else if (active_keys[Key::RIGHT][Key::DOWN]) {
+            vel.x += speed * math::SQRT2_INV;
+            vel.y += speed * math::SQRT2_INV;
+        }
+        // Raw
+        else if (active_keys[Key::LEFT]) { vel.x -= speed; }
+        else if (active_keys[Key::RIGHT]) { vel.x += speed; }
+        else if (active_keys[Key::UP]) { vel.y -= speed; }
+        else if (active_keys[Key::DOWN]) { vel.y += speed; }
+
+        body.pos += { vel.x * dt, vel.y * dt };
     }
 
     void render(Renderer& gfx) {
@@ -48,23 +65,18 @@ int main()
         while (auto event = Event::Poll()) {
             switch (event->type())
             {
-                case Event::QUIT: { running = false; }
+                case Event::QUIT: { running = false; break; }
 
                 case Event::KEY_DOWN: {
-                    if (event->kb().key == Key::ESC) { running = false; }
+                    if (event->kb().key == Key::ESC) { running = false; break; }
                 }
 
                 default: { break; }
             }
-
-            p.input(*event);
         }
 
-        p.update(dt.millis());
-        log::info("{}, {}", p.body.pos.x, p.body.pos.y);
-
+        p.update(dt.seconds());
         gfx.start(ColorU8::BLACK);
-
         p.render(gfx);
 
         gfx.finish();

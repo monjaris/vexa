@@ -296,9 +296,9 @@ enum class Keycode : uint32
 
 
 
-using KeyModValueT = underlying_t<KeyMod>;
-using KeyValueT = underlying_t<Key>;
-using KeycodeValueT = underlying_t<Keycode>;
+using KeyModValueT = enum_t<KeyMod>;
+using KeyValueT = enum_t<Key>;
+using KeycodeValueT = enum_t<Keycode>;
 
 
 
@@ -306,7 +306,7 @@ using KeycodeValueT = underlying_t<Keycode>;
 GEN_BITOPS(KeyMod, KeyModValueT);  // wrapped to a macro now
 
 constexpr bool operator== (const KeyMod first, const KeyMod second) {
-    return CAST(KeyModValueT, first) == CAST(KeyModValueT, second);
+    return CAST<KeyModValueT>(first) == CAST<KeyModValueT>(second);
 }
 
 

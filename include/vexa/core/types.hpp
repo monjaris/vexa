@@ -76,5 +76,9 @@ concept is_any_same_as = is_any_same_t<T, U...>;
 
 
 // get underlying type via cross-compiler instrinct
-template<class T> using underlying_t = __underlying_type(T);
-
+template<class T> using enum_t = __underlying_type(T);
+// get integral value of an enum(class) member
+template<class EnumType>
+auto enum_v(EnumType enum_member) -> enum_t<EnumType> {
+    return static_cast<enum_t<EnumType>>(enum_member);
+}
