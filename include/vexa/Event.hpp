@@ -14,55 +14,43 @@ public:
     using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
 
 
-    class VX_NODISCARD ActiveKeyState {
-        struct {
-            bool key_data[enum_len<Key>];
-            uint16 mod_data;
-            const usize key_len = (usize)Key::COUNT;
-            const usize mod_len = (usize)KeyMod::COUNT;
-            //
-            bool last_key_res;  bool last_mod_res;
-            usize last_key_idx; usize last_mod_idx;
-            bool is_key_the_last_and_not_mod;
-        } m;
-
+    class ActiveKeysState {
     public:
-        ActiveKeyState(usize key_count, usize mod_count)
-            : m {
-                .key_data = {}, .mod_data = {}, .key_len = key_count, .mod_len = mod_count,
-                .last_key_res = true, .last_mod_res = true, .last_key_idx = {}, .last_mod_idx = {},
-                .is_key_the_last_and_not_mod = true
+        bool key_data[static_cast<usize>(Key::COUNT)] = {};
+        enum_t<KeyMod> mod_data = 0;
+
+        struct Proxy {
+            const ActiveKeysState& state;
+            bool result;
+
+            // Continue chain with a Key
+            Proxy operator[](Key key) const noexcept {
+                return Proxy{state, result && state.key_data[static_cast<usize>(key)]};
             }
-        {}
 
-        constexpr auto* keyDataPtr() noexcept { return m.key_data; }
-        constexpr auto& modData() noexcept { return m.mod_data; }
+            // Continue chain with a KeyMod
+            Proxy operator[](KeyMod mod) const noexcept {
+                return Proxy{state, result && ((state.mod_data & static_cast<uint16>(mod)) != 0)};
+            }
 
-        constexpr ActiveKeyState& operator[] (Key key) noexcept {
-            if (CAST(bool, *this)) return *this;
-            m.last_key_idx = CAST(usize, key);
-            m.last_key_res = m.key_data[m.last_key_idx] == true;
-            m.is_key_the_last_and_not_mod = true;
-            return *this;
+            // Final conversion
+            explicit operator bool() const noexcept {
+                return result;
+            }
+        };
+
+        // Entry points
+        Proxy operator[](Key key) const noexcept {
+            return Proxy{*this, key_data[static_cast<usize>(key)]};
         }
 
-        constexpr ActiveKeyState& operator[] (KeyMod key) noexcept {
-            if (CAST(bool, *this)) return *this;
-            m.last_mod_idx = CAST(usize, key);
-            m.last_mod_res = m.mod_data & CAST(uint16, key);
-            m.is_key_the_last_and_not_mod = false;
-            return *this;
-        }
-
-        operator bool() const noexcept {
-            return m.is_key_the_last_and_not_mod? (m.last_key_res):(m.last_mod_res);
+        Proxy operator[](KeyMod mod) const noexcept {
+            return Proxy{*this, (mod_data & static_cast<uint16>(mod)) != 0};
         }
     };
 
 
 private:
-    static inline ActiveKeyState m_key_n_mod_state{CAST(usize, Key::COUNT), CAST(usize, KeyMod::COUNT)};
-
     struct AnyBase {
         Type type;
         uint64 date;
@@ -169,7 +157,7 @@ private:
             int32 length;
         };
 
-        struct EditingCandidates : AnyBase {
+        struct EditingCandids : AnyBase {
             uint32 window_id;
             const char * const *candidates;
             int32 num_candidates;
@@ -333,7 +321,7 @@ private:
 
         Text::Input text;
         Text::Editing text_edit;
-        Text::EditingCandidates text_edit_candidates;
+        Text::EditingCandids text_edit_candids;
 
         Mouse::Input mouse;
         Mouse::Device mouse_device;
@@ -361,12 +349,12 @@ private:
         Touch::Button pen_button;
         Touch::Axis pen_axis;
 
-        WindowEvent window_ev;
-        RenderEvent render_ev;
-        SensorEvent sensor_ev;
-        DisplayEvent display_ev;
-        ClipboardEvent clipboard_ev;
-        ExternalDropEvent extern_drop_ev;
+        WindowEvent window;
+        RenderEvent render;
+        SensorEvent sensor;
+        DisplayEvent display;
+        ClipboardEvent clipboard;
+        ExternalDropEvent extern_drop;
 
         AudioDeviceEvent audio_device;
         CameraDeviceEvent camera_device;
@@ -380,7 +368,7 @@ private:
 public:
     Event() noexcept;
 
-    static ActiveKeyState ActiveKeys() noexcept;
+    static ActiveKeysState ActiveKeys() noexcept;
     static void Fill(Event& ev) noexcept;
     static std::optional<Event> Poll() noexcept;
 
@@ -397,7 +385,7 @@ public:
     VX_NODISCARD auto kbDevice() const noexcept { return m.kb_device; };
     VX_NODISCARD auto text() const noexcept { return m.text; };
     VX_NODISCARD auto textEdit() const noexcept { return m.text_edit; };
-    VX_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candidates; };
+    VX_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candids; };
     VX_NODISCARD auto mouseButton() const noexcept { return m.mouse; };
     VX_NODISCARD auto mouseDevice() const noexcept { return m.mouse_device; };
     VX_NODISCARD auto mouseMotion() const noexcept { return m.mouse_motion; };
@@ -420,12 +408,12 @@ public:
     VX_NODISCARD auto pmotion() const noexcept { return m.pen_motion; };
     VX_NODISCARD auto pbutton() const noexcept { return m.pen_button; };
     VX_NODISCARD auto paxis() const noexcept { return m.pen_axis; };
-    VX_NODISCARD auto windowEvent() const noexcept { return m.window_ev; };
-    VX_NODISCARD auto renderEvent() const noexcept { return m.render_ev; };
-    VX_NODISCARD auto sensorEvent() const noexcept { return m.sensor_ev; };
-    VX_NODISCARD auto displayEvent() const noexcept { return m.display_ev; };
-    VX_NODISCARD auto clipboardEvent() const noexcept { return m.clipboard_ev; };
-    VX_NODISCARD auto externalDropEvent() const noexcept { return m.extern_drop_ev; };
+    VX_NODISCARD auto windowEvent() const noexcept { return m.window; };
+    VX_NODISCARD auto renderEvent() const noexcept { return m.render; };
+    VX_NODISCARD auto sensorEvent() const noexcept { return m.sensor; };
+    VX_NODISCARD auto displayEvent() const noexcept { return m.display; };
+    VX_NODISCARD auto clipboardEvent() const noexcept { return m.clipboard; };
+    VX_NODISCARD auto externalDropEvent() const noexcept { return m.extern_drop; };
     VX_NODISCARD auto audioDevice() const noexcept { return m.audio_device; };
     VX_NODISCARD auto cameraDevice() const noexcept { return m.camera_device; };
     VX_NODISCARD auto quitEvent() const noexcept { return m.quit_ev; };

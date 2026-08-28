@@ -12,7 +12,7 @@ NAMESPACE_BEGIN(vexa)
 
 
 template<class EnumType>
-constexpr usize enum_len = CAST(usize, EnumType::COUNT);
+constexpr usize enum_len = CAST<usize>(EnumType::COUNT);
 
 template<class StdContainerType>
 constexpr usize stdcont_len = std::tuple_size_v<StdContainerType>;

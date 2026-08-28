@@ -1,9 +1,7 @@
 #pragma once
-#include <array>
 #include "defs.hpp"
 #include "vec.hpp"
 #include "math.hpp"
-// forward declare cmath functions
 NAMESPACE_BEGIN(vexa)
 inline NAMESPACE_BEGIN(shapes)
 
@@ -109,7 +107,6 @@ struct Rect {
 struct VX_NODISCARD Circle {
     Vec2 pos;
     Vec2::ValueT radius;
-
 
     //  quality of the circle (scales segments)  //
     static constexpr fp32 POOR = 0.03;

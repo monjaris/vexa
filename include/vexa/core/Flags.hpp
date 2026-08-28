@@ -8,7 +8,7 @@ template<typename T>
 class VX_NODISCARD Flags {
 public:
     using ValueT = T;
-    using UnderT = underlying_t<ValueT>;
+    using EnumT = enum_t<ValueT>;
 
 private:
     using This = Flags;
@@ -25,8 +25,8 @@ public:
     VX_NODISCARD constexpr ValueT value() const noexcept {
         return m_value;
     }
-    VX_NODISCARD constexpr UnderT intValue() const noexcept {
-        return CAST(underlying_t<ValueT>, m_value);
+    VX_NODISCARD constexpr EnumT intValue() const noexcept {
+        return CAST<enum_t<ValueT>>(m_value);
     }
 
     //  has/has-not  //

@@ -26,7 +26,7 @@ public:
 
 
 // generate bit operators for Subsystem enum
-GEN_BITOPS(Engine::Subsystem, underlying_t<Engine::Subsystem>);
+GEN_BITOPS(Engine::Subsystem, enum_t<Engine::Subsystem>);
 
 
 NAMESPACE_END(vexa)

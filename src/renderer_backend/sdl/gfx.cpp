@@ -250,7 +250,7 @@ void gfx::fill_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segment
     SDL_Vertex vertices[MAX_SEGMENTS + 1];
     int32 indices [MAX_SEGMENTS * 3];
 
-    fp32 step_rad = 2.0f * PI32 / CAST(fp32, segments);
+    fp32 step_rad = 2.0f * PI32 / CAST<fp32>(segments);
 
     vertices[0] = {
         .position  = {x, y},
@@ -275,17 +275,17 @@ void gfx::fill_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segment
         uint32 next    = (current % segments) + 1;
 
         indices[i * 3 + 0] = 0;
-        indices[i * 3 + 1] = CAST(int32, current);
-        indices[i * 3 + 2] = CAST(int32, next);
+        indices[i * 3 + 1] = CAST<int32>(current);
+        indices[i * 3 + 2] = CAST<int32>(next);
     }
 
     SDL_RenderGeometry(
         SDL_REND,
         nullptr,
         vertices,
-        CAST(int, segments + 1),
+        CAST<int>(segments + 1),
         indices,
-        CAST(int, segments * 3)
+        CAST<int>(segments * 3)
     );
 }
 

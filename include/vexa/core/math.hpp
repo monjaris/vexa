@@ -4,26 +4,24 @@
 NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(math)
 
-// compile time PI as fp32 and fp64
-constexpr fp32 PI32 = 3.14159265f;
-constexpr fp64 PI64 = 3.14159265358979323846;
-// to make (x / PI32) and (x / PI64) optimizable, where x is a runtime value
-constexpr fp32 PI32_INV = 1.0f/3.14159265f;
-constexpr fp64 PI64_INV = 1.0f/3.14159265358979323846;
-
 
 //  SQRT (consteval)  //
+template<uint8 iterations = 64>
 consteval auto sqrtCT(auto x) {
     using T = decltype(x);
-    if (x < CAST(T, 0)) static_assert(true, "sqrt of negative number is undefined");
-    IF_THEN(x == CAST(T, 0) || x != x,   return x;)  // x!=x can return true with NANs
 
-    auto prev = CAST(T, 0);
-    auto curr = (x < CAST(T, 1))?  CAST(T, 1) : x;
+    CASSERT(x < CAST<T>(0),
+        "sqrt of negative number is undefined"
+    );
 
-    while (curr != prev) {
-        prev = curr;
-        curr = static_cast<T>(0.5) * (curr + x / curr);
+    // is 0 or NAN
+    if (x == T{0} || x != x) {
+        return x;
+    }
+
+    T curr = (x < T{1})? (T{1}):(x);
+    for (uint8 i=0;  i < iterations;  ++i) {
+        curr = (curr + x / curr) * 0.5;
     }
     return curr;
 }
@@ -44,6 +42,26 @@ constexpr inline fp32 pow(fp32 x, fp32 exp) noexcept {
 constexpr inline fp64 pow(fp64 x, fp64 exp) noexcept {
     return std::pow(x, exp);
 }
+
+
+
+
+
+inline NAMESPACE_BEGIN(constants)
+
+// compile time PI as fp32 and fp64
+constexpr fp32 PI32 = 3.14159265f;
+constexpr fp64 PI64 = 3.14159265358979323846;
+// to make (x / PI32) and (x / PI64) optimizable, where x is a runtime value
+constexpr fp32 PI32_INV = 1.0f/3.14159265f;
+constexpr fp64 PI64_INV = 1.0f/3.14159265358979323846;
+
+constexpr fp32 SQRT2 = sqrtCT(2);
+constexpr fp32 SQRT2_INV = 1.0f / SQRT2;
+
+NAMESPACE_END(constants)
+
+
 
 
 
