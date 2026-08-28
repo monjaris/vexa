@@ -116,16 +116,16 @@ public:
         return *this;
     }
     // <Date> + <DurationT>
-    friend constexpr TimePoint operator+ (TimePoint date, DurationT duration) noexcept {
-        return date += duration;
+    constexpr TimePoint operator+ (DurationT duration) noexcept {
+        return {.m_since_epoch = m_since_epoch + duration};
     }
     // <Date> - <DurationT>
-    friend constexpr TimePoint operator- (TimePoint date, DurationT duration) noexcept {
-        return date -= duration;
+    constexpr TimePoint operator- (DurationT duration) noexcept {
+        return {.m_since_epoch = m_since_epoch - duration};
     }
     // <Date> - <Date>
-    friend constexpr DurationT operator- (const TimePoint& left, const TimePoint& right) noexcept {
-        return left.m_since_epoch - right.m_since_epoch;
+    constexpr DurationT operator- (const TimePoint& other) noexcept {
+        return DurationT{m_since_epoch - other.m_since_epoch};
     }
 
 

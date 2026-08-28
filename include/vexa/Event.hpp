@@ -367,6 +367,11 @@ private:
 
 public:
     Event() noexcept;
+    ~Event() noexcept;
+    Event(Event&&) noexcept;
+    Event(const Event&) noexcept;
+    Event& operator= (const Event&) noexcept;
+    Event& operator= (Event&&) noexcept;
 
     static ActiveKeysState ActiveKeys() noexcept;
     static void Fill(Event& ev) noexcept;
@@ -377,8 +382,8 @@ public:
     VX_NODISCARD Type type() const noexcept;
 
     //  Bool-Getters  //
-    VX_NODISCARD bool is_first() const noexcept;
-    VX_NODISCARD bool is_last() const noexcept;
+    VX_NODISCARD bool isFirst() const noexcept;
+    VX_NODISCARD bool isLast() const noexcept;
 
     //  Getters  //
     VX_NODISCARD auto kb() const noexcept { return m.kb; }

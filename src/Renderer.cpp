@@ -114,6 +114,10 @@ Renderer& This::setVsync(bool enabled) {
     return *this;
 }
 
+bool This::getVsync() {
+    return m_build_config.vsync;
+}
+
 
 void This::start() {
     SDL_RenderClear(impl->m_renderer);
