@@ -32,11 +32,11 @@ class VX_NODISCARD Renderer
 public:
     using Cfg = M_Cfg;
 
-    explicit Renderer(Cfg config = Cfg{});
+    Renderer(Cfg config = Cfg{});
+    // rule of 5
     ~Renderer();
     Renderer(Renderer&& other) noexcept;
     Renderer& operator= (Renderer&& other) noexcept;
-    // delete
     Renderer (const Renderer& copy_ctor) = delete;
     Renderer& operator= (const Renderer& copy_operator) = delete;
 

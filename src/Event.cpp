@@ -246,7 +246,7 @@ This::ActiveKeysState This::ActiveKeys() noexcept {
 
 
 
-void This::Fill(Event& ev) noexcept {
+void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
     namespace i = internal;
 
     switch (ev.m_type)
@@ -254,20 +254,20 @@ void This::Fill(Event& ev) noexcept {
         //  KEYBOARD  //
         CASE_OR (KEY_DOWN, KEY_UP): {
             ev.m.kb = KB::Input {
-                {ev.m_type, i::event.key.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.key.which,
                 i::event.key.windowID,
                 CAST<Key>(i::event.key.scancode),
                 CAST<Keycode>(i::event.key.key),
                 CAST<KeyMod>(i::event.key.mod),
-                i::event.key.repeat? (Behaviour::REPS):(Behaviour::ONCE)
+                i::event.key.repeat
             };
 
             break;
         }
         CASE_OR(KEYBOARD_ADDED, KEYBOARD_REMOVED): {
             ev.m.kb_device = KB::Device {
-                {ev.m_type, i::event.kdevice.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.kdevice.which
             };
             break;
@@ -276,7 +276,7 @@ void This::Fill(Event& ev) noexcept {
         //  TEXT INPUT  //
         case Type::TEXT_INPUT: {
             ev.m.text = Text::Input {
-                {ev.m_type, i::event.text.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.text.windowID,
                 i::event.text.text
             };
@@ -284,7 +284,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::TEXT_EDIT: {
             ev.m.text_edit = Text::Editing {
-                {ev.m_type, i::event.edit.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.edit.windowID,
                 i::event.edit.text,
                 i::event.edit.start,
@@ -294,7 +294,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::TEXT_EDIT_CANDID: {
             ev.m.text_edit_candids = Text::EditingCandids {
-                {ev.m_type, i::event.edit_candidates.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.edit_candidates.windowID,
                 i::event.edit_candidates.candidates,
                 i::event.edit_candidates.num_candidates,
@@ -307,7 +307,7 @@ void This::Fill(Event& ev) noexcept {
         //  MOUSE  //
         case Type::MOUSE_MOTION: {
             ev.m.mouse_motion = Mouse::Motion {
-                {ev.m_type, i::event.motion.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.motion.which,
                 i::event.motion.windowID,
                 i::event.motion.state,
@@ -320,7 +320,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(MOUSE_BUTTON_DOWN, MOUSE_BUTTON_UP): {
             ev.m.mouse = Mouse::Input {
-                {ev.m_type, i::event.button.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.button.which,
                 i::event.button.windowID,
                 i::event.button.button,
@@ -333,7 +333,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::MOUSE_WHEEL: {
             ev.m.mouse_wheel = Mouse::Wheel {
-                {ev.m_type, i::event.wheel.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.wheel.which,
                 i::event.wheel.windowID,
                 i::event.wheel.x,
@@ -352,7 +352,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(MOUSE_ADDED, MOUSE_REMOVED): {
             ev.m.mouse_device = Mouse::Device {
-                {ev.m_type, i::event.mdevice.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.mdevice.which
             };
             break;
@@ -361,7 +361,7 @@ void This::Fill(Event& ev) noexcept {
         //  JOYSTICK  //
         case Type::JOYSTICK_AXIS_MOTION: {
             ev.m.joystick_axis = Joystick::Axis {
-                {ev.m_type, i::event.jaxis.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.jaxis.which,
                 i::event.jaxis.value,
                 i::event.jaxis.axis
@@ -370,7 +370,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::JOYSTICK_BALL_MOTION: {
             ev.m.joystick_ball = Joystick::Ball {
-                {ev.m_type, i::event.jball.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.jball.which,
                 i::event.jball.xrel,
                 i::event.jball.yrel,
@@ -380,7 +380,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::JOYSTICK_HAT_MOTION: {
             ev.m.joystick_hat = Joystick::Hat {
-                {ev.m_type, i::event.jhat.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.jhat.which,
                 i::event.jhat.hat,
                 i::event.jhat.value
@@ -389,7 +389,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(JOYSTICK_BUTTON_DOWN, JOYSTICK_BUTTON_UP): {
             ev.m.joystick_button = Joystick::Button {
-    {ev.m_type, i::event.jbutton.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.jbutton.which,
                 i::event.jbutton.button,
                 i::event.jbutton.down
@@ -398,7 +398,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::JOYSTICK_BATTERY_UPDATED: {
             ev.m.joystick_battery = Joystick::Battery {
-    {ev.m_type, i::event.jbattery.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.jbattery.which,
                 Joystick::Battery::UNKNOWN,
                 i::event.jbattery.percent
@@ -407,7 +407,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(JOYSTICK_ADDED, JOYSTICK_REMOVED): {
             ev.m.joystick_device = Joystick::Device {
-    {ev.m_type, i::event.jdevice.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.jdevice.which
             };
             break;
@@ -416,7 +416,7 @@ void This::Fill(Event& ev) noexcept {
         //  GAMEPAD  //
         case Type::GAMEPAD_AXIS_MOTION: {
             ev.m.gamepad_axis = Gamepad::Axis {
-    {ev.m_type, i::event.gaxis.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.gaxis.which,
                 i::event.gaxis.value,
                 i::event.gaxis.axis
@@ -425,7 +425,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(GAMEPAD_BUTTON_DOWN, GAMEPAD_BUTTON_UP): {
             ev.m.gamepad_button = Gamepad::Button {
-    {ev.m_type, i::event.gbutton.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.gbutton.which,
                 i::event.gbutton.button,
                 i::event.gbutton.down
@@ -434,7 +434,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(GAMEPAD_ADDED, GAMEPAD_REMOVED): {
             ev.m.gamepad_device = Gamepad::Device {
-    {ev.m_type, i::event.gdevice.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.gdevice.which
             };
             break;
@@ -443,7 +443,7 @@ void This::Fill(Event& ev) noexcept {
         case Type::GAMEPAD_TOUCHPAD_MOTION:
         case Type::GAMEPAD_TOUCHPAD_UP: {
             ev.m.gamepad_touchpad = Gamepad::Touchpad {
-    {ev.m_type, i::event.gtouchpad.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.gtouchpad.which,
                 i::event.gtouchpad.touchpad,
                 i::event.gtouchpad.finger,
@@ -455,7 +455,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::GAMEPAD_SENSOR_UPDATE: {
             ev.m.gamepad_sensor = Gamepad::Sensor {
-    {ev.m_type, i::event.gsensor.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.gsensor.which
             };
             break;
@@ -467,7 +467,7 @@ void This::Fill(Event& ev) noexcept {
         case Type::FINGER_MOTION:
         case Type::FINGER_CANCELED: {
             ev.m.touch_finger = Touch::Finger {
-    {ev.m_type, i::event.tfinger.timestamp},
+    {Type{ev_type}, ev_date},
                 i::event.tfinger.windowID,
                 i::event.tfinger.touchID,
                 i::event.tfinger.fingerID,
@@ -482,7 +482,7 @@ void This::Fill(Event& ev) noexcept {
         case Type::PEN_PROXIMITY_IN:
         case Type::PEN_PROXIMITY_OUT: {
             ev.m.touch_proximity = Touch::Proximity {
-                {ev.m_type, i::event.pproximity.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.pproximity.which,
                 i::event.pproximity.windowID
             };
@@ -490,7 +490,7 @@ void This::Fill(Event& ev) noexcept {
         }
         case Type::PEN_MOTION: {
             ev.m.pen_motion = Touch::Motion {
-                {ev.m_type, i::event.pmotion.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.pmotion.which,
                 i::event.pmotion.windowID,
                 i::event.pmotion.pen_state,
@@ -501,7 +501,7 @@ void This::Fill(Event& ev) noexcept {
         }
         CASE_OR(PEN_BUTTON_DOWN, PEN_BUTTON_UP): {
             ev.m.pen_button = Touch::Button {
-                {ev.m_type, i::event.pbutton.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.pbutton.which,
                 i::event.pbutton.windowID,
                 i::event.pbutton.pen_state,
@@ -516,7 +516,7 @@ void This::Fill(Event& ev) noexcept {
             // AMBIGUOUS: SDL_PenAxisEvent maps axis values using SDL_PenAxis enum values.
             // Converting directly to internal Touch::Axis::axis representation.
             ev.m.pen_axis = Touch::Axis {
-                {ev.m_type, i::event.paxis.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.paxis.which,
                 i::event.paxis.windowID,
                 i::event.paxis.pen_state,
@@ -535,7 +535,7 @@ void This::Fill(Event& ev) noexcept {
         case Type::DROP_COMPLETE:
         case Type::DROP_POSITION: {
             ev.m.extern_drop = ExternalDropEvent {
-                {ev.m_type, i::event.drop.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.drop.windowID,
                 i::event.drop.x,
                 i::event.drop.y,
@@ -548,7 +548,7 @@ void This::Fill(Event& ev) noexcept {
         //  WINDOW EVENTS  //
         case Type::WINDOW_SHOWN ... Type::WINDOW_HDR_STATE_CHANGED: {
             ev.m.window = WindowEvent {
-                {ev.m_type, i::event.window.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.window.windowID,
                 i::event.window.data1,
                 i::event.window.data2
@@ -559,7 +559,7 @@ void This::Fill(Event& ev) noexcept {
         //  DISPLAY EVENTS  //
         case Type::DISPLAY_ORIENTATION ... Type::DISPLAY_USABLE_BOUNDS_CHANGED: {
             ev.m.display = DisplayEvent {
-                {ev.m_type, i::event.display.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.display.displayID
             };
             break;
@@ -568,7 +568,7 @@ void This::Fill(Event& ev) noexcept {
         //  SENSOR EVENTS  //
         case Type::SENSOR_UPDATE: {
             ev.m.sensor = SensorEvent {
-                {ev.m_type, i::event.sensor.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.sensor.which,
                 {
                     i::event.sensor.data[0], i::event.sensor.data[1], i::event.sensor.data[2],
@@ -582,7 +582,7 @@ void This::Fill(Event& ev) noexcept {
         //  CLIPBOARD EVENTS  //
         case Type::CLIPBOARD_UPDATE: {
             ev.m.clipboard = ClipboardEvent {
-                {ev.m_type, i::event.clipboard.timestamp},
+                {Type{ev_type}, ev_date},
                 i::event.clipboard.owner,
                 i::event.clipboard.num_mime_types,
                 i::event.clipboard.mime_types
@@ -593,14 +593,14 @@ void This::Fill(Event& ev) noexcept {
         //  SPECIAL EVENTS  //
         case Type::QUIT: {
             ev.m.quit_ev = QuitEvent {
-                {ev.m_type, i::event.quit.timestamp}
+                {Type{ev_type}, ev_date}
             };
             break;
         }
 
         case Type::CUSTOM: {
-            ev.m.custom_ev = UserEvent {
-                {ev.m_type, i::event.user.timestamp},
+            ev.m.custom_ev = CustomEvent {
+                {Type{ev_type}, ev_date},
                 i::event.user.windowID, i::event.user.code,
                 i::event.user.data1, i::event.user.data2
             };
@@ -620,7 +620,8 @@ std::optional<Event> Event::Poll() noexcept {
 
     Event build;
     build.m_type = M_ToVexaEventTypeRuntime(i::event.type);
-    Fill(build);
+    build.m_date = Event::Date::DurationT{3};
+    M_Fill(build, build.m_type, build.m_date.sinceEpoch().millis());
 
     return build;
 }
@@ -631,7 +632,9 @@ This::Type This::type() const noexcept {
     return m_type;
 }
 
-
+VX_NODISCARD This::Date This::date() const noexcept {
+    return m_date;
+}
 
 bool This::isFirst() const noexcept {
     return m_type == Type::FIRST;

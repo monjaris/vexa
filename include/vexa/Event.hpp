@@ -9,10 +9,8 @@ class VX_NODISCARD Event
 {
 public:
     enum Type : uint64;
-    enum Behaviour : uint8;
 
     using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
-
 
     class ActiveKeysState {
     public:
@@ -56,6 +54,7 @@ private:
         uint64 date;
     };
 
+
     struct KB VX_STATIC_CLASS
     {
         struct Input : AnyBase {
@@ -64,7 +63,7 @@ private:
             Key key;
             Keycode key_code;
             KeyMod mods;
-            Behaviour behave;  // repeat style
+            bool repeated;
         };
 
         struct Device : AnyBase {
@@ -280,14 +279,6 @@ private:
 
     struct SensorEvent : AnyBase { uint32 device_id; fp32 data[6]; uint64 sensor_timestamp; };
 
-    struct QuitEvent : AnyBase {};
-
-    struct UserEvent : AnyBase {
-        uint32 window_id;
-        int32 code;
-        void *data1;
-        void *data2;
-    };
 
     struct RenderEvent : AnyBase {
         uint32 window_id;
@@ -307,7 +298,14 @@ private:
         const char **mime_types;
     };
 
+    struct CustomEvent : AnyBase {
+        uint32 window_id;
+        int32 code;
+        void *data1;
+        void *data2;
+    };
 
+    struct QuitEvent : AnyBase {};
 
 
 private:
@@ -360,13 +358,15 @@ private:
         CameraDeviceEvent camera_device;
 
         QuitEvent quit_ev;
-        UserEvent custom_ev;
+        CustomEvent custom_ev;
     } m;
 
 
+    static void M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept;
 
 public:
     Event() noexcept;
+    // rule of 5
     ~Event() noexcept;
     Event(Event&&) noexcept;
     Event(const Event&) noexcept;
@@ -374,12 +374,12 @@ public:
     Event& operator= (Event&&) noexcept;
 
     static ActiveKeysState ActiveKeys() noexcept;
-    static void Fill(Event& ev) noexcept;
     static std::optional<Event> Poll() noexcept;
 
 
     //  Get event type  //
     VX_NODISCARD Type type() const noexcept;
+    VX_NODISCARD Date date() const noexcept;
 
     //  Bool-Getters  //
     VX_NODISCARD bool isFirst() const noexcept;
@@ -585,13 +585,6 @@ enum VX_NODISCARD Event::Type : uint64 {
     ENUM_PADDING = 0x7FFFFFFF
 };
 
-
-
-enum Event::Behaviour : uint8 {
-    ONCE = 0,
-    CONT = 1,
-    REPS = 2
-};
 
 
 NAMESPACE_END(vexa)

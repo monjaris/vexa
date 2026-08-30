@@ -104,7 +104,9 @@ private:
 public:
     using Cfg = M_Cfg;
 
+    // Window() = delete;
     Window(Cfg config = Cfg{});
+    // rule of 5
     ~Window();
     Window(Window&& other);
     Window& operator= (Window&& other);
