@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="section"><a href="../index.html">Main</a></li>
+            <li class="section"><a  href="engine.html">Engine</a></li>
+            <li class="current section"><a>Window</a></li>
+            <li class="section"><a  href="renderer.html">Renderer</a></li>
+            <li class="section"><a  href="event.html">Event</a></li>
+            <li class="section"><a  href="time.html">time</a></li>
+        </ul>
+  </nav>
+  <main>
+    <h1>Window (class)</h1>
+    <hr>
+    <h3>Types</h3>
+    <ul>
+      <li>enum Trait;</li>
+      <li>class Cfg;</li>
+    </ul>
+    <br>
+    <h3>Special methods</h3>
+    <ul>
+      <li>Window(Cfg config = Cfg{});</li>
+      <li>~Window();</li>
+      <li>Window(Window&amp;&amp; other);</li>
+      <li>Window&amp; operator= (Window&amp;&amp; other);</li>
+      <li>Window(Window&amp; other) = delete;</li>
+      <li>Window&amp; operator= (const Window&amp; copy_ctor) = delete;</li>
+    </ul>
+    <br>
+    <h3>General methods</h3>
+    <ul>
+      <li>Window create();</li>
+      <li>void destroy();</li>
+    </ul>
+    <br>
+    <h3>Setter methods</h3>
+    <ul>
+      <li>Window&amp; setRenderer(const Renderer::Cfg&amp;
+      recreatenderer_cfg);</li>
+      <li>Window&amp; setTitle(const char* title);</li>
+      <li>Window&amp; setSize(Vec2i size);</li>
+      <li>Window&amp; setPosition(Vec2i position);</li>
+      <li>Window&amp; setAspectRatio(fp32 min_ratio, fp32 max_ratio);</li>
+      <li>Window&amp; setResizable(bool yes = true);</li>
+      <li>Window&amp; setMaximized(bool yes = true); Window&amp;
+      toggleMaximized();</li>
+      <li>Window&amp; setMinimized(bool yes = true);</li>
+      <li>Window&amp; setFullScreen(bool yes = true);</li>
+      <li>Window&amp; setBorderless(bool yes = true);</li>
+      <li>Window&amp; setHidden(bool yes = true);</li>
+      <li>Window&amp; setAlwaysOnTop(bool yes = true);</li>
+      <li>Window&amp; setKeyboardGrabbed(bool yes = true);</li>
+      <li>Window&amp; setMouseGrabbed(bool yes = true);</li>
+      <li>Window&amp; setMouseRelative(bool yes = true);</li>
+    </ul>
+    <br>
+    <h3>Getter methods</h3>
+    <ul>
+      <li>bool exists();</li>
+      <li>uint32 id() const;</li>
+      <li>Renderer&amp; renderer();</li>
+      <li>const char* title();</li>
+      <li>Vec2i size();</li>
+      <li>Vec2i position();</li>
+      <li>bool isResizable();</li>
+      <li>bool isMaximized();</li>
+      <li>bool isMinimized();</li>
+      <li>bool isFullScreen();</li>
+      <li>bool isBorderless();</li>
+      <li>bool isHidden();</li>
+      <li>bool isAlwaysOnTop();</li>
+      <li>bool isKeyboardGrabbed();</li>
+      <li>bool isMouseGrabbed();</li>
+      <li>bool isMouseRelative();</li>
+    </ul>
+  </main>
+</body>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="section"><a href="../index.html">Main</a></li>
+            <li class="current section"><a>Engine</a></li>
+            <li class="section"><a  href="window.html">Window</a></li>
+            <li class="section"><a  href="renderer.html">Renderer</a></li>
+            <li class="section"><a  href="event.html">Event</a></li>
+            <li class="section"><a  href="time.html">time</a></li>
+        </ul>
+  </nav>
+  <main>
+    <h1>Engine (non-instantiated class)</h1>
+    <hr>
+    <h3>Types</h3>
+    <ul>
+      <li>enum class Subsystem</li>
+    </ul>
+    <br>
+    <h3>Static methods</h3>
+    <ul>
+      <li>bool Init(Subsystem initial_subsystems);</li>
+      <li>void Close();</li>
+      <li>bool InitSubsystems(Subsystem subsystems);</li>
+      <li>void CloseSubsystems(Subsystem subsystems);</li>
+      <li>bool setMouseCaptured(bool yes);</li>
+      <li>bool IsMouseCaptured();</li>
+    </ul>
+  </main>
+  
+</body>
