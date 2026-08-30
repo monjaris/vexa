@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="section"><a href="../index.html">Main</a></li>
+            <li class="section"><a  href="engine.html">Engine</a></li>
+            <li class="section"><a  href="window.html">Window</a></li>
+            <li class="current section"><a>Renderer</a></li>
+            <li class="section"><a  href="event.html">Event</a></li>
+            <li class="section"><a  href="time.html">time</a></li>
+        </ul>
+  </nav>
+  <main>
+    <h1>Renderer (class)</h1>
+    <hr>
+    <h3>Types</h3>
+    <ul>
+      <li>class Cfg;</li>
+    </ul>
+    <br>
+    <h3>Special methods</h3>
+    <ul>
+      <li>explicit Renderer(Cfg config = Cfg{});</li>
+      <li>~Renderer();</li>
+      <li>Renderer(Renderer&amp;&amp; other);</li>
+      <li>Renderer&amp; operator= (Renderer&amp;&amp; other);</li>
+      <li>Renderer (const Renderer&amp; copy_ctor) = delete;</li>
+      <li>Renderer&amp; operator= (const Renderer&amp; copy_operator) =
+      delete;</li>
+    </ul>
+    <br>
+    <h3>General methods</h3>
+    <ul>
+      <li>Renderer create(void* window_ptr);</li>
+      <li>void destroy();</li>
+      <li>bool exists();</li>
+    </ul>
+    <br>
+    <h3>Setter methods</h3>
+    <ul>
+      <li>Renderer&amp; setVsync(bool enabled = true);</li>
+    </ul>
+    <br>
+    <h3>Getter methods</h3>
+    <ul>
+      <li>bool vsync();</li>
+    </ul>
+    <br>
+    <h3>Other methods</h3>
+    <ul>
+      <li>void start();</li>
+      <li>void start(ColorU8 color);</li>
+      <li>void start(ColorF32 color);</li>
+      <li>void finish();</li>
+      <li>void triangleFill(Triangle triangle, ColorU8 color);</li>
+      <li>void triangleFill(Triangle triangle, ColorF32 color);</li>
+      <li>void triangleLines(Triangle triangle, ColorU8 color);</li>
+      <li>void triangleLines(Triangle triangle, ColorF32 color);</li>
+      <li>void triangleFillN(Triangle (&amp;triangle_array)[], ColorU8
+      color);</li>
+      <li>void triangleFillN(Triangle (&amp;triangle_array)[], ColorF32
+      color);</li>
+      <li>void triangleLinesN(Triangle (&amp;triangle_array)[], ColorU8
+      color);</li>
+      <li>void triangleLinesN(Triangle (&amp;triangle_array)[], ColorF32
+      color);</li>
+      <li>void rectFill(Rect rectangle, ColorU8 color);</li>
+      <li>void rectFill(Rect rectangle, ColorF32 color);</li>
+      <li>void rectLines(Rect rectangle, ColorU8 color);</li>
+      <li>void rectLines(Rect rectangle, ColorF32 color);</li>
+      <li>void rectFillN(Rect (&amp;rectangle_array)[], ColorU8 color);</li>
+      <li>void rectFillN(Rect (&amp;rectangle_array)[], ColorF32 color);</li>
+      <li>void rectLinesN(Rect (&amp;rectangle_array)[], ColorU8 color);</li>
+      <li>void rectLinesN(Rect (&amp;rectangle_array)[], ColorF32 color);</li>
+      <li>void PolyFill(Vec2 pos, Vec2 size, ColorU8 color);</li>
+      <li>void PolyLines(Vec2 pos, Vec2 size, ColorU8 color);</li>
+      <li>void circleFill(Circle circle, ColorF32 color, fp32 quality =
+      Circle::NORMAL);</li>
+      <li>void circleFill(Circle circle, ColorU8 color, fp32 quality =
+      Circle::NORMAL);</li>
+      <li>void circleLines(Circle circle, ColorU8 color);</li>
+      <li>void circleLines(Circle circle, ColorF32 color);</li>
+    </ul>
+  </main>
+</body>

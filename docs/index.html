@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="current section"><a>Main</a></li>
+            <li class="section"><a  href="sections/engine.html">Engine</a></li>
+            <li class="section"><a  href="sections/window.html">Window</a></li>
+            <li class="section"><a  href="sections/renderer.html">Renderer</a></li>
+            <li class="section"><a  href="sections/event.html">Event</a></li>
+            <li class="section"><a  href="sections/time.html">time</a></li>
+        </ul>
+  </nav>
+
+  <main>
+    <h1>Vexa</h1>
+    <hr>
+    <p>
+      Modern C++23 graphics/multimedia framework on top of SDL3.
+    </p>
+    <p>
+      Windowing, events, 2D/3D rendering, timing. Opinionated API, low boilerplate.
+    </p>
+    <p>
+      SDL3 is compiled from vendor/SDL3 into a static library and linked into libvexa.so. You do not need a system SDL3 package.
+    </p>
+    <br>
+    <h2>Requirements</h2>
+      <ul>
+        <li>C++23 compiler (clang++, g++)</li>
+        <li><a href="https://xmake.io">xmake</a></li>
+        <li>CMake + Ninja (used only to build vendored SDL3)</li>
+      </ul>
+    <br>
+    <h2>Build</h2>
+      <pre><code>./build.sh dev          # debug
+./build.sh              # release</code></pre>
+    <br>
+    <h2>Quick example</h2>
+    <pre><code>#include "vexa/vexa.hpp"
+
+using namespace vexa;
+
+int main()
+{
+    // Initialize Vexa
+    Engine::Init(Engine::VIDEO);
+
+    // create a window with 1280x720 size and default renderer
+    auto window = Window{}
+        .setSize({1280, 720})
+        .setRenderer(Renderer::Cfg{})
+        .create();
+    auto& gfx = window.renderer();
+
+    bool running = true;
+    while (running)
+    {
+        // poll events
+        while (auto event = Event::Poll()) {
+            switch (event->type()) {
+                case Event::QUIT: { running = false; break; }
+                default: { break; }
+            }
+        }
+
+        gfx.start(ColorU8::BLACK);
+
+        gfx.rectFill(Rect{480, 200, 320, 320}, ColorF32::CYAN);
+
+        gfx.finish();
+        time::sleep(time::Millis(16.67));
+    }
+
+    Engine::Close();
+}</code></pre>
+    
+  </main>
+
+</body>
+</html>

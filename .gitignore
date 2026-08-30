@@ -20,3 +20,6 @@
 # Directories
 /vendor/SDL3-upstream/
 /entity/
+
+#vscode
+.vscode/

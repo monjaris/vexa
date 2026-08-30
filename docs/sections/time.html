@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vexa Documentation</title>
+  <meta name="description" content="Modern C++23 graphics/multimedia framework on top of SDL3.">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../style.css">
+  <meta name="color_scheme" content="dark">
+</head>
+<body>
+  <nav class="sidebar">
+        <ul>
+            <li class="section"><a href="../index.html">Main</a></li>
+            <li class="section"><a  href="engine.html">Engine</a></li>
+            <li class="section"><a  href="window.html">Window</a></li>
+            <li class="section"><a  href="renderer.html">Renderer</a></li>
+            <li class="section"><a  href="event.html">Event</a></li>
+            <li class="current section"><a>time</a></li>
+        </ul>
+  </nav>
+  <main>
+    <h1>time (namespace)</h1>
+    <hr>
+    <h2>time::Duration (class)</h2>
+    <h3>Class template</h3>
+    <ul>
+    <li>template&lt;typename ValueT, uint64 RATIO&gt;</li>
+    </ul>
+    <br>
+    <h3>Special methods</h3>
+    <ul>
+    <li>Duration() = delete;</li>
+    <li>explicit constexpr Duration(ValueT amount);</li>
+    </ul>
+    <br>
+    <h3>Setter/arithmetic operators</h3>
+    <ul>
+    <li>constexpr Duration&amp; operator+= (const Duration&amp;
+    duration);</li>
+    <li>constexpr Duration&amp; operator-= (const Duration&amp;
+    duration);</li>
+    <li>constexpr Duration operator+ (const Duration&amp; other) const;</li>
+    <li>constexpr Duration operator- (const Duration&amp; other) const;</li>
+    </ul>
+    <br>
+    <h3>Getter methods</h3>
+    <ul>
+    <li>consteval inline uint64 ratio() const;</li>
+    <li>constexpr inline ValueT amount() const;</li>
+    <li>constexpr inline ValueT nanos() const;</li>
+    <li>constexpr inline ValueT micros() const;</li>
+    <li>constexpr inline ValueT millis() const;</li>
+    <li>constexpr inline ValueT seconds() const;</li>
+    </ul>
+    <h2>time::TimePoint (class)</h2>
+    <h3>Class template</h3>
+    <ul>
+    <li>template<DurationConcept DurationT></li>
+    </ul>
+    <br>
+    <h3>Special methods</h3>
+    <ul>
+    <li>constexpr TimePoint(): m_since_epoch(0) {};</li>
+    <li>explicit constexpr TimePoint(DurationT dur_since_epoch);</li>
+    </ul>
+    <br>
+    <h3>Setter/arithmetic operators</h3>
+    <ul>
+    <li>constexpr TimePoint&amp; operator+= (DurationT duration);</li>
+    <li>constexpr TimePoint&amp; operator-= (DurationT duration);</li>
+    <li>constexpr TimePoint operator+ (DurationT duration);</li>
+    <li>constexpr TimePoint operator- (DurationT duration);</li>
+    <li>constexpr DurationT operator- (const TimePoint&amp; other);</li>
+    </ul>
+    <br>
+    <h3>Getter methods</h3>
+    <ul>
+    <li>const DurationT&amp; sinceEpoch();</li>
+    <li>DurationT elapsed();</li>
+    </ul>
+    <h2>Types</h2>
+    <ul>
+    <li>using Nanos = Duration&lt;int64, 1lu&gt;;</li>
+    <li>using Micros = Duration&lt;int64, 1’000lu&gt;;</li>
+    <li>using Millis = Duration&lt;fp64, 1’000’000lu&gt;;</li>
+    <li>using Seconds = Duration&lt;fp64, 1’000’000’000lu&gt;;</li>
+    <li>using Date = TimePoint&lt;Nanos&gt;;</li>
+    <li>using LongDate = TimePoint&lt;Millis&gt;;</li>
+    </ul>
+    <br>
+    <h3>Functions</h3>
+    <ul>
+    <li>void sleep(Duration amount);</li>
+    <li>Date now();</li>
+    </ul>
+  </main>
+</body>
