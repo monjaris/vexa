@@ -8,7 +8,8 @@ Windowing, events, 2D/3D rendering, timing. Opinionated API, low boilerplate.
 
 - C++23 compiler (clang++)
 - [xmake](https://xmake.io)
-- CMake + Ninja (used only to build vendored SDL3)
+- CMake + Ninja (used only to build vendored code)
+- thats all!
 
 ## Build
 
@@ -19,7 +20,8 @@ Windowing, events, 2D/3D rendering, timing. Opinionated API, low boilerplate.
 
 SDL3 is compiled from vendor/SDL3 into a static library and linked into libvexa.so.
 You do not need a system SDL3 package.
-Quick example
+
+Minimal example
 
 ```c++
 #include "vexa/vexa.hpp"
@@ -64,12 +66,9 @@ int main()
 # Layout
 - include/vexa/     public headers \
 - src/              library sources \
-- vendor/SDL3/      vendored SDL3 tree \
-- tests/            small binaries (game, etc.) \
-- xmake/            build scripts (SDL static + vexa shared)
+- vendor/           vendored code \
+- xmake/            build scripts
 
 # License (MIT)
 
 See [License](LICENSE.txt).
-
-Vendored SDL3 remains under its own zlib license; keep its notices when redistributing.
