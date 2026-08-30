@@ -60,7 +60,14 @@ consteval void vx_force_compile_time_error(const char*) {}
 #define VX_STATIC_ERR($MESSAGE) static_assert(false, $MESSAGE)
 
 #define VX_STATIC_CLASS : private CN_SC
-class CN_SC {CN_SC()=default; CN_SC(const CN_SC&)=delete; CN_SC& operator=(const CN_SC&)=delete;};
+class CN_SC {
+    // delete ctor/dtor
+    CN_SC() = delete;  ~CN_SC() = delete;
+    // delete copy ops
+    CN_SC(const CN_SC&) = delete;  CN_SC& operator=(const CN_SC&) = delete;
+    // delete move ops
+    CN_SC(CN_SC&&) = delete;  CN_SC& operator=(CN_SC&&) = delete;
+};
 
 #define VX_UNUSE(...)  (unuse_symbol(__VA_ARGS__));
 namespace vexa { template<typename... Args> constexpr void unuse_symbol(Args&&...) noexcept {} }

@@ -102,7 +102,7 @@ public:
 
     // main ctor
     template<DurationConcept DurationT>
-    explicit constexpr TimePoint(DurationT dur_since_epoch): m_since_epoch(dur_since_epoch) {}
+    constexpr TimePoint(DurationT dur_since_epoch): m_since_epoch(dur_since_epoch) {}
 
     // { +=, -=, +, - } operators
     // <Date> += <DurationT>

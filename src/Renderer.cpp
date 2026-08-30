@@ -51,10 +51,11 @@ public:
     }
 };
 
-// Ctor
+
+
 This::Renderer(This::Cfg config): impl(new Impl{}), m_build_config(config) {}
-// Dtor
-This::~Renderer() {};
+
+This::~Renderer() = default;
 
 This::Renderer(Renderer&& other) noexcept
     : impl(std::move(other.impl))
@@ -76,7 +77,7 @@ Renderer& This::operator= (Renderer&& other) noexcept {
 
 
 Renderer This::create(void* window_ptr) {
-    Renderer build = Renderer{};
+    Renderer build = {};
     build.m_build_config = m_build_config;
 
     IF_THEN(impl->m_renderer_exists, log::error(FN"{}", __func__, me_couldnt_create_renderer_already_exists);)
