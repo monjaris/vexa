@@ -99,7 +99,7 @@ class Ref {
     const T* const m_data = nullptr;
 
 public:
-    Ref(T& data): m_data(&data) {}
+    explicit Ref(T& data): m_data(&data) {}
 
     VX_NODISCARD const T& get() const noexcept { return *m_data; }
 };
@@ -110,9 +110,13 @@ class RefMut {
     T* const m_data = nullptr;
 
 public:
-    RefMut(T& object): m_data(&object) {}
+    explicit RefMut(T& object): m_data(&object) {}
 
-    const T& get() const {
+    T& get() noexcept {
+        return *m_data;
+    }
+
+    const T& getConst() const noexcept {
         return *m_data;
     }
 };

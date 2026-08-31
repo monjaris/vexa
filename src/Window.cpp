@@ -115,7 +115,6 @@ public:
     SDL_Window* createWindow(Cfg config) {
         if (!window_exists)
         {
-            log::info("kenejkrnfrjknfe");
             m_window = SDL_CreateWindow(
                 config.m_title, config.m_size->x, config.m_size->y,
                 This::M_ToSDL3WindowFlagRuntime(config.m_flags->value())

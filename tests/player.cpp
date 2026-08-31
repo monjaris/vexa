@@ -3,7 +3,8 @@
 using namespace vexa;
 
 struct Player {
-    Rect body = {{600, 400}, {75, 75}};
+    Image image;
+    Vec2 pos;
     Vec2 vel;
     fp32 speed = 400;
 
@@ -35,11 +36,11 @@ struct Player {
         else if (active_keys[Key::UP]) { vel.y -= speed; }
         else if (active_keys[Key::DOWN]) { vel.y += speed; }
 
-        body.pos += { vel.x * dt, vel.y * dt };
+        pos += { vel.x * dt, vel.y * dt };
     }
 
     void render(Renderer& gfx) {
-        gfx.rectFill(body, ColorU8::YELLOW);
+        
     }
 };
 

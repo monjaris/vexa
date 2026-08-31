@@ -47,7 +47,7 @@ int main()
         while (auto event = Event::Poll()) {
             switch (event->type()) {
                 case Event::QUIT: { running = false; break; }
-                default: { break; }
+                default: break;
             }
         }
 
@@ -72,3 +72,5 @@ int main()
 # License (MIT)
 
 See [License](LICENSE.txt).
+
+If you use this project, a mention or credit would be greatly appreciated (but is not required beyond the license terms).

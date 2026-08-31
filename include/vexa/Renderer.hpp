@@ -1,6 +1,7 @@
 #pragma once
 #include "vexa/alt/memory.hpp"
 #include "vexa/core/common.hpp"
+#include "Texture.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -47,11 +48,17 @@ public:
     Renderer& setVsync(bool enabled = true);
     bool getVsync();
 
-    void start();
+    void start();  // sets color black
+    void start(void* null);  // edge-case, if you really want to keep the last used brush color
     void start(ColorU8 color);
     void start(ColorF32 color);
     void finish();
-    // void clear(ColorU8 color);
+
+    Texture newTexture(Image texture_source);
+    Texture loadTexture(const char* texture_source_path);
+    Texture newTexture(std::string_view texture_source_path);
+
+    void renderTexture(const Texture& texture, Vec2 pos);
 
     void triangleFill(Triangle triangle, ColorU8 color);
     void triangleFill(Triangle triangle, ColorF32 color);

@@ -199,7 +199,7 @@ This::Event() noexcept {
     m.gamepad_touchpad.date = m.gamepad_sensor.date =
     m.touch_finger.date = m.touch_pinch.date = m.touch_pen.date = m.touch_proximity.date =
     m.pen_motion.date = m.pen_button.date = m.pen_axis.date =
-    m.window.date = m.render.date = m.sensor.date = m.display.date =
+    m.window.date = m.renderer.date = m.sensor.date = m.display.date =
     m.clipboard.date = m.extern_drop.date = m.audio_device.date = m.camera_device.date =
     m.quit_ev.date = m.custom_ev.date
         =
@@ -214,7 +214,7 @@ This::Event() noexcept {
     m.gamepad_touchpad.type = m.gamepad_sensor.type =
     m.touch_finger.type = m.touch_pinch.type = m.touch_pen.type = m.touch_proximity.type =
     m.pen_motion.type = m.pen_button.type = m.pen_axis.type =
-    m.window.type = m.render.type = m.sensor.type = m.display.type =
+    m.window.type = m.renderer.type = m.sensor.type = m.display.type =
     m.clipboard.type = m.extern_drop.type = m.audio_device.type = m.camera_device.type =
     m.quit_ev.type = m.custom_ev.type
         =
