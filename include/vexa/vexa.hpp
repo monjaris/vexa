@@ -4,4 +4,5 @@
 #include "Window.hpp"
 #include "Engine.hpp"
 #include "Event.hpp"
+#include "Image.hpp"
 #include "time.hpp"

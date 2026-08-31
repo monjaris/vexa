@@ -348,7 +348,7 @@ private:
         Touch::Axis pen_axis;
 
         WindowEvent window;
-        RenderEvent render;
+        RenderEvent renderer;
         SensorEvent sensor;
         DisplayEvent display;
         ClipboardEvent clipboard;
@@ -410,19 +410,19 @@ public:
     VX_NODISCARD auto touchPinch() const noexcept { return m.touch_pinch; };
     VX_NODISCARD auto touchPen() const noexcept { return m.touch_pen; };
     VX_NODISCARD auto touchProximity() const noexcept { return m.touch_proximity; };
-    VX_NODISCARD auto pmotion() const noexcept { return m.pen_motion; };
-    VX_NODISCARD auto pbutton() const noexcept { return m.pen_button; };
-    VX_NODISCARD auto paxis() const noexcept { return m.pen_axis; };
-    VX_NODISCARD auto windowEvent() const noexcept { return m.window; };
-    VX_NODISCARD auto renderEvent() const noexcept { return m.render; };
-    VX_NODISCARD auto sensorEvent() const noexcept { return m.sensor; };
-    VX_NODISCARD auto displayEvent() const noexcept { return m.display; };
-    VX_NODISCARD auto clipboardEvent() const noexcept { return m.clipboard; };
-    VX_NODISCARD auto externalDropEvent() const noexcept { return m.extern_drop; };
+    VX_NODISCARD auto touchMotion() const noexcept { return m.pen_motion; };
+    VX_NODISCARD auto touchButton() const noexcept { return m.pen_button; };
+    VX_NODISCARD auto touchAxis() const noexcept { return m.pen_axis; };
+    VX_NODISCARD auto window() const noexcept { return m.window; };
+    VX_NODISCARD auto renderer() const noexcept { return m.renderer; };
+    VX_NODISCARD auto sensor() const noexcept { return m.sensor; };
+    VX_NODISCARD auto display() const noexcept { return m.display; };
+    VX_NODISCARD auto clipboard() const noexcept { return m.clipboard; };
+    VX_NODISCARD auto externalDrop() const noexcept { return m.extern_drop; };
     VX_NODISCARD auto audioDevice() const noexcept { return m.audio_device; };
     VX_NODISCARD auto cameraDevice() const noexcept { return m.camera_device; };
-    VX_NODISCARD auto quitEvent() const noexcept { return m.quit_ev; };
-    VX_NODISCARD auto customEvent() const noexcept { return m.custom_ev; };
+    VX_NODISCARD auto quit() const noexcept { return m.quit_ev; };
+    VX_NODISCARD auto custom() const noexcept { return m.custom_ev; };
 
 
 private:

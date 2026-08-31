@@ -1,25 +1,37 @@
-#include "vexa.hpp"
+#include "vexa/vexa.hpp"
+#include "vexa/alt/SDL3.h"
+
+using namespace vexa;
 
 int main()
 {
-    IF_THEN(not
-        vexa::Engine::Init(vexa::Engine::VIDEO | vexa::Engine::EVENT),
-        vexa::log::fatal("Engine didnt start");
-    );
+    Engine::Init(Engine::VIDEO);
 
-    vexa::Window::Cfg window_cfg;
-    vexa::Renderer::Cfg renderer_cfg;
-    window_cfg.m_size = {1, 1};
-    auto window = vexa::Window{window_cfg}.setRenderer(renderer_cfg).create();
+    auto window = Window{}.setSize({1280, 720}).setRenderer({}).create();
     auto& gfx = window.renderer();
 
-    while(true)
+    Texture texture = gfx.newTexture("<PATH>");
+
+    bool running = true;
+    while(running)
     {
-        gfx.start(vexa::ColorF32::BLACK);
-        gfx.rectFill({{132, 453}, {132, 343}}, vexa::ColorU8::RED);
+        while (auto ev = Event::Poll()) {
+            switch (ev->type()) {
+                case Event::QUIT: { running = false; break; }
+
+                default : break;
+            }
+
+            if (Event::ActiveKeys()[Key::ESC]) { running = false; }
+        }
+
+        gfx.start(ColorF32::BLACK);
+
+        gfx.renderTexture(texture, {100, 100});
+
         gfx.finish();
-        vexa::time::sleep(vexa::time::Millis{16.6});
+        time::sleep(time::Millis{16.6});
     }
 
-    vexa::Engine::Close();
+    Engine::Close();
 }

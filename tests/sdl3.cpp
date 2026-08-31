@@ -7,8 +7,7 @@ struct Player {
     float x, y = 0;
 
     void start(SDL_Renderer* renderer) {
-        texture = IMG_LoadTexture(renderer, "../assets/gd.png");
-        if (texture == nullptr) std::println("texture not loaded");
+        
     }
 
     void render(SDL_Renderer* renderer) {

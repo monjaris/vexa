@@ -59,7 +59,7 @@ struct Rect {
     constexpr Rect() noexcept: pos({0, 0}), size({0, 0}) {}
 
     // create a rectangle: (x, y, w, h)
-    explicit constexpr inline Rect(
+    constexpr inline Rect(
         Vec2::ValueT x, Vec2::ValueT y, Vec2::ValueT width, Vec2::ValueT height
     ) noexcept: pos({x, y}), size(width, height) {}
 

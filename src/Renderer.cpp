@@ -121,6 +121,11 @@ bool This::getVsync() {
 
 
 void This::start() {
+    gfx::set_brush_color8(impl->m_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(impl->m_renderer);
+}
+//
+void This::start(void* null) {
     SDL_RenderClear(impl->m_renderer);
 }
 // overload for clearing with Color8
@@ -139,6 +144,41 @@ void This::finish() {
 }
 
 
+
+Texture This::newTexture(Image texture_source) {
+    SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
+        impl->m_renderer, CAST<SDL_Surface*>(texture_source.m.image)
+    );
+
+    Texture texture;
+    texture.m.texture = texture_handle;
+    texture.m.is_loaded = true;
+
+    return texture;
+}
+// overload
+Texture This::loadTexture(const char* texture_source_path) {
+    return newTexture(Image::Load(texture_source_path));
+}
+// overload again
+Texture This::newTexture(std::string_view texture_source_path) {
+    return newTexture(Image::Load(texture_source_path));
+}
+
+
+
+void This::renderTexture(const Texture& texture, Vec2 pos) {
+    SDL_FRect dest = {
+        pos.x, pos.y,
+        CAST<fp32>(CAST<SDL_Texture*>(texture.m.texture)->w),
+        CAST<fp32>(CAST<SDL_Texture*>(texture.m.texture)->h)
+    };
+
+    SDL_RenderTexture(
+        impl->m_renderer, CAST<SDL_Texture*>(texture.m.texture),
+        nullptr, &dest
+    );
+}
 
 
 void This::triangleFill(Triangle triangle, ColorU8 color) {
