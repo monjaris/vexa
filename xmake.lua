@@ -115,5 +115,4 @@ target("time")  add_files("tests/time.cpp")  add_deps("vexa")
 target("entity")  add_files("tests/entity.cpp")  add_deps("vexa")
 
 --- EXAMPLES
-target("pingpong")  add_files("examples/pingpong.cpp")  add_deps("vexa")
-
+includes("examples.lua")

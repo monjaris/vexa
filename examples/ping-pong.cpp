@@ -1,6 +1,6 @@
 /*=============================================*\
 
- vexa implementation of pingpong (vexa-0.0.1)
+ vexa implementation of ping-pong (vexa-0.0.1)
 
  Copyright (c) 2026 @gitduck6
 
@@ -205,7 +205,7 @@ int main(void)
         {
             switch (event->type())
             {
-                case Event::KEY_REPEAT:
+                case Event::KEY_DOWN:
                 {
                     auto key = event->kb().key;
                     if (key == Key::Q) running = false;
