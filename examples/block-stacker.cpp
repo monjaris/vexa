@@ -1,6 +1,6 @@
 /*=============================================*\
 
- vexa implementation of Tarsis (vexa-0.1.0)
+ vexa implementation of block-stacker (vexa-0.1.0)
 
  Copyright (c) 2026 @abdulrahman-103
 
@@ -12,19 +12,19 @@
 int fps = 60;
 float frametime = 1000.0f / fps;
 
-typedef enum {I, L, J, O, T, S, Z} PieceType;
+enum PieceType {I, L, J, O, T, S, Z};
 
-typedef struct {
-        int column;
-        int row;
-    } Block;
+struct Block {
+    int column;
+    int row;
+};
 
-typedef struct {
+struct Piece {
     PieceType type;
     Block blocks[4];
     int rot;
     bool active;
-} Piece;
+};
 
 Piece current_piece;
 
@@ -33,15 +33,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 3;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 4;
-        
+
         Block block3;
         block3.row = 0;
         block3.column = 5;
-        
+
         Block block4;
         block4.row = 0;
         block4.column = 6;
@@ -58,15 +58,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 4;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 5;
-        
+
         Block block3;
         block3.row = 0;
         block3.column = 6;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 4;
@@ -83,15 +83,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 4;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 5;
-        
+
         Block block3;
         block3.row = 0;
         block3.column = 6;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 6;
@@ -108,15 +108,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 4;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 5;
-        
+
         Block block3;
         block3.row = 1;
         block3.column = 4;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 5;
@@ -133,15 +133,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 4;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 5;
-        
+
         Block block3;
         block3.row = 0;
         block3.column = 6;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 5;
@@ -158,15 +158,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 5;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 6;
-        
+
         Block block3;
         block3.row = 1;
         block3.column = 4;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 5;
@@ -183,15 +183,15 @@ void place_piece(PieceType piece_type, char grid[20][10]){
         Block block1;
         block1.row = 0;
         block1.column = 4;
-        
+
         Block block2;
         block2.row = 0;
         block2.column = 5;
-        
+
         Block block3;
         block3.row = 1;
         block3.column = 5;
-        
+
         Block block4;
         block4.row = 1;
         block4.column = 6;
@@ -232,11 +232,11 @@ void rotate(char grid[20][10], bool clockwise){
     if (target_rot == -90){target_rot = 270;}
     else if (target_rot == -180){target_rot = 180;}
     else if (target_rot == 360){target_rot = 0;}
-    
+
     if (current_piece.type == I){
         if (target_rot == 180 && current_piece.blocks[0].row > 1 && current_piece.blocks[3].row < 19){
             if (grid[current_piece.blocks[2].row + 1][current_piece.blocks[2].column] == 0 && grid[current_piece.blocks[2].row - 1][current_piece.blocks[2].column] == 0 && grid[current_piece.blocks[2].row - 2][current_piece.blocks[2].column] == 0){
-                
+
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].row += 1; current_piece.blocks[3].column -= 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
@@ -248,13 +248,13 @@ void rotate(char grid[20][10], bool clockwise){
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                 current_piece.blocks[0].row -= 2; current_piece.blocks[0].column += 2;
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
-                
+
                 success = true;
             }
         }
         else if (target_rot == 0 && current_piece.blocks[0].column < 9 && current_piece.blocks[0].column > 1){
             if (grid[current_piece.blocks[2].row][current_piece.blocks[2].column + 1] == 0 && grid[current_piece.blocks[2].row][current_piece.blocks[2].column - 1] == 0 && grid[current_piece.blocks[2].row][current_piece.blocks[2].column - 2] == 0){
-                
+
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].row -= 1; current_piece.blocks[3].column += 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
@@ -266,7 +266,7 @@ void rotate(char grid[20][10], bool clockwise){
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                 current_piece.blocks[0].row += 2; current_piece.blocks[0].column -= 2;
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
-                
+
                 success = true;
             }
         }
@@ -274,7 +274,7 @@ void rotate(char grid[20][10], bool clockwise){
     else if (current_piece.type == S){
         if (target_rot == 180){
             if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column] == 0){
-                
+
                 grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                 current_piece.blocks[2].column += 2;
                 grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
@@ -286,13 +286,13 @@ void rotate(char grid[20][10], bool clockwise){
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].row -= 1; current_piece.blocks[3].column += 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
-                
+
                 success = true;
             }
         }
         else if (target_rot == 0 && current_piece.blocks[1].column > 0){
             if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0){
-                
+
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].row += 1; current_piece.blocks[3].column -= 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
@@ -313,7 +313,7 @@ void rotate(char grid[20][10], bool clockwise){
     else if (current_piece.type == Z){
         if (target_rot == 180){
             if (grid[current_piece.blocks[0].row][current_piece.blocks[0].column + 2] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 2] == 0){
-                
+
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                 current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 2;
                 grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -329,13 +329,13 @@ void rotate(char grid[20][10], bool clockwise){
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].column -= 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
-                
+
                 success = true;
             }
         }
         else if (target_rot == 0 && current_piece.blocks[2].column > 0){
             if (grid[current_piece.blocks[2].row][current_piece.blocks[2].column - 1] == 0 && grid[current_piece.blocks[2].row + 1][current_piece.blocks[2].column + 1] == 0){
-                
+
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                 current_piece.blocks[3].column += 1;
                 grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
@@ -361,7 +361,7 @@ void rotate(char grid[20][10], bool clockwise){
         if (clockwise){
             if (target_rot == 90 && current_piece.blocks[2].row > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -373,14 +373,14 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column -= 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[2].column < 9){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -399,7 +399,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270 && current_piece.blocks[2].row < 19){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -418,7 +418,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -439,7 +439,7 @@ void rotate(char grid[20][10], bool clockwise){
         else if (!clockwise){
             if (target_rot == 90 && current_piece.blocks[2].row < 19){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column += 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
@@ -447,18 +447,18 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 0;
                     current_piece.blocks[3].row += 1; current_piece.blocks[3].column -= 1;
                     grid[current_piece.blocks[3].row][current_piece.blocks[3].column] = 1;
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column -= 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
@@ -477,7 +477,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270 && current_piece.blocks[2].row > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row -= 1; current_piece.blocks[2].column -= 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
@@ -496,7 +496,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column < 9){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row -= 1; current_piece.blocks[2].column += 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
@@ -519,7 +519,7 @@ void rotate(char grid[20][10], bool clockwise){
         if (clockwise){
             if (target_rot == 90 && current_piece.blocks[2].row > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -531,14 +531,14 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column -= 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[2].column < 9 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -557,7 +557,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270 && current_piece.blocks[0].row < 19){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -576,7 +576,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -597,7 +597,7 @@ void rotate(char grid[20][10], bool clockwise){
         else if (!clockwise){
             if (target_rot == 90 && current_piece.blocks[3].row < 18){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 2] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -609,14 +609,14 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column += 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row - 2][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -635,7 +635,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 2] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -654,7 +654,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column < 9){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 2][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -670,7 +670,7 @@ void rotate(char grid[20][10], bool clockwise){
                     success = true;
                 }
             }
-        }   
+        }
     }
 
 
@@ -678,7 +678,7 @@ void rotate(char grid[20][10], bool clockwise){
         if (clockwise){
             if (target_rot == 90 && current_piece.blocks[2].row > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -690,14 +690,14 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column -= 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[0].column < 9){
                 if (grid[current_piece.blocks[0].row][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -716,7 +716,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270 && current_piece.blocks[0].row < 19){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -735,7 +735,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -756,7 +756,7 @@ void rotate(char grid[20][10], bool clockwise){
         else if (!clockwise){
             if (target_rot == 90 && current_piece.blocks[2].row < 19){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 2] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -768,14 +768,14 @@ void rotate(char grid[20][10], bool clockwise){
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 0;
                     current_piece.blocks[2].row += 1; current_piece.blocks[2].column += 1;
                     grid[current_piece.blocks[2].row][current_piece.blocks[2].column] = 1;
-                    
+
                     success = true;
                 }
             }
 
             else if (target_rot == 180 && current_piece.blocks[0].column > 0){
                 if (grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row - 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row - 2][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row -= 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -794,7 +794,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 270 && current_piece.blocks[0].row > 0){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 2][current_piece.blocks[0].column - 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column += 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -813,7 +813,7 @@ void rotate(char grid[20][10], bool clockwise){
 
             else if (target_rot == 0 && current_piece.blocks[2].column < 9){
                 if (grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column - 1] == 0 && grid[current_piece.blocks[0].row + 1][current_piece.blocks[0].column + 1] == 0 && grid[current_piece.blocks[0].row + 2][current_piece.blocks[0].column + 1] == 0){
-                    
+
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 0;
                     current_piece.blocks[0].row += 1; current_piece.blocks[0].column -= 1;
                     grid[current_piece.blocks[0].row][current_piece.blocks[0].column] = 1;
@@ -870,7 +870,7 @@ void physics(char grid[20][10]){
         if (!sibling){
         grid[current_piece.blocks[block].row - 1][current_piece.blocks[block].column] = 0;
         }
-        
+
     }
 }
 
@@ -908,7 +908,7 @@ void right(char grid[20][10]){
         if (!sibling){
         grid[current_piece.blocks[block].row][current_piece.blocks[block].column - 1] = 0;
         }
-        
+
     }
 }
 
@@ -946,7 +946,7 @@ void left(char grid[20][10]){
         if (!sibling){
         grid[current_piece.blocks[block].row][current_piece.blocks[block].column + 1] = 0;
         }
-        
+
     }
 }
 
@@ -1007,7 +1007,8 @@ int main() {
     float spawn_timer = 0.0f; // initialize the timer for spawning rows
     const float spawn_timer_interval = 250.0f; // 50 ms more than clear_row_timer_interval
 
-    char grid[20][10] = {0}; // the grid where the blocks exist
+    char grid[20][10]; // the grid where the blocks exist
+    memset(grid, 0, 200);
     PieceType random_piece = static_cast<PieceType>(random(0, 6)); // chooses a random piece
     place_piece(random_piece, grid); // places a random piece
 
@@ -1020,10 +1021,10 @@ int main() {
         .setTitle("Tarsis")
         .setRenderer(Renderer::Cfg{})
         .create();
-    
+
     window.setResizable(true);
     window.setAspectRatio(0.5, 0.5);
-    auto& gfx = window.renderer(); 
+    auto& gfx = window.renderer();
     bool running = true;
     while (running)
     {
@@ -1039,7 +1040,7 @@ int main() {
                         gravity_timer_interval = fast_gravity_interval;
                     }
                     if (event->kb().key == Key::ESC) { running = false; } // exit game
-                    
+
                     // rotate clockwise, "&& !event->kb().repeated" makes it a 1 time press instead of a repeated event
                     if ((event->kb().key == Key::X || event->kb().key == Key::UP || event->kb().key == Key::W) && !event->kb().repeated) {
                         rotate(grid, true);
@@ -1065,6 +1066,8 @@ int main() {
                         gravity_timer_interval = 500.0f;
                     }
                 }
+
+                default: break;
             }
         }
         // move pieces down (physics()) each time gravity timer reaches interval and reset it
@@ -1073,7 +1076,7 @@ int main() {
             gravity_timer = 0;
             physics(grid);
         }
-        
+
         // if piece isn't active (stopped moving) then check if the row should be cleared and clear it if so
         if (!current_piece.active) {
             clear_row(grid, &clear_row_timer, clear_row_timer_interval);

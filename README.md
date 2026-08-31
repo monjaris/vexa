@@ -63,11 +63,22 @@ int main()
 }
 ```
 
+
+# Creating examples for vexa
+1. clone this repo
+2. find `examples.lua` file
+3. add your own example name to the `examples` list
+4. go to `examples/` directory and copy-paste `_example_template_.cpp`
+5. change file name to `<name-added-to-list>.cpp`
+6. fill example header, code an example
+
+note: If you want to publish, fork the repo and do the same steps then make a PR, i will accept it!
+
 # Layout
-- include/vexa/     public headers \
-- src/              library sources \
-- vendor/           vendored code \
-- xmake/            build scripts
+- include/vexa/       public headers
+- src/                       library sources
+- vendor/                vendored code
+- scripts/                 build scripts
 
 # License (MIT)
 

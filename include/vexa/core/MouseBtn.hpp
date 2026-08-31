@@ -23,12 +23,12 @@ enum class MouseBtnMask : uint8
 {
     NONE = 0,
 
-    LEFT = 1 << CAST(int8, MouseBtn::LEFT),
-    MIDDLE = 1 << CAST(int8, MouseBtn::MIDDLE),
-    RIGHT = 1 << CAST(int8, MouseBtn::RIGHT),
+    LEFT = 1 << CAST<int8>(MouseBtn::LEFT),
+    MIDDLE = 1 << CAST<int8>(MouseBtn::MIDDLE),
+    RIGHT = 1 << CAST<int8>(MouseBtn::RIGHT),
 
-    EXTRA_1 = 1 << CAST(int8, MouseBtn::EXTRA_1),
-    EXTRA_2 = 1 << CAST(int8, MouseBtn::EXTRA_2),
+    EXTRA_1 = 1 << CAST<int8>(MouseBtn::EXTRA_1),
+    EXTRA_2 = 1 << CAST<int8>(MouseBtn::EXTRA_2),
 };
 
 
