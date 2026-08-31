@@ -1,8 +1,10 @@
-/*
-Vexa port of Tarsis
-SPDX-License-Identifier: MIT
-Copyright (c) 2026 Abdulrahman 103
-*/
+/*=============================================*\
+
+ vexa implementation of Tarsis (vexa-0.1.0)
+
+ Copyright (c) 2026 @abdulrahman-103
+
+\*=============================================*/
 
 #include <random>
 #include "vexa/vexa.hpp"
