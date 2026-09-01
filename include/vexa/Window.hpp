@@ -20,7 +20,7 @@ private:
         //
         CfgVal<const char*> m_title;
         CfgVal<Vec2i> m_size;
-        CfgVal<Vec2i> m_position;
+        CfgVal<Vec2i> m_pos;
         CfgVal<Vec2> m_aspect_ratio;
         CfgVal<Image> m_icon;
         //
@@ -30,7 +30,7 @@ private:
         CfgVal<bool> m_is_fullscreen;
         CfgVal<bool> m_is_borderless;
         CfgVal<bool> m_is_hidden;
-        CfgVal<bool> m_is_always_on_top;
+        CfgVal<bool> m_is_on_top;
         CfgVal<bool> m_is_mouse_grabbed;
         CfgVal<bool> m_is_mouse_relative;
         CfgVal<bool> m_is_keyboard_grabbed;
@@ -41,7 +41,7 @@ private:
 
             m_title(""),
             m_size(Vec2i{0, 0}),
-            m_position(Vec2i{0, 0}),
+            m_pos(Vec2i{0, 0}),
             m_aspect_ratio(Vec2{1, 1}),
             m_icon(Image{}),
             m_is_resizable(false),
@@ -50,7 +50,7 @@ private:
             m_is_fullscreen(false),
             m_is_borderless(false),
             m_is_hidden(false),
-            m_is_always_on_top(false),
+            m_is_on_top(false),
             m_is_mouse_grabbed(false),
             m_is_mouse_relative(false),
             m_is_keyboard_grabbed(false)
@@ -64,7 +64,7 @@ private:
             m_flags = m_flags.defaultVal();
             m_title = m_title.defaultVal();
             m_size = m_size.defaultVal();
-            m_position = m_position.defaultVal();
+            m_pos = m_pos.defaultVal();
             m_aspect_ratio = m_aspect_ratio.defaultVal();
             m_icon = m_icon.defaultVal();
             m_is_resizable = m_is_resizable.defaultVal();
@@ -73,14 +73,14 @@ private:
             m_is_fullscreen = m_is_fullscreen.defaultVal();
             m_is_borderless = m_is_borderless.defaultVal();
             m_is_hidden = m_is_hidden.defaultVal();
-            m_is_always_on_top = m_is_always_on_top.defaultVal();
+            m_is_on_top = m_is_on_top.defaultVal();
             m_is_mouse_grabbed = m_is_mouse_grabbed.defaultVal();
             m_is_mouse_relative = m_is_mouse_relative.defaultVal();
             m_is_keyboard_grabbed = m_is_keyboard_grabbed.defaultVal();
             return *this;
         }
     }
-    m_build_config;
+    m_bconfig;
 
 
     using mWindowPtr = void*;
@@ -88,23 +88,24 @@ private:
     using mWindowFlags = uint64;
     //
     static mWindowFlags _getActiveFlags(mWindowPtr win);
-    //
-    static void _trySetTitle(mWindowPtr win, const char* title);
-    static void _trySetSize(mWindowPtr win, int x, int y);
-    static void _trySetPos(mWindowPtr win, int x, int y);
-    static void _trySetAspectRatio(mWindowPtr win, fp32 min, fp32 max);
-    static void _trySetIcon(mWindowPtr win, mSurface surface);
-    //
-    static void _trySetResizable(mWindowPtr win, bool yes);
-    static void _trySetMinimized(mWindowPtr win, bool yes);
-    static void _trySetMaximized(mWindowPtr win, bool yes);
-    static void _trySetFullscreen(mWindowPtr win, bool yes);
-    static void _trySetBorderless(mWindowPtr win, bool yes);
-    static void _trySetHidden(mWindowPtr win, bool yes);
-    static void _trySetAlwaysOnTop(mWindowPtr win, bool yes);
-    static void _trySetKeyboardGrabbed(mWindowPtr win, bool yes);
-    static void _trySetMouseGrabbed(mWindowPtr win, bool yes);
-    static void _trySetMouseRelative(mWindowPtr win, bool yes);
+
+    template<typename... Args>
+    void m_trySetProperty(
+        const char* prop, auto& build_config_var, auto config_val,
+        auto (*sdl_fn), Args... sdl_fn_args
+    ) noexcept;
+
+    template<typename... Args>
+    void m_trySetProperty(
+        const char* prop, auto& build_config_var, auto config_val,
+        auto (*sdl_fn)
+    ) noexcept;
+
+    template<typename... Args>
+    void m_trySetProperty(
+        const char* prop, auto& build_config_var, auto config_val,
+        auto (*sdl_fn), auto non_logged_arg, decltype(nullptr)
+    ) noexcept;
 
 
 public:
@@ -140,7 +141,7 @@ public:
     bool isMouseRelative();
 
 
-    Window& setRenderer(const Renderer::Cfg& recreatenderer_cfg);
+    Window& setRenderer(const Renderer::Cfg& renderer_cfg);
     Window& setTitle(const char* title);
     Window& setSize(Vec2i size);
     Window& setPosition(Vec2i position);
