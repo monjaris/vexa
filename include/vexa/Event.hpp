@@ -9,14 +9,19 @@ class VX_NODISCARD Event
 {
 public:
     enum Type : uint64;
-
     using Date = time::TimePoint<time::Duration<uint64, time::Millis::RATIO>>;
 
+
+    // global event state
+    static std::optional<Event> event;
+
+
     class ActiveKeysState {
-    public:
+        friend ActiveKeysState ActiveKeys();
         bool key_data[static_cast<usize>(Key::COUNT)] = {};
         enum_t<KeyMod> mod_data = 0;
 
+    public:
         struct Proxy {
             const ActiveKeysState& state;
             bool result;
@@ -32,7 +37,7 @@ public:
             }
 
             // Final conversion
-            explicit operator bool() const noexcept {
+            operator bool() const noexcept {
                 return result;
             }
         };
@@ -45,6 +50,9 @@ public:
         Proxy operator[](KeyMod mod) const noexcept {
             return Proxy{*this, (mod_data & static_cast<uint16>(mod)) != 0};
         }
+
+        bool* keyData() { return key_data; }
+        enum_t<KeyMod>& modData() { return mod_data; }
     };
 
 
@@ -312,7 +320,6 @@ private:
     Type m_type;
     Event::Date m_date;
 
-
     union {
         KB::Input kb;
         KB::Device kb_device;
@@ -363,6 +370,8 @@ private:
 
 
     static void M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept;
+    void m_toVexaEvent(SDL_Event* sdl_event) noexcept;
+
 
 public:
     Event() noexcept;
@@ -375,6 +384,7 @@ public:
 
     static ActiveKeysState ActiveKeys() noexcept;
     static std::optional<Event> Poll() noexcept;
+    static bool On(Type event_type) noexcept;
 
 
     //  Get event type  //

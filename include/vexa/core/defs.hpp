@@ -1,5 +1,7 @@
 #pragma once
 
+#define VX_VERSION "vexa version: v0.2.0"
+
 namespace vexa {
     #include "types.hpp"
 }
@@ -53,6 +55,10 @@ consteval void vx_force_compile_time_error(const char*) {}
         return (left = left | right); \
     } \
 
+
+
+#define VX_MAP($VEXA, $SDL) case $SDL: return $VEXA; break
+#define VX_REVERSE_MAP($SDL, $VEXA) case $VEXA: return $SDL; break
 
 
 #define VX_NODISCARD  [[nodiscard]]

@@ -147,7 +147,7 @@ void This::finish() {
 
 Texture This::newTexture(Image texture_source) {
     SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
-        impl->m_renderer, CAST<SDL_Surface*>(texture_source.m.image)
+        impl->m_renderer, CAST<SDL_Surface*>(texture_source.ptr())
     );
 
     Texture texture;
@@ -161,7 +161,7 @@ Texture This::loadTexture(const char* texture_source_path) {
     return newTexture(Image::Load(texture_source_path));
 }
 // overload again
-Texture This::newTexture(std::string_view texture_source_path) {
+Texture This::loadTexture(std::string_view texture_source_path) {
     return newTexture(Image::Load(texture_source_path));
 }
 

@@ -6,7 +6,7 @@ Windowing, events, 2D/3D rendering, timing. Opinionated API, low boilerplate.
 
 ## Requirements
 
-- C++23 compiler (clang++)
+- C++23 compiler (clang/gcc)
 - [xmake](https://xmake.io)
 - CMake + Ninja (used only to build vendored code)
 - thats all!

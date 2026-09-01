@@ -151,11 +151,13 @@ Window& This::operator= (Window&& other) {
 
 
 
-#define IS_CFG_DEFAULT(_cfg_prop)  (m_build_config._cfg_prop == m_build_config._cfg_prop.defaultVal())
+#define IS_CFG_DEFAULT(_cfg_prop) \
+    (m_build_config._cfg_prop == m_build_config._cfg_prop.defaultVal())
 
 Window This::create() {
     Window build = {};
     build.m_build_config = m_build_config;
+    auto& cfg = build.m_build_config;
 
     auto* new_window = build.impl->createWindow(build.m_build_config);
     IF_THEN (!new_window,   log::fatal(FN"{}", __func__, mf_window_currently_doesnt_exist);)
@@ -167,31 +169,35 @@ Window This::create() {
     );
 
     if (!IS_CFG_DEFAULT(m_title))
-        _trySetTitle(new_window, m_build_config.m_title);
+        _trySetTitle(new_window, cfg.m_title);
     if (!IS_CFG_DEFAULT(m_size))
-        _trySetSize(new_window, m_build_config.m_size->x, m_build_config.m_size->y);
+        _trySetSize(new_window, cfg.m_size->x, cfg.m_size->y);
     if (!IS_CFG_DEFAULT(m_position))
-        _trySetPos(new_window, m_build_config.m_position->x, m_build_config.m_position->y);
+        _trySetPos(new_window, cfg.m_position->x, cfg.m_position->y);
+    if (!IS_CFG_DEFAULT(m_aspect_ratio))
+        _trySetAspectRatio(new_window, cfg.m_aspect_ratio->x, cfg.m_aspect_ratio->y);
+    if (!IS_CFG_DEFAULT(m_icon))
+        _trySetIcon(new_window, cfg.m_icon->m.image);
     if (!IS_CFG_DEFAULT(m_is_resizable))
-        _trySetResizable(new_window, m_build_config.m_is_resizable);
+        _trySetResizable(new_window, cfg.m_is_resizable);
     if (!IS_CFG_DEFAULT(m_is_minimized))
-        _trySetMinimized(new_window, m_build_config.m_is_minimized);
+        _trySetMinimized(new_window, cfg.m_is_minimized);
     if (!IS_CFG_DEFAULT(m_is_maximized))
-        _trySetMaximized(new_window, m_build_config.m_is_maximized);
+        _trySetMaximized(new_window, cfg.m_is_maximized);
     if (!IS_CFG_DEFAULT(m_is_fullscreen))
-        _trySetFullscreen(new_window, m_build_config.m_is_fullscreen);
+        _trySetFullscreen(new_window, cfg.m_is_fullscreen);
     if (!IS_CFG_DEFAULT(m_is_borderless))
-        _trySetBorderless(new_window, m_build_config.m_is_borderless);
+        _trySetBorderless(new_window, cfg.m_is_borderless);
     if (!IS_CFG_DEFAULT(m_is_hidden))
-        _trySetHidden(new_window, m_build_config.m_is_hidden);
+        _trySetHidden(new_window, cfg.m_is_hidden);
     if (!IS_CFG_DEFAULT(m_is_always_on_top))
-        SDL_SetWindowAlwaysOnTop(new_window, m_build_config.m_is_always_on_top);
+        SDL_SetWindowAlwaysOnTop(new_window, cfg.m_is_always_on_top);
     if (!IS_CFG_DEFAULT(m_is_mouse_grabbed))
-        SDL_SetWindowMouseGrab(new_window, m_build_config.m_is_mouse_grabbed);
+        SDL_SetWindowMouseGrab(new_window, cfg.m_is_mouse_grabbed);
     if (!IS_CFG_DEFAULT(m_is_mouse_relative))
-        SDL_SetWindowRelativeMouseMode(new_window, m_build_config.m_is_mouse_relative);
+        SDL_SetWindowRelativeMouseMode(new_window, cfg.m_is_mouse_relative);
     if (!IS_CFG_DEFAULT(m_is_keyboard_grabbed))
-        _trySetKeyboardGrabbed(new_window, m_build_config.m_is_keyboard_grabbed);
+        _trySetKeyboardGrabbed(new_window, cfg.m_is_keyboard_grabbed);
 
     if (impl->renderer_set) {
         build.impl->renderer = build.impl->renderer.create((SDL_Window*)new_window);
@@ -336,6 +342,15 @@ void This::_trySetAspectRatio(This::mWindowPtr win, fp32 min, fp32 max) {
     }
 }
 
+void This::_trySetIcon(This::mWindowPtr win, This::mSurface surface) {
+    if (!SDL_SetWindowIcon((SDL_Window*)win, (SDL_Surface*)surface)) {
+        log::error(
+            TRY_SET_FAILED("aspect-ratio") "to an icon"
+            "Hence, are you on wayland?"
+        );
+    }
+}
+
 
 void This::_trySetResizable(This::mWindowPtr win, bool yes) {
     if (!SDL_SetWindowResizable((SDL_Window*)win, yes)) {
@@ -447,10 +462,15 @@ Window& This::setPosition(Vec2i position) {
 
 Window& This::setAspectRatio(fp32 min, fp32 max) {
     if (impl && impl->window_exists) { _trySetAspectRatio(impl->ptr(), min, max); }
-    m_build_config.m_aspect_ratio_min_max = {min, max};
+    m_build_config.m_aspect_ratio = {min, max};
     return *this;
 }
 
+Window& This::setIcon(Image image) {
+    if (impl && impl->window_exists) { _trySetIcon(impl->ptr(), image.m.image); }
+    m_build_config.m_icon = image;
+    return *this;
+}
 
 Window& This::setResizable(bool yes) {
     if (impl && impl->window_exists) { _trySetResizable(impl->ptr(), yes); }

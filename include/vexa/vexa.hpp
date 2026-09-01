@@ -6,3 +6,4 @@
 #include "Event.hpp"
 #include "Image.hpp"
 #include "time.hpp"
+#include "input.hpp"

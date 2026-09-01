@@ -236,10 +236,10 @@ This::ActiveKeysState This::ActiveKeys() noexcept {
     ActiveKeysState aks;
 
     // copy sdl keyboard state to internal buffer
-    std::copy_n(SDL_GetKeyboardState(nullptr), enum_v(Key::COUNT), aks.key_data);
+    std::copy_n(SDL_GetKeyboardState(nullptr), enum_v(Key::COUNT), aks.keyData());
 
     // copy sdl key modifier state to internal variable
-    aks.mod_data = SDL_GetModState();
+    aks.modData() = SDL_GetModState();
 
     return aks;
 }
@@ -612,6 +612,10 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
 }
 
 
+void This::m_toVexaEvent(SDL_Event* sdl_event) noexcept {
+    m_type = M_ToVexaEventTypeRuntime(sdl_event->type);
+    m_date = Event::Date::DurationT{sdl_event->common.timestamp};
+}
 
 std::optional<Event> Event::Poll() noexcept {
     namespace i = internal;
@@ -619,12 +623,19 @@ std::optional<Event> Event::Poll() noexcept {
     if (!SDL_PollEvent(&i::event)) return std::nullopt;
 
     Event build;
-    build.m_type = M_ToVexaEventTypeRuntime(i::event.type);
-    build.m_date = Event::Date::DurationT{3};
+    build.m_toVexaEvent(&i::event);
     M_Fill(build, build.m_type, build.m_date.sinceEpoch().millis());
 
     return build;
 }
+
+bool This::On(This::Type event_type) noexcept {
+    if (SDL_PollEvent(&internal::event)) {
+        return event_type == M_ToVexaEventTypeRuntime(internal::event.type);
+    }
+    return false;
+}
+
 
 
 

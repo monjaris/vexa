@@ -21,7 +21,8 @@ private:
         CfgVal<const char*> m_title;
         CfgVal<Vec2i> m_size;
         CfgVal<Vec2i> m_position;
-        CfgVal<Vec2> m_aspect_ratio_min_max;
+        CfgVal<Vec2> m_aspect_ratio;
+        CfgVal<Image> m_icon;
         //
         CfgVal<bool> m_is_resizable;
         CfgVal<bool> m_is_maximized;
@@ -41,7 +42,8 @@ private:
             m_title(""),
             m_size(Vec2i{0, 0}),
             m_position(Vec2i{0, 0}),
-            m_aspect_ratio_min_max(Vec2{1, 1}),
+            m_aspect_ratio(Vec2{1, 1}),
+            m_icon(Image{}),
             m_is_resizable(false),
             m_is_maximized(false),
             m_is_minimized(false),
@@ -63,7 +65,8 @@ private:
             m_title = m_title.defaultVal();
             m_size = m_size.defaultVal();
             m_position = m_position.defaultVal();
-            m_aspect_ratio_min_max = m_aspect_ratio_min_max.defaultVal();
+            m_aspect_ratio = m_aspect_ratio.defaultVal();
+            m_icon = m_icon.defaultVal();
             m_is_resizable = m_is_resizable.defaultVal();
             m_is_maximized = m_is_maximized.defaultVal();
             m_is_minimized = m_is_minimized.defaultVal();
@@ -81,13 +84,16 @@ private:
 
 
     using mWindowPtr = void*;
+    using mSurface = void*;
     using mWindowFlags = uint64;
+    //
     static mWindowFlags _getActiveFlags(mWindowPtr win);
     //
     static void _trySetTitle(mWindowPtr win, const char* title);
     static void _trySetSize(mWindowPtr win, int x, int y);
     static void _trySetPos(mWindowPtr win, int x, int y);
     static void _trySetAspectRatio(mWindowPtr win, fp32 min, fp32 max);
+    static void _trySetIcon(mWindowPtr win, mSurface surface);
     //
     static void _trySetResizable(mWindowPtr win, bool yes);
     static void _trySetMinimized(mWindowPtr win, bool yes);
@@ -139,6 +145,7 @@ public:
     Window& setSize(Vec2i size);
     Window& setPosition(Vec2i position);
     Window& setAspectRatio(fp32 min_ratio, fp32 max_ratio);
+    Window& setIcon(Image image);
     Window& setResizable(bool yes = true);
     Window& setMaximized(bool yes = true);  Window& toggleMaximized();
     Window& setMinimized(bool yes = true);
@@ -151,8 +158,8 @@ public:
     Window& setMouseRelative(bool yes = true);
 
 private:
-    template<Trait> consteval static inline uint64 M_ToSDL3WindowFlag();
-    static inline uint64 M_ToSDL3WindowFlagRuntime(uint64 traits);
+    template<Trait> consteval static uint64 M_ToSDL3WindowFlag();
+    static uint64 M_ToSDL3WindowFlagRuntime(uint64 traits);
 };
 
 
