@@ -14,15 +14,11 @@ This::~Image() {
 
 
 Image This::Load(std::string_view path) {
-    Image image;
+    Image image = {};
 
     image.m.is_loaded = true;
     image.m.image = SDL_LoadSurface(path.data());
     image.m.path = path;
-    image.m.size = {
-        EXTERN_CAST(image.m.image)->w,
-        EXTERN_CAST(image.m.image)->h
-    };
 
     return image;
 }
@@ -38,8 +34,22 @@ bool This::Unload(RefMut<Image> image_ref) {
 }
 
 
+bool This::operator== (const Image& other) const noexcept {
+    return (
+        m.image == other.m.image &&
+        m.path == other.m.path
+    );
+}
+
+void* This::ptr() {
+    return m.image;
+}
+
 Vec2i This::size() {
-    return m.size;
+    return {
+        EXTERN_CAST(m.image)->w,
+        EXTERN_CAST(m.image)->h
+    };
 }
 
 

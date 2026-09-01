@@ -17,16 +17,16 @@ NAMESPACE_BEGIN(vexa)
 
 class Image
 {
-public:
+    friend class Window;
+
     struct M {
         bool is_loaded = false;
         void* image = nullptr;
-
         std::string_view path;
-        Vec2i size;
-
     } m;
 
+
+public:
     Image() = default;
     Image(const Image&) = default;
     Image& operator= (const Image&) = default;
@@ -43,6 +43,9 @@ public:
     // returns `false` if it already was unloaded or didnt ever get loaded
     static bool Unload(RefMut<Image> image_ref);
 
+    bool operator== (const Image& other) const noexcept;
+
+    void* ptr();
     Vec2i size();
     std::string_view path();
 };

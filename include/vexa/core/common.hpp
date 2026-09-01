@@ -8,6 +8,9 @@
 #include "vexa/core/vec.hpp"
 #include "vexa/core/log.hpp"
 #include "vexa/core/Flags.hpp"
+#include "vexa/core/Key.hpp"
+#include "vexa/core/MouseBtn.hpp"
+#include "vexa/core/Angle.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -56,6 +59,10 @@ public:
 
     // get default value of the config object
     const T& defaultVal() const { return m_default; }
+
+    // bool operator== (T other) {
+        // return value == other;
+    // }
 
     // to access @member value implicitly
     constexpr operator T() const noexcept { return value; }

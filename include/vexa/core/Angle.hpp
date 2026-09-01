@@ -7,7 +7,7 @@ struct Angle {
     fp32 radians;
 
     constexpr Angle (fp32 radians): radians(radians) {}
-    constexpr Angle (fp32 degrees, void*): radians(degrees) {}
+    constexpr Angle (fp32 degrees, void* null): radians(math::toRadians(degrees)) {}
 
     // returns angle value in degrees
     constexpr fp32 degrees() const noexcept {

@@ -2,17 +2,31 @@
 #include "Window.hpp"
 NAMESPACE_BEGIN(vexa)
 
+
 class Engine VX_STATIC_CLASS
 {
 public:
-    enum class Subsystem : uint8 { VIDEO, AUDIO, EVENT };
-    using Subsystem::VIDEO;
-    using Subsystem::AUDIO;
-    using Subsystem::EVENT;
+    enum class Subsystem : uint16 {
+        NONE = 1 << 0,
+        EVENT = 1 << 1,
+        VIDEO = 1 << 2,
+        AUDIO = 1 << 3,
+        JOYSTICK = 1 << 4,
+        HAPTIC = 1 << 5,
+        GAMEPAD = 1 << 6,
+        SENSOR = 1 << 7,
+        CAMERA = 1 << 8
+    };
+
+    using enum Subsystem;
+
 
 private:
     static inline bool m_init = false;
     static inline Flags<Subsystem> m_subsystems;
+
+    static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag) noexcept;
+    static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag) noexcept;
 
 public:
     static bool Init(Subsystem initial_subsystems) noexcept;

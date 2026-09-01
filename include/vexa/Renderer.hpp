@@ -56,7 +56,7 @@ public:
 
     Texture newTexture(Image texture_source);
     Texture loadTexture(const char* texture_source_path);
-    Texture newTexture(std::string_view texture_source_path);
+    Texture loadTexture(std::string_view texture_source_path);
 
     void renderTexture(const Texture& texture, Vec2 pos);
 
