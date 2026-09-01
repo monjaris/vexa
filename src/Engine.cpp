@@ -10,7 +10,8 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
-        log::info("vexa::Engine::Init(): vexa-version: {}", VX_VERSION);
+        log::info("Initializing VEXA..");
+        log::info("Engine::Init(): {}", VX_VERSION);
         return SDL_Init(M_toSDLSubsystems(m_subsystems.value()));
     }
     return false;
@@ -21,7 +22,7 @@ void This::Close() noexcept {
     if (m_init) {
         m_init = false;
         m_subsystems.reset();
-        log::info("vexa::Engine::Close(): vexa-version");
+        log::info("Engine::Close(): vexa-version");
         SDL_Quit();
     }
 }
