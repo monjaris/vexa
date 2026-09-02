@@ -16,11 +16,13 @@ public:
         HAPTIC = 1 << 5,
         GAMEPAD = 1 << 6,
         SENSOR = 1 << 7,
-        CAMERA = 1 << 8
+        CAMERA = 1 << 8,
+        //
+        FONT
     };
 
     using enum Subsystem;
-
+    static constexpr auto NON_COMPAT = Subsystem(-1);  // known overflow
 
 private:
     static inline bool m_init = false;
