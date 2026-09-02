@@ -1,5 +1,40 @@
 CompileFlags:
+  Compiler: clang++
+
   Add:
-    - -Ivendor/SDL3/src
+    - -std=c++23
+
+    # Forced header
+    - -include
+    - include/vexa/alt/SDL3.h
+
+    # Include paths
+    - -Iinclude
+    - -Iinclude/vexa/alt
+    - -Ivendor/SDL3/include
+
+    # Warnings
+    - -Wall
+    - -Wextra
+    - -Wuninitialized
+    - -Werror=uninitialized
+
+    # Project configuration
+    - -fno-exceptions
+
+  Remove:
+    - -c
+    - -g
+    - -O0
+    - -fPIC
+    - -Qunused-arguments
+    - -ftime-trace
+
+    - -Wno-unused-parameter
+    - -Wno-unused-function
+    - -Wno-unused-variable
+    - -Wno-unused-const-variable
+
+
 Index:
   Background: Build

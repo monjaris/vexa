@@ -87,24 +87,21 @@ private:
     using mSurface = void*;
     using mWindowFlags = uint64;
     //
-    static mWindowFlags _getActiveFlags(mWindowPtr win);
+    static mWindowFlags m_getActiveFlags(mWindowPtr win);
 
+
+
+    // wrap SDL function that takes extra arguments after the window pointer
     template<typename... Args>
-    void m_trySetProperty(
+    void m_trySetWithArgs(
         const char* prop, auto& build_config_var, auto config_val,
         auto (*sdl_fn), Args... sdl_fn_args
     ) noexcept;
 
-    template<typename... Args>
-    void m_trySetProperty(
+    // wrap SDL function that takes only the window pointer
+    void m_trySetNoArgs(
         const char* prop, auto& build_config_var, auto config_val,
         auto (*sdl_fn)
-    ) noexcept;
-
-    template<typename... Args>
-    void m_trySetProperty(
-        const char* prop, auto& build_config_var, auto config_val,
-        auto (*sdl_fn), auto non_logged_arg, decltype(nullptr)
     ) noexcept;
 
 

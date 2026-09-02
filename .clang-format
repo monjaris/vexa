@@ -1,0 +1,88 @@
+---
+Language: Cpp
+
+BasedOnStyle: LLVM
+
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+
+IndentCaseLabels: false
+IndentGotoLabels: true
+IndentPPDirectives: None
+
+
+ColumnLimit: 100
+
+
+BreakBeforeBraces: Attach
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: Never
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+AccessModifierOffset: -4
+EmptyLineBeforeAccessModifier: LogicalBlock
+
+SpaceBeforeParens: ControlStatements
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Pointer
+
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+
+SortIncludes: Never
+IncludeBlocks: Preserve
+
+Standard: c++23
+
+AlwaysBreakTemplateDeclarations: Yes
+BreakTemplateDeclarations: Yes
+
+
+Cpp11BracedListStyle: true
+BinPackArguments: true
+BinPackParameters: true
+
+
+EnumTrailingComma: Remove
+
+ReflowComments: true
+CommentPragmas: '^ IWYU pragma:'
+
+NamespaceIndentation: None
+
+FixNamespaceComments: true
+SeparateDefinitionBlocks: Always
+...
