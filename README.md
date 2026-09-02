@@ -75,10 +75,10 @@ int main()
 note: If you want to publish, fork the repo and do the same steps then make a PR, i will accept it!
 
 # Layout
-- include/vexa/       public headers
-- src/                       library sources
-- vendor/                vendored code
-- scripts/                 build scripts
+- `include/vexa/`       public headers
+- `src/`                       library sources
+- `vendor/`                vendored code
+- `scripts/`                 build scripts
 
 # License (MIT)
 
