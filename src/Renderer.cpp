@@ -90,7 +90,7 @@ Renderer This::create(void* window_ptr) {
 
     // mark renderer is created
     build.impl->m_renderer_ever_existed = build.impl->m_renderer_exists = true;
-    log::info(FN"created renderer for window [ID={}]",
+    log::info(FN"created new renderer for window [ID={}]",
         __func__, SDL_GetWindowID((SDL_Window*)window_ptr)
     );
 
@@ -145,29 +145,19 @@ void This::finish() {
 
 
 
-Texture This::newTexture(Image texture_source) {
-    SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
-        impl->m_renderer, CAST<SDL_Surface*>(texture_source.ptr())
-    );
-
-    Texture texture;
-    texture.m.texture = texture_handle;
-    texture.m.is_loaded = true;
-
-    return texture;
+Texture This::loadTexture(Image texture_source) {
+    return Texture::M_Load(impl->m_renderer, texture_source);
 }
 // overload
 Texture This::loadTexture(const char* texture_source_path) {
-    return newTexture(Image::Load(texture_source_path));
-}
-// overload again
-Texture This::loadTexture(std::string_view texture_source_path) {
-    return newTexture(Image::Load(texture_source_path));
+    return loadTexture(Image::Load(texture_source_path));
 }
 
 
-
-void This::renderTexture(const Texture& texture, Vec2 pos) {
+void This::renderTexture(
+    const Texture& texture, Vec2 pos
+)
+{
     SDL_FRect dest = {
         pos.x, pos.y,
         CAST<fp32>(CAST<SDL_Texture*>(texture.m.texture)->w),
@@ -179,6 +169,33 @@ void This::renderTexture(const Texture& texture, Vec2 pos) {
         nullptr, &dest
     );
 }
+// overload
+void This::renderTexture(
+    const Texture& texture, Rect src, Rect dest
+)
+{
+    SDL_FRect src_rect = {src.pos.x, src.pos.x, src.size.y, src.size.y};
+    SDL_FRect dest_rect = {dest.pos.x, dest.pos.x, dest.size.y, dest.size.y};
+
+    SDL_RenderTexture(
+        impl->m_renderer, CAST<SDL_Texture*>(texture.m.texture),
+        src.isEmpty()? nullptr : &src_rect,
+        dest.isEmpty()? nullptr : &dest_rect
+    );
+}
+// overload again
+void This::renderTexture(
+    const Texture& texture, Rect dest
+)
+{
+    SDL_FRect dest_rect = {dest.pos.x, dest.pos.x, dest.size.y, dest.size.y};
+
+    SDL_RenderTexture(
+        impl->m_renderer, CAST<SDL_Texture*>(texture.m.texture),
+        nullptr, &dest_rect
+    );
+}
+
 
 
 void This::triangleFill(Triangle triangle, ColorU8 color) {

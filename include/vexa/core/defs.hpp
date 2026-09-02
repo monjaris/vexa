@@ -1,6 +1,6 @@
 #pragma once
 
-#define VX_VERSION "vexa version: v0.2.0"
+#define VX_VERSION "v0.2.0"
 
 namespace vexa {
     #include "types.hpp"

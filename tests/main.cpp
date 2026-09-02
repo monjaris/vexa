@@ -1,7 +1,4 @@
 #include "vexa/vexa.hpp"
-#include "vexa/alt/SDL3.h"
-#include "SDL3_ttf/SDL_ttf.h"
-
 using namespace vexa;
 
 int main()
@@ -11,7 +8,10 @@ int main()
     Window window = Window{}.setSize({1280, 720}).setRenderer({}).create();
     Renderer& gfx = window.renderer();
 
-    // Texture texture = gfx.loadTexture("<PATH>");
+    Texture texture = gfx.loadTexture("tests/assets/gd.png");
+    if (texture.error()) {
+        log::error("failed to load texture: {}", texture.path());
+    }
 
     bool running = true;
     while(running)
@@ -21,7 +21,7 @@ int main()
 
         gfx.start(ColorF32::BLACK);
 
-        // gfx.renderTexture(texture, {100, 100});
+        gfx.renderTexture(texture, {100, 100});
 
         gfx.finish();
         time::sleep(time::Millis{16.6});

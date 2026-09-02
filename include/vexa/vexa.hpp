@@ -7,3 +7,4 @@
 #include "Image.hpp"
 #include "time.hpp"
 #include "input.hpp"
+#include "os.hpp"

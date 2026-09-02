@@ -67,12 +67,12 @@ static_assert(sizeof(fp64) == 8, "fp64 must be 8 bytes");
 // check if T and U are same type
 template<typename T, typename U> inline constexpr bool is_same_t = false;
 template<typename T> inline constexpr bool is_same_t<T, T> = true;
-template<class T, class U> concept is_same_as = is_same_t<T, U>;
+template<class T, class U> concept same_as = is_same_t<T, U>;
 
 // check if T and U are same type (variadic)
 template<typename T, typename... U> inline constexpr bool is_any_same_t = (is_same_t<T, U> || ...);
 template<typename T, typename... U>
-concept is_any_same_as = is_any_same_t<T, U...>;
+concept any_same_as = is_any_same_t<T, U...>;
 
 
 // get underlying type via cross-compiler instrinct
@@ -82,3 +82,15 @@ template<class EnumType>
 auto enum_v(EnumType enum_member) -> enum_t<EnumType> {
     return static_cast<enum_t<EnumType>>(enum_member);
 }
+
+template<auto fn> using return_t = decltype(fn);
+
+
+template<typename CharT>
+concept CharConcept = (
+    is_same_t<char8, CharT> ||
+    is_same_t<unsigned char, CharT> ||
+    is_same_t<wchar_t, CharT> ||
+    is_same_t<char16, CharT> ||
+    is_same_t<char32, CharT>
+);

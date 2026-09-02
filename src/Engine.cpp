@@ -1,5 +1,6 @@
 #include "vexa/alt/SDL3.h"
 #include "vexa/Engine.hpp"
+#include "vexa/os.hpp"
 NAMESPACE_BEGIN(vexa)
 
 using This = Engine;
@@ -10,8 +11,9 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
-        log::info("Initializing VEXA..");
-        log::info("Engine::Init(): {}", VX_VERSION);
+        m_init_date = time::now();
+        log::info("Initializing VEXA-{}", VX_VERSION);
+        log::info("Engine::Init(): working-directory: {}", os::cwd().data());
         return SDL_Init(M_toSDLSubsystems(m_subsystems.value()));
     }
     return false;
@@ -22,7 +24,7 @@ void This::Close() noexcept {
     if (m_init) {
         m_init = false;
         m_subsystems.reset();
-        log::info("Engine::Close(): vexa-version");
+        log::info("Engine::Close(): ");
         SDL_Quit();
     }
 }
@@ -42,6 +44,16 @@ void This::CloseSubsystems(Subsystem subsystems) noexcept {
 
 bool This::setMouseCaptured(bool yes) noexcept {
     return SDL_CaptureMouse(yes);
+}
+
+
+
+time::Date This::InitDate() noexcept {
+    return m_init_date;
+}
+
+time::Nanos This::Uptime() noexcept {
+    return m_init_date.elapsed();
 }
 
 VX_NODISCARD bool This::IsMouseCaptured() noexcept {
