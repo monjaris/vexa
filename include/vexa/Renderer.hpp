@@ -54,11 +54,13 @@ public:
     void start(ColorF32 color);
     void finish();
 
-    Texture newTexture(Image texture_source);
+    Texture loadTexture(Image texture_source);
     Texture loadTexture(const char* texture_source_path);
     Texture loadTexture(std::string_view texture_source_path);
 
     void renderTexture(const Texture& texture, Vec2 pos);
+    void renderTexture(const Texture& texture, Rect dest);
+    void renderTexture(const Texture& texture, Rect src, Rect dest);
 
     void triangleFill(Triangle triangle, ColorU8 color);
     void triangleFill(Triangle triangle, ColorF32 color);
