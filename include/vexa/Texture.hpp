@@ -30,7 +30,7 @@ public:
     ~Texture();
 
     explicit operator bool() const noexcept;
-    bool error() const noexcept;
+    bool exists() const noexcept;
     const char* path() const noexcept;
     Vec2 pos() const noexcept;
 };

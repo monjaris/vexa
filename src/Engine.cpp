@@ -1,4 +1,5 @@
 #include "vexa/alt/SDL3.h"
+#include "vexa/alt/SDL3-TTF.hpp"
 #include "vexa/Engine.hpp"
 #include "vexa/os.hpp"
 NAMESPACE_BEGIN(vexa)
@@ -20,8 +21,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
-
-            
+            TTF_Init();
         }
 
         return SDL_Init(M_toSDLSubsystems(m_subsystems.value()));

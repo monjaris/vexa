@@ -97,6 +97,7 @@ end)
 
 --- TARGETS
 includes("scripts/sdl3-static.lua")
+includes("scripts/sdl3_ttf-static.lua")
 includes("scripts/vexa-dynamic.lua")
 
 
@@ -116,4 +117,3 @@ target("entity")  add_files("tests/entity.cpp")  add_deps("vexa")
 
 --- EXAMPLES
 includes("examples.lua")
-target("snake")  add_files("examples/snake.cpp")  add_deps("vexa")

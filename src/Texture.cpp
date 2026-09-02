@@ -32,7 +32,7 @@ This::operator bool() const noexcept {
     return m.is_loaded;
 }
 
-bool This::error() const noexcept {
+bool This::exists() const noexcept {
     return !operator bool();
 }
 
