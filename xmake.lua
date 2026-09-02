@@ -95,8 +95,6 @@ on_config(function ()
 end)
 
 
-add_requires("sdl3_ttf", {system = true});
-
 --- TARGETS
 includes("scripts/sdl3-static.lua")
 includes("scripts/vexa-dynamic.lua")
@@ -104,7 +102,7 @@ includes("scripts/vexa-dynamic.lua")
 
 --- TESTS
 target("game")  add_files("tests/game.cpp")  add_deps("vexa")
-target("main")  add_files("tests/main.cpp")  add_deps("vexa")  add_packages("sdl3_ttf")
+target("main")  add_files("tests/main.cpp")  add_deps("vexa")
 target("meter")  add_files("tests/meter.cpp")  add_deps("vexa")
 target("cstrlen")  add_files("tests/cstrlen.cpp")  add_deps("vexa")
 target("player")  add_files("tests/player.cpp")  add_deps("vexa")
