@@ -1,5 +1,6 @@
 #include "vexa/vexa.hpp"
 #include "vexa/alt/SDL3.h"
+#include "SDL3_ttf/SDL_ttf.h"
 
 using namespace vexa;
 

@@ -70,27 +70,10 @@ static constexpr TraitMap flag_maps[] = {
 
 NAMESPACE_END()
 
-template<This::Trait traits>
-consteval inline uint64 This::M_ToSDL3WindowFlag() {
-    uint64 sdl_flags = 0;
-    for (const auto& m : flag_maps) {
-        if (traits & m.trait) sdl_flags |= m.flag;
-    }
-    return sdl_flags;
-}
-
-uint64 This::M_ToSDL3WindowFlagRuntime(uint64 traits) {
-    uint64 sdl_flags = 0;
-    for (const auto& m : flag_maps) {
-        if (traits & static_cast<uint64>(m.trait)) sdl_flags |= m.flag;
-    }
-    return sdl_flags;
-}
 
 
 
-
-
+//  IMPL  //
 
 class This::Impl {
     SDL_Window* m_window = nullptr;
@@ -134,6 +117,7 @@ public:
     }
 };
 
+
 This::Window(Cfg config): impl(new Impl{}), m_bconfig(config) {}
 
 This::~Window() { impl = nullptr; }
@@ -150,6 +134,63 @@ Window& This::operator= (Window&& other) {
 }
 
 
+
+
+//  PRIVATE  //
+
+template<This::Trait traits>
+consteval inline uint64 This::M_ToSDL3WindowFlag() {
+    uint64 sdl_flags = 0;
+    for (const auto& m : flag_maps) {
+        if (traits & m.trait) sdl_flags |= m.flag;
+    }
+    return sdl_flags;
+}
+
+uint64 This::M_ToSDL3WindowFlagRuntime(uint64 traits) {
+    uint64 sdl_flags = 0;
+    for (const auto& m : flag_maps) {
+        if (traits & static_cast<uint64>(m.trait)) sdl_flags |= m.flag;
+    }
+    return sdl_flags;
+}
+
+This::mWindowFlags This::m_getActiveFlags(mWindowPtr win) {
+    return SDL_GetWindowFlags((SDL_Window*)win);
+}
+
+template<typename... Args>
+void This::m_trySetWithArgs(
+    const char* prop, auto& build_config_var, auto config_val,
+    auto (*sdl_fn), Args... sdl_fn_args
+) noexcept
+{
+    if (impl && impl->window_exists) {
+        if (sdl_fn(impl->ptr(), sdl_fn_args...) == false) {
+            log::error("Failed to set {} property", prop);
+        }
+    }
+    build_config_var = config_val;
+}
+
+void This::m_trySetNoArgs(
+    const char* prop, auto& build_config_var, auto config_val,
+    auto (*sdl_fn)
+) noexcept
+{
+    if (impl && impl->window_exists) {
+        if (sdl_fn(impl->ptr()) == false) {
+            log::error("Failed to set {} property", prop);
+        }
+    }
+    build_config_var = config_val;
+}
+
+
+
+
+
+//  GENERAL METHODS  //
 
 #define IS_CFG_DEFAULT(_cfg_prop) \
     (m_bconfig._cfg_prop == m_bconfig._cfg_prop.defaultVal())
@@ -169,41 +210,42 @@ Window This::create() {
     );
 
     if (!IS_CFG_DEFAULT(m_title))
-        m_trySetTitle(new_window, cfg.m_title);
+        build.setTitle(cfg.m_title);
     if (!IS_CFG_DEFAULT(m_size))
-        m_trySetSize(new_window, cfg.m_size->x, cfg.m_size->y);
+        build.setSize(cfg.m_size);
     if (!IS_CFG_DEFAULT(m_pos))
-        m_trySetPos(new_window, cfg.m_pos->x, cfg.m_pos->y);
+        build.setPosition(cfg.m_pos);
     if (!IS_CFG_DEFAULT(m_aspect_ratio))
-        m_trySetAspectRatio(new_window, cfg.m_aspect_ratio->x, cfg.m_aspect_ratio->y);
+        build.setAspectRatio(cfg.m_aspect_ratio->x, cfg.m_aspect_ratio->y);
     if (!IS_CFG_DEFAULT(m_icon))
-        m_trySetIcon(new_window, cfg.m_icon->m.image);
+        build.setIcon(cfg.m_icon);
     if (!IS_CFG_DEFAULT(m_is_resizable))
-        m_trySetResizable(new_window, cfg.m_is_resizable);
+        build.setResizable(cfg.m_is_resizable);
     if (!IS_CFG_DEFAULT(m_is_minimized))
-        m_trySetMinimized(new_window, cfg.m_is_minimized);
+        build.setMinimized(cfg.m_is_minimized);
     if (!IS_CFG_DEFAULT(m_is_maximized))
-        m_trySetMaximized(new_window, cfg.m_is_maximized);
+        build.setMaximized(cfg.m_is_maximized);
     if (!IS_CFG_DEFAULT(m_is_fullscreen))
-        m_trySetFullscreen(new_window, cfg.m_is_fullscreen);
+        build.setFullScreen(cfg.m_is_fullscreen);
     if (!IS_CFG_DEFAULT(m_is_borderless))
-        m_trySetBorderless(new_window, cfg.m_is_borderless);
+        build.setBorderless(cfg.m_is_borderless);
     if (!IS_CFG_DEFAULT(m_is_hidden))
-        m_trySetHidden(new_window, cfg.m_is_hidden);
+        build.setHidden(cfg.m_is_hidden);
     if (!IS_CFG_DEFAULT(m_is_on_top))
-        SDL_SetWindowAlwaysOnTop(new_window, cfg.m_is_on_top);
+        build.setAlwaysOnTop(cfg.m_is_on_top);
     if (!IS_CFG_DEFAULT(m_is_mouse_grabbed))
-        SDL_SetWindowMouseGrab(new_window, cfg.m_is_mouse_grabbed);
+        build.setMouseGrabbed(cfg.m_is_mouse_grabbed);
     if (!IS_CFG_DEFAULT(m_is_mouse_relative))
-        SDL_SetWindowRelativeMouseMode(new_window, cfg.m_is_mouse_relative);
+        build.setMouseRelative(cfg.m_is_mouse_relative);
     if (!IS_CFG_DEFAULT(m_is_keyboard_grabbed))
-        m_trySetKeyboardGrabbed(new_window, cfg.m_is_keyboard_grabbed);
+        build.setKeyboardGrabbed(cfg.m_is_keyboard_grabbed);
 
     if (impl->renderer_set) {
         build.impl->renderer = build.impl->renderer.create((SDL_Window*)new_window);
     }
     return build;
 }
+
 
 
 void This::destroy() {
@@ -215,15 +257,6 @@ void This::destroy() {
 bool This::exists() {
     return impl->window_exists;
 }
-
-
-// Flags This::defaultFlags() const noexcept {
-//     return m_config.flags.defaultVal();
-// }
-
-// const Flags& This::flags() noexcept {
-//     return m_config.flags;
-// }
 
 
 uint32 This::id() const noexcept {
@@ -262,214 +295,159 @@ Vec2i This::position() {
 }
 
 bool This::isResizable() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_RESIZABLE);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_RESIZABLE);
 }
 
 bool This::isMaximized() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED);
 }
 
 bool This::isMinimized() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_MINIMIZED);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MINIMIZED);
 }
 
 bool This::isFullScreen() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_FULLSCREEN);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_FULLSCREEN);
 }
 
 bool This::isBorderless() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_BORDERLESS);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_BORDERLESS);
 }
 
 bool This::isHidden() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_HIDDEN);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_HIDDEN);
 }
 
 bool This::isAlwaysOnTop() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_ALWAYS_ON_TOP);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_ALWAYS_ON_TOP);
 }
 
 bool This::isKeyboardGrabbed() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_KEYBOARD_GRABBED);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_KEYBOARD_GRABBED);
 }
 
 bool This::isMouseRelative() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_RELATIVE_MODE);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_RELATIVE_MODE);
 }
 
 bool This::isMouseGrabbed() {
-    return (_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_GRABBED);
+    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_GRABBED);
 }
 
 
 
 
 
-This::mWindowFlags This::_getActiveFlags(mWindowPtr win) {
-    return SDL_GetWindowFlags((SDL_Window*)win);
-}
-
-
-
-template<typename... Args>
-void This::m_trySetProperty(
-    const char* prop, auto& build_config_var, auto config_val,
-    auto (*sdl_fn), Args... sdl_fn_args
-) noexcept
-{
-    if (impl && impl->window_exists) {
-        if (sdl_fn(impl->ptr(), sdl_fn_args...) == false) {
-            log::error("Failed to set {} property ""to \"{}\"", prop, sdl_fn_args...);
-        }
-    }
-
-    build_config_var = config_val;
-}
-
-
-template<typename... Args>
-void This::m_trySetProperty(
-    const char* prop, auto& build_config_var, auto config_val,
-    auto (*sdl_fn)
-) noexcept
-{
-    if (impl && impl->window_exists) {
-        if (sdl_fn(impl->ptr()) == false) {
-            log::error("Failed to set {} property ""to \"{}\"", prop, true);
-        }
-    }
-
-    build_config_var = config_val;
-}
 
 
 
 
+
+
+//  SETTERS //
 
 
 Window& This::setRenderer(const Renderer::Cfg& renderer_cfg) {
     impl->renderer_set = true;
     impl->renderer.m_build_config = renderer_cfg;
-    if (impl && impl->window_exists) { impl->renderer = impl->renderer.create(impl->ptr()); }
+    if (impl && impl->window_exists) {
+        impl->renderer = impl->renderer.create(impl->ptr());
+    }
     return *this;
 }
 
 Window& This::setTitle(const char* title) {
-    m_trySetProperty(
-        "title", m_bconfig.m_title, title, SDL_SetWindowTitle, title
-    );
+    m_trySetWithArgs("title", m_bconfig.m_title, title,
+                        SDL_SetWindowTitle, title);
     return *this;
 }
 
 Window& This::setSize(Vec2i size) {
-    m_trySetProperty(
-        "size", m_bconfig.m_size, size, SDL_SetWindowSize, size.x, size.y
-    );
+    m_trySetWithArgs("size", m_bconfig.m_size, size,
+                        SDL_SetWindowSize, size.x, size.y);
     return *this;
 }
 
 Window& This::setPosition(Vec2i position) {
-    m_trySetProperty(
-        "position", m_bconfig.m_pos, position, SDL_SetWindowPosition, position.x, position.y
-    );
+    m_trySetWithArgs("position", m_bconfig.m_pos, position,
+                        SDL_SetWindowPosition, position.x, position.y);
     return *this;
 }
 
 Window& This::setAspectRatio(fp32 min, fp32 max) {
-    // m_trySetProperty(
-        // "aspect-ratio", m_bconfig.m_aspect_ratio, {min, max}, SDL_SetWindowAspectRatio, min, max
-    // );
+    m_trySetWithArgs("aspect-ratio", m_bconfig.m_aspect_ratio, Vec2{min, max},
+                        SDL_SetWindowAspectRatio, min, max);
     return *this;
 }
 
 Window& This::setIcon(Image image) {
-    m_trySetProperty("icon", m_bconfig.m_icon, image, SDL_SetWindowIcon, (SDL_Surface*)image.ptr());
+    m_trySetWithArgs("icon", m_bconfig.m_icon, image,
+                        SDL_SetWindowIcon, (SDL_Surface*)image.ptr());
     return *this;
 }
 
-
-
-
 Window& This::setResizable(bool yes) {
-    m_trySetProperty(
-        "is-resizable", m_bconfig.m_is_resizable, yes,
-        SDL_SetWindowResizable, yes
-    );
+    m_trySetWithArgs("is-resizable", m_bconfig.m_is_resizable, yes,
+                        SDL_SetWindowResizable, yes);
     return *this;
 }
 
 Window& This::setMaximized(bool yes) {
-    m_trySetProperty(
-        "is-maximized", m_bconfig.m_is_maximized, yes,
-        yes? SDL_MaximizeWindow : SDL_RestoreWindow
-    );
+    m_trySetNoArgs("is-maximized", m_bconfig.m_is_maximized, yes,
+                    yes ? SDL_MaximizeWindow : SDL_RestoreWindow);
     return *this;
 }
-// friend of setMaximized
+
 Window& This::toggleMaximized() {
-    this->setMaximized(!(_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED));
+    setMaximized(!(m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED));
     return *this;
 }
 
 Window& This::setMinimized(bool yes) {
-    m_trySetProperty(
-        "is-minimized", m_bconfig.m_is_minimized, yes, SDL_MinimizeWindow
-    );
+    m_trySetNoArgs("is-minimized", m_bconfig.m_is_minimized, yes,
+                    yes ? SDL_MinimizeWindow : SDL_RestoreWindow);
     return *this;
 }
 
 Window& This::setFullScreen(bool yes) {
-    m_trySetProperty(
-        "is-fullscreen", m_bconfig.m_is_fullscreen, yes,
-        SDL_SetWindowFullscreen, yes
-    );
+    m_trySetWithArgs("is-fullscreen", m_bconfig.m_is_fullscreen, yes,
+                        SDL_SetWindowFullscreen, yes);
     return *this;
 }
 
 Window& This::setBorderless(bool yes) {
-    m_trySetProperty(
-        "is-borderless", m_bconfig.m_is_borderless, yes,
-        SDL_SetWindowBordered, yes
-    );
+    m_trySetWithArgs("is-borderless", m_bconfig.m_is_borderless, yes,
+                        SDL_SetWindowBordered, !yes);
     return *this;
 }
 
 Window& This::setHidden(bool yes) {
-    m_trySetProperty(
-        "is-hidden", m_bconfig.m_is_hidden, yes, SDL_HideWindow
-    );
+    m_trySetNoArgs("is-hidden", m_bconfig.m_is_hidden, yes,
+                    yes ? SDL_HideWindow : SDL_ShowWindow);
     return *this;
 }
 
 Window& This::setAlwaysOnTop(bool yes) {
-    m_trySetProperty(
-        "is-always-on-top", m_bconfig.m_is_on_top, yes,
-        SDL_SetWindowAlwaysOnTop, yes
-    );
+    m_trySetWithArgs("is-always-on-top", m_bconfig.m_is_on_top, yes,
+                        SDL_SetWindowAlwaysOnTop, yes);
     return *this;
 }
 
 Window& This::setKeyboardGrabbed(bool yes) {
-    m_trySetProperty(
-        "is-keyboard-grabbed", m_bconfig.m_is_keyboard_grabbed, yes,
-        SDL_SetWindowKeyboardGrab, yes
-    );
+    m_trySetWithArgs("is-keyboard-grabbed", m_bconfig.m_is_keyboard_grabbed, yes,
+                        SDL_SetWindowKeyboardGrab, yes);
     return *this;
 }
 
 Window& This::setMouseGrabbed(bool yes) {
-    m_trySetProperty(
-        "is-mouse-grabbed", m_bconfig.m_is_mouse_grabbed, yes,
-        SDL_SetWindowMouseGrab, yes
-    );
+    m_trySetWithArgs("is-mouse-grabbed", m_bconfig.m_is_mouse_grabbed, yes,
+                        SDL_SetWindowMouseGrab, yes);
     return *this;
 }
 
 Window& This::setMouseRelative(bool yes) {
-    m_trySetProperty(
-        "is-mouse-relative", m_bconfig.m_is_mouse_relative, yes,
-        SDL_SetWindowRelativeMouseMode, yes
-    );
+    m_trySetWithArgs("is-mouse-relative", m_bconfig.m_is_mouse_relative, yes,
+                        SDL_SetWindowRelativeMouseMode, yes);
     return *this;
 }
 
