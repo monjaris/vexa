@@ -1,4 +1,4 @@
--- via CMake, Build vendor/SDL3 into a static library
+-- via CMake, build vendor/SDL3 into a static library
 
 o_X11="x11"
 o_WL="wayland"

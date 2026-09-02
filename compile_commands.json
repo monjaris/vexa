@@ -1,126 +1,121 @@
 [
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/sdl/linux/x86_64/debug/tests/sdl3.cpp.o", "tests/sdl3.cpp"],
-  "file": "tests/sdl3.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/entity/linux/x86_64/debug/tests/entity.cpp.o", "tests/entity.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/entity/linux/x86_64/release/tests/entity.cpp.o", "tests/entity.cpp"],
   "file": "tests/entity.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/bound/linux/x86_64/debug/tests/bound.cpp.o", "tests/bound.cpp"],
-  "file": "tests/bound.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/ref/linux/x86_64/debug/tests/ref.cpp.o", "tests/ref.cpp"],
-  "file": "tests/ref.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/meter/linux/x86_64/debug/tests/meter.cpp.o", "tests/meter.cpp"],
-  "file": "tests/meter.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/game/linux/x86_64/debug/tests/game.cpp.o", "tests/game.cpp"],
-  "file": "tests/game.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/cstrlen/linux/x86_64/debug/tests/cstrlen.cpp.o", "tests/cstrlen.cpp"],
-  "file": "tests/cstrlen.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Engine.cpp.o", "src/Engine.cpp"],
-  "file": "src/Engine.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/time.cpp.o", "src/time.cpp"],
-  "file": "src/time.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Window.cpp.o", "src/Window.cpp"],
-  "file": "src/Window.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Event.cpp.o", "src/Event.cpp"],
-  "file": "src/Event.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Renderer.cpp.o", "src/Renderer.cpp"],
-  "file": "src/Renderer.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Texture.cpp.o", "src/Texture.cpp"],
-  "file": "src/Texture.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/Image.cpp.o", "src/Image.cpp"],
-  "file": "src/Image.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/input.cpp.o", "src/input.cpp"],
-  "file": "src/input.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/os.cpp.o", "src/os.cpp"],
-  "file": "src/os.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-DVEXA_RENDERER_SDL", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/vexa/linux/x86_64/debug/src/renderer_backend/sdl/gfx.cpp.o", "src/renderer_backend/sdl/gfx.cpp"],
-  "file": "src/renderer_backend/sdl/gfx.cpp"
-},
-{
-  "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/sdl3-wl/linux/x86_64/debug/tests/sdl3_wl.cpp.o", "tests/sdl3_wl.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/sdl3-wl/linux/x86_64/release/tests/sdl3_wl.cpp.o", "tests/sdl3_wl.cpp"],
   "file": "tests/sdl3_wl.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/size/linux/x86_64/debug/tests/item_size.cpp.o", "tests/item_size.cpp"],
-  "file": "tests/item_size.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Engine.cpp.o", "src/Engine.cpp"],
+  "file": "src/Engine.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/main/linux/x86_64/debug/tests/main.cpp.o", "tests/main.cpp"],
-  "file": "tests/main.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/time.cpp.o", "src/time.cpp"],
+  "file": "src/time.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/block-stacker/linux/x86_64/debug/examples/block-stacker.cpp.o", "examples/block-stacker.cpp"],
-  "file": "examples/block-stacker.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Window.cpp.o", "src/Window.cpp"],
+  "file": "src/Window.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/time/linux/x86_64/debug/tests/time.cpp.o", "tests/time.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Event.cpp.o", "src/Event.cpp"],
+  "file": "src/Event.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Renderer.cpp.o", "src/Renderer.cpp"],
+  "file": "src/Renderer.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Texture.cpp.o", "src/Texture.cpp"],
+  "file": "src/Texture.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/Image.cpp.o", "src/Image.cpp"],
+  "file": "src/Image.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/input.cpp.o", "src/input.cpp"],
+  "file": "src/input.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/os.cpp.o", "src/os.cpp"],
+  "file": "src/os.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-fPIC", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-DVEXA_RENDERER_SDL", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/vexa/linux/x86_64/release/src/renderer_backend/sdl/gfx.cpp.o", "src/renderer_backend/sdl/gfx.cpp"],
+  "file": "src/renderer_backend/sdl/gfx.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/time/linux/x86_64/release/tests/time.cpp.o", "tests/time.cpp"],
   "file": "tests/time.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/player/linux/x86_64/debug/tests/player.cpp.o", "tests/player.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/player/linux/x86_64/release/tests/player.cpp.o", "tests/player.cpp"],
   "file": "tests/player.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/ping-pong/linux/x86_64/debug/examples/ping-pong.cpp.o", "examples/ping-pong.cpp"],
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/block-stacker/linux/x86_64/release/examples/block-stacker.cpp.o", "examples/block-stacker.cpp"],
+  "file": "examples/block-stacker.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/main/linux/x86_64/release/tests/main.cpp.o", "tests/main.cpp"],
+  "file": "tests/main.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/bound/linux/x86_64/release/tests/bound.cpp.o", "tests/bound.cpp"],
+  "file": "tests/bound.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/ping-pong/linux/x86_64/release/examples/ping-pong.cpp.o", "examples/ping-pong.cpp"],
   "file": "examples/ping-pong.cpp"
 },
 {
   "directory": "/home/ziya/dev/main/vexa",
-  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-g", "-O0", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/include", "-Wall", "-Wextra", "-fno-exceptions", "-Wuninitialized", "-Werror=uninitialized", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-ftime-trace", "-o", "build/.objs/snake/linux/x86_64/debug/examples/snake.cpp.o", "examples/snake.cpp"],
-  "file": "examples/snake.cpp"
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/sdl/linux/x86_64/release/tests/sdl3.cpp.o", "tests/sdl3.cpp"],
+  "file": "tests/sdl3.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/game/linux/x86_64/release/tests/game.cpp.o", "tests/game.cpp"],
+  "file": "tests/game.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/cstrlen/linux/x86_64/release/tests/cstrlen.cpp.o", "tests/cstrlen.cpp"],
+  "file": "tests/cstrlen.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/meter/linux/x86_64/release/tests/meter.cpp.o", "tests/meter.cpp"],
+  "file": "tests/meter.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/size/linux/x86_64/release/tests/item_size.cpp.o", "tests/item_size.cpp"],
+  "file": "tests/item_size.cpp"
+},
+{
+  "directory": "/home/ziya/dev/main/vexa",
+  "arguments": ["/usr/bin/clang++", "-c", "-Qunused-arguments", "-O3", "-std=c++23", "-include", "include/vexa/alt/SDL3.h", "-Iinclude", "-Iinclude/vexa/alt", "-Ivendor/SDL3/include", "-I/home/ziya/dev/main/vexa/vendor/SDL3_ttf/include", "-Wall", "-fno-exceptions", "-Wno-unused-parameter", "-Wno-unused-function", "-Wno-unused-variable", "-Wno-unused-const-variable", "-DNDEBUG", "-o", "build/.objs/ref/linux/x86_64/release/tests/ref.cpp.o", "tests/ref.cpp"],
+  "file": "tests/ref.cpp"
 }]

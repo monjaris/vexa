@@ -9,7 +9,7 @@ int main()
     Renderer& gfx = window.renderer();
 
     Texture texture = gfx.loadTexture("tests/assets/gd.png");
-    if (texture.error()) {
+    if (!texture.exists()) {
         log::error("failed to load texture: {}", texture.path());
     }
 
