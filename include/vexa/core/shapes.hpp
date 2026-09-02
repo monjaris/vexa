@@ -72,13 +72,15 @@ struct Rect {
         : pos(position), size({side, side}) {}
 
 
-    // methods: area(), perimeter(), center()
+    // methods: empty(), area(), perimeter(), center()
+    constexpr inline bool isEmpty()
+        const noexcept { return !pos.x && !pos.y && !size.x && !size.y; }
     constexpr inline Vec2::ValueT area()
-    const noexcept { return size.x * size.y; }
+        const noexcept { return size.x * size.y; }
     constexpr inline Vec2::ValueT perimeter()
-    const noexcept { return 2*(size.x + size.y); }
+        const noexcept { return 2*(size.x + size.y); }
     constexpr inline Vec2 center()
-    const noexcept { return {pos.x + size.x / 2, pos.y + size.y / 2}; }
+        const noexcept { return {pos.x + size.x / 2, pos.y + size.y / 2}; }
 
     // methods: left(), right(), top(), bottom()
     constexpr inline Vec2 left()

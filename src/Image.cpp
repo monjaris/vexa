@@ -13,18 +13,18 @@ This::~Image() {
 }
 
 
-Image This::Load(std::string_view path) {
+Image This::Load(const char* path) noexcept {
     Image image = {};
 
     image.m.is_loaded = true;
-    image.m.image = SDL_LoadSurface(path.data());
+    image.m.image = SDL_LoadSurface(path);
     image.m.path = path;
 
     return image;
 }
 
 
-bool This::Unload(RefMut<Image> image_ref) {
+bool This::Unload(RefMut<Image> image_ref) noexcept {
     if (image_ref.get().m.is_loaded) {
         SDL_DestroySurface(EXTERN_CAST(image_ref.get().m.image));
     }
@@ -53,7 +53,7 @@ Vec2i This::size() {
 }
 
 
-std::string_view This::path() {
+const char* This::path() {
     return m.path;
 }
 

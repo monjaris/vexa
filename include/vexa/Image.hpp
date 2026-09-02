@@ -22,7 +22,7 @@ class Image
     struct M {
         bool is_loaded = false;
         void* image = nullptr;
-        std::string_view path;
+        const char* path;
     } m;
 
 
@@ -37,17 +37,17 @@ public:
 
 
     // Load and return a image from path
-    static Image Load(std::string_view path);
+    static Image Load(const char* path) noexcept;
 
     // returns `true` if image was unloaded
     // returns `false` if it already was unloaded or didnt ever get loaded
-    static bool Unload(RefMut<Image> image_ref);
+    static bool Unload(RefMut<Image> image_ref) noexcept;
 
     bool operator== (const Image& other) const noexcept;
 
     void* ptr();
     Vec2i size();
-    std::string_view path();
+    const char* path();
 };
 
 

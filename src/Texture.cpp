@@ -7,7 +7,40 @@ NAMESPACE_BEGIN(vexa)
 using This = Texture;
 
 
-Vec2 This::pos() const {
+
+Texture This::M_Load(void* renderer_ptr, Image image) {
+    SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
+        CAST<SDL_Renderer*>(renderer_ptr), CAST<SDL_Surface*>(image.ptr())
+    );
+
+    Texture build;
+
+    if (texture_handle == nullptr) {
+        log::fatal(This::MSG_LOAD_FAIL, image.path());
+    } else {
+        build.m.is_loaded = true;
+    }
+
+    build.m.path = image.path();
+    build.m.texture = texture_handle;
+
+    return build;
+}
+
+
+This::operator bool() const noexcept {
+    return m.is_loaded;
+}
+
+bool This::error() const noexcept {
+    return !operator bool();
+}
+
+const char* This::path() const noexcept {
+    return m.path;
+}
+
+Vec2 This::pos() const noexcept {
     return {
         CAST<fp32>(EXTERN_CAST(m.texture)->format),
         CAST<fp32>(EXTERN_CAST(m.texture)->h)

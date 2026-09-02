@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.hpp"
+#include "time.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -24,6 +25,7 @@ public:
 private:
     static inline bool m_init = false;
     static inline Flags<Subsystem> m_subsystems;
+    static inline time::Date m_init_date;
 
     static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag) noexcept;
     static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag) noexcept;
@@ -35,6 +37,9 @@ public:
     static void CloseSubsystems(Subsystem subsystems) noexcept;
 
     static bool setMouseCaptured(bool yes) noexcept;
+
+    static time::Date InitDate() noexcept;
+    static time::Nanos Uptime() noexcept;
     static bool IsMouseCaptured() noexcept;
 };
 
