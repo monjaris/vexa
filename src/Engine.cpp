@@ -14,6 +14,16 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
         m_init_date = time::now();
         log::info("Initializing VEXA-{}", VX_VERSION);
         log::info("Engine::Init(): working-directory: {}", os::cwd().data());
+
+        using subsys_int = enum_t<Subsystem>;
+        subsys_int subsys = M_toSDLSubsystems(m_subsystems.value());
+
+        if (subsys & CAST<subsys_int>(FONT)) {
+            subsys &= ~CAST<subsys_int>(FONT);
+
+            
+        }
+
         return SDL_Init(M_toSDLSubsystems(m_subsystems.value()));
     }
     return false;
@@ -75,8 +85,9 @@ constexpr This::Subsystem This::M_toVexaSubsystems(uint32 sdl_flag) noexcept {
         VX_MAP(EVENT, SDL_INIT_EVENTS);
         VX_MAP(SENSOR, SDL_INIT_SENSOR);
         VX_MAP(CAMERA, SDL_INIT_CAMERA);
+        VX_MAP(NONE, 0);
     }
-    return NONE;
+    return NON_COMPAT;
 }
 
 constexpr uint32 This::M_toSDLSubsystems(Subsystem subsys) noexcept {
@@ -91,6 +102,8 @@ constexpr uint32 This::M_toSDLSubsystems(Subsystem subsys) noexcept {
         VX_REVERSE_MAP(SDL_INIT_SENSOR, SENSOR);
         VX_REVERSE_MAP(SDL_INIT_CAMERA, CAMERA);
         VX_REVERSE_MAP(0, NONE);
+
+        default : return -1;
     }
 }
 
