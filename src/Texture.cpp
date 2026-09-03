@@ -1,5 +1,6 @@
-#include "vexa/Texture.hpp"
 #include "vexa/alt/SDL3.h"
+#include "vexa/core/log.hpp"
+#include "vexa/Texture.hpp"
 NAMESPACE_BEGIN(vexa)
 
 #define EXTERN_CAST($OBJ) (static_cast<SDL_Texture*>($OBJ))
@@ -8,15 +9,14 @@ using This = Texture;
 
 
 
-Texture This::M_Load(void* renderer_ptr, Image image) {
+Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
     SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
         CAST<SDL_Renderer*>(renderer_ptr), CAST<SDL_Surface*>(image.ptr())
     );
-
     Texture build;
 
     if (texture_handle == nullptr) {
-        log::fatal(This::MSG_LOAD_FAIL, image.path());
+        log::error(This::MSG_LOAD_FAIL, "");
     } else {
         build.m.is_loaded = true;
     }
@@ -33,7 +33,7 @@ This::operator bool() const noexcept {
 }
 
 bool This::exists() const noexcept {
-    return !operator bool();
+    return operator bool();
 }
 
 const char* This::path() const noexcept {

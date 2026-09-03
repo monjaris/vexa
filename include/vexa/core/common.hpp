@@ -2,8 +2,9 @@
 #include "vexa/alt/ini_list.hpp"
 #include "defs.hpp"
 // modules
-#include "utils.hpp"
+#include "vexa/core/utils.hpp"
 #include "vexa/core/math.hpp"
+#include "vexa/core/memory.hpp"
 #include "vexa/core/colors.hpp"
 #include "vexa/core/shapes.hpp"
 #include "vexa/core/vec.hpp"
@@ -23,88 +24,34 @@ constexpr usize stdcont_len = std::tuple_size_v<StdContainerType>;
 template<typename T>
 class CfgVal {
     T m_default;
-    T value;
+    T m_value;
 public:
 
     constexpr CfgVal (T default_and_initial_value)
-        : m_default(default_and_initial_value), value(m_default)
+        : m_default(default_and_initial_value), m_value(m_default)
     {}
 
     constexpr CfgVal& operator=(const T& new_value) {
-        value = new_value;
+        m_value = new_value;
         return *this;
     }
 
+    auto value() const noexcept { return m_value; }
+
     // get default value of the config object
-    const T& defaultVal() const { return m_default; }
+    T defaultVal() const noexcept { return m_default; }
 
     // bool operator== (T other) {
         // return value == other;
     // }
 
     // to access @member value implicitly
-    constexpr operator T() const noexcept { return value; }
+    constexpr operator T() const noexcept { return m_value; }
 
     // to access underlying members of value via `->`
-    constexpr T* operator ->() noexcept { return &value; }
+    constexpr T* operator ->() noexcept { return &m_value; }
 };
 
-
-template<class T>
-class OwnPtr {
-    T* m_ptr;
-public:
-    OwnPtr(T* ptr): m_ptr(ptr) {}
-    ~OwnPtr() {}
-
-    // delete copy ctor/operator
-    explicit OwnPtr(const T& copy_ctor) = delete;
-    OwnPtr& operator= (const T& copy_operator) = delete;
-
-    // define move ctor/operator
-    explicit OwnPtr(T&& other) {
-        m_ptr = other.mptr;
-    }
-    OwnPtr& operator= (T&& other) {
-        m_ptr = other.m_ptr;
-        return *this;
-    }
-
-    T* get() { return m_ptr; }
-
-    static T* Alloc() {
-        return OwnPtr<T>(new T{});
-    }
-};
-
-
-
-template<class T>
-class Ref {
-    const T* const m_data = nullptr;
-
-public:
-    explicit Ref(T& data): m_data(&data) {}
-
-    VX_NODISCARD const T& get() const noexcept { return *m_data; }
-};
-
-
-template<class T>
-class RefMut {
-    T* const m_data = nullptr;
-
-public:
-    explicit RefMut(T& object): m_data(&object) {}
-
-    T& get() noexcept {
-        return *m_data;
-    }
-
-    const T& getConst() const noexcept {
-        return *m_data;
-    }
-};
 
 
 NAMESPACE_END(vexa)

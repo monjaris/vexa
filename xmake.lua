@@ -104,16 +104,9 @@ includes("scripts/vexa-dynamic.lua")
 --- TESTS
 target("game")  add_files("tests/game.cpp")  add_deps("vexa")
 target("main")  add_files("tests/main.cpp")  add_deps("vexa")
-target("meter")  add_files("tests/meter.cpp")  add_deps("vexa")
-target("cstrlen")  add_files("tests/cstrlen.cpp")  add_deps("vexa")
-target("player")  add_files("tests/player.cpp")  add_deps("vexa")
-target("size")  add_files("tests/item_size.cpp")  add_deps("vexa")
-target("ref")  add_files("tests/ref.cpp")  add_deps("vexa")
-target("sdl3-wl")  add_files("tests/sdl3_wl.cpp")  add_deps("vexa")
+target("bench")  add_files("tests/bench.cpp")  add_deps("vexa")
 target("sdl")  add_files("tests/sdl3.cpp")  add_deps("vexa")
-target("bound")  add_files("tests/bound.cpp")  add_deps("vexa")
 target("time")  add_files("tests/time.cpp")  add_deps("vexa")
-target("entity")  add_files("tests/entity.cpp")  add_deps("vexa")
 
 --- EXAMPLES
 includes("examples.lua")

@@ -3,7 +3,9 @@
 #define VX_VERSION "v0.2.0"
 
 namespace vexa {
-    #include "types.hpp"
+    inline namespace types {
+        #include "types.hpp"
+    }
 }
 
 #define NAMESPACE_BEGIN($NAME) namespace $NAME {
@@ -60,7 +62,6 @@ consteval void vx_force_compile_time_error(const char*) {}
 #define VX_MAP($VEXA, $SDL) case $SDL: return $VEXA; break
 #define VX_REVERSE_MAP($SDL, $VEXA) case $VEXA: return $SDL; break
 
-
 #define VX_NODISCARD  [[nodiscard]]
 
 #define VX_STATIC_ERR($MESSAGE) static_assert(false, $MESSAGE)
@@ -74,6 +75,8 @@ class CN_SC {
     // delete move ops
     CN_SC(CN_SC&&) = delete;  CN_SC& operator=(CN_SC&&) = delete;
 };
+
+#define VX_UNREACHABLE() __builtin_unreachable()
 
 #define VX_UNUSE(...)  (unuse_symbol(__VA_ARGS__));
 namespace vexa { template<typename... Args> constexpr void unuse_symbol(Args&&...) noexcept {} }

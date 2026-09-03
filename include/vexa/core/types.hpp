@@ -2,6 +2,7 @@
 
 using usize = decltype(sizeof(nullptr));
 using isize = decltype((char*)0 - (char*)0);
+using nullptrT = decltype(nullptr);
 
 using char8 = char;
 using int8 = char8;

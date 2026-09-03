@@ -62,7 +62,7 @@ bool gfx::set_brush_color8(
 
 //
 void gfx::line_thin(void* renderer_ptr, fp32 x1, fp32 y1, fp32 x2, fp32 y2) {
-    
+    SDL_RenderLine(SDL_REND, x1, y1, x2, y2);
 }
 
 

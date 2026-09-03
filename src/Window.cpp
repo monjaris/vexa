@@ -217,8 +217,8 @@ Window This::create() {
         build.setPosition(cfg.m_pos);
     if (!IS_CFG_DEFAULT(m_aspect_ratio))
         build.setAspectRatio(cfg.m_aspect_ratio->x, cfg.m_aspect_ratio->y);
-    if (!IS_CFG_DEFAULT(m_icon))
-        build.setIcon(cfg.m_icon);
+    if (!IS_CFG_DEFAULT(m_icon_image_path))
+        build.setIcon(cfg.m_icon_image_path);
     if (!IS_CFG_DEFAULT(m_is_resizable))
         build.setResizable(cfg.m_is_resizable);
     if (!IS_CFG_DEFAULT(m_is_minimized))
@@ -341,9 +341,6 @@ bool This::isMouseGrabbed() {
 
 
 
-
-
-
 //  SETTERS //
 
 
@@ -358,43 +355,55 @@ Window& This::setRenderer(const Renderer::Cfg& renderer_cfg) {
 
 Window& This::setTitle(const char* title) {
     m_trySetWithArgs("title", m_bconfig.m_title, title,
-                        SDL_SetWindowTitle, title);
+        SDL_SetWindowTitle, title
+    );
     return *this;
 }
 
 Window& This::setSize(Vec2i size) {
     m_trySetWithArgs("size", m_bconfig.m_size, size,
-                        SDL_SetWindowSize, size.x, size.y);
+        SDL_SetWindowSize, size.x, size.y
+    );
     return *this;
 }
 
 Window& This::setPosition(Vec2i position) {
     m_trySetWithArgs("position", m_bconfig.m_pos, position,
-                        SDL_SetWindowPosition, position.x, position.y);
+        SDL_SetWindowPosition, position.x, position.y
+    );
     return *this;
 }
 
 Window& This::setAspectRatio(fp32 min, fp32 max) {
     m_trySetWithArgs("aspect-ratio", m_bconfig.m_aspect_ratio, Vec2{min, max},
-                        SDL_SetWindowAspectRatio, min, max);
+        SDL_SetWindowAspectRatio, min, max
+    );
     return *this;
 }
 
-Window& This::setIcon(Image image) {
-    m_trySetWithArgs("icon", m_bconfig.m_icon, image,
-                        SDL_SetWindowIcon, (SDL_Surface*)image.ptr());
+Window& This::setIcon(const char* image_path) {
+    if (image_path == nullptr) {
+        log::warning("Window::setIcon(): Can not set window icon image path to a nullptr");
+        return *this;
+    }
+
+    auto image = Image::Load(image_path);
+    SDL_SetWindowIcon(impl->ptr(), CAST<SDL_Surface*>(image.ptr()));
+
     return *this;
 }
 
 Window& This::setResizable(bool yes) {
     m_trySetWithArgs("is-resizable", m_bconfig.m_is_resizable, yes,
-                        SDL_SetWindowResizable, yes);
+        SDL_SetWindowResizable, yes
+    );
     return *this;
 }
 
 Window& This::setMaximized(bool yes) {
     m_trySetNoArgs("is-maximized", m_bconfig.m_is_maximized, yes,
-                    yes ? SDL_MaximizeWindow : SDL_RestoreWindow);
+        yes ? SDL_MaximizeWindow : SDL_RestoreWindow
+    );
     return *this;
 }
 
@@ -405,49 +414,57 @@ Window& This::toggleMaximized() {
 
 Window& This::setMinimized(bool yes) {
     m_trySetNoArgs("is-minimized", m_bconfig.m_is_minimized, yes,
-                    yes ? SDL_MinimizeWindow : SDL_RestoreWindow);
+        yes ? SDL_MinimizeWindow : SDL_RestoreWindow
+    );
     return *this;
 }
 
 Window& This::setFullScreen(bool yes) {
     m_trySetWithArgs("is-fullscreen", m_bconfig.m_is_fullscreen, yes,
-                        SDL_SetWindowFullscreen, yes);
+        SDL_SetWindowFullscreen, yes
+    );
     return *this;
 }
 
 Window& This::setBorderless(bool yes) {
     m_trySetWithArgs("is-borderless", m_bconfig.m_is_borderless, yes,
-                        SDL_SetWindowBordered, !yes);
+        SDL_SetWindowBordered, !yes
+    );
     return *this;
 }
 
 Window& This::setHidden(bool yes) {
     m_trySetNoArgs("is-hidden", m_bconfig.m_is_hidden, yes,
-                    yes ? SDL_HideWindow : SDL_ShowWindow);
+        yes ? SDL_HideWindow : SDL_ShowWindow
+    );
     return *this;
 }
 
 Window& This::setAlwaysOnTop(bool yes) {
     m_trySetWithArgs("is-always-on-top", m_bconfig.m_is_on_top, yes,
-                        SDL_SetWindowAlwaysOnTop, yes);
+        SDL_SetWindowAlwaysOnTop, yes
+    );
     return *this;
 }
 
 Window& This::setKeyboardGrabbed(bool yes) {
     m_trySetWithArgs("is-keyboard-grabbed", m_bconfig.m_is_keyboard_grabbed, yes,
-                        SDL_SetWindowKeyboardGrab, yes);
+        SDL_SetWindowKeyboardGrab, yes
+    );
     return *this;
 }
 
 Window& This::setMouseGrabbed(bool yes) {
     m_trySetWithArgs("is-mouse-grabbed", m_bconfig.m_is_mouse_grabbed, yes,
-                        SDL_SetWindowMouseGrab, yes);
+        SDL_SetWindowMouseGrab, yes
+    );
     return *this;
 }
 
 Window& This::setMouseRelative(bool yes) {
     m_trySetWithArgs("is-mouse-relative", m_bconfig.m_is_mouse_relative, yes,
-                        SDL_SetWindowRelativeMouseMode, yes);
+        SDL_SetWindowRelativeMouseMode, yes
+    );
     return *this;
 }
 
