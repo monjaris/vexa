@@ -232,7 +232,7 @@ int main(void)
         ball.Update();
 
         if (!running) break;
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
 
         player.Draw(gfx);
         ball.Draw(gfx);

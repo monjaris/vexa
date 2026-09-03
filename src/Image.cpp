@@ -1,4 +1,4 @@
-#include <string_view>
+#include "vexa/core/log.hpp"
 #include "vexa/Image.hpp"
 NAMESPACE_BEGIN(vexa)
 
@@ -14,13 +14,17 @@ This::~Image() {
 
 
 Image This::Load(const char* path) noexcept {
-    Image image = {};
+    Image build = {};
 
-    image.m.is_loaded = true;
-    image.m.image = SDL_LoadSurface(path);
-    image.m.path = path;
+    build.m.image = SDL_LoadSurface(path);
+    if (build.m.image == nullptr) {
+        log::error(This::MSG_LOAD_FAIL_PATH, path);
+    } else {
+        build.m.is_loaded = true;
+        build.m.path = path;
+    }
 
-    return image;
+    return build;
 }
 
 

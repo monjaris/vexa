@@ -5,5 +5,17 @@
 # 2. the name($1) argument provided should match the base name of the example file
 # 3. the example name(base part of the example file) should be added to array in examples.lua
 
-xmake run "$1" || \
+example=${1:-"--list"}
+
+if [ "$example" = "--list" ]; then
+    printf "\033[32mAvailable examples to run:\033[0m\n"
+
+    for file in ./examples/*; do
+        basename "$file" .cpp
+    done
+
+    exit
+fi
+
+xmake run "$example" || \
 echo "Example '$1' does not exist!"

@@ -24,7 +24,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
             TTF_Init();
         }
 
-        return SDL_Init(M_toSDLSubsystems(m_subsystems.value()));
+        return SDL_Init(subsys);
     }
     return false;
 }
@@ -35,6 +35,15 @@ void This::Close() noexcept {
         m_init = false;
         m_subsystems.reset();
         log::info("Engine::Close(): ");
+
+        using subsys_int = enum_t<Subsystem>;
+        subsys_int subsys = M_toSDLSubsystems(m_subsystems.value());
+
+        if (subsys & CAST<subsys_int>(FONT)) {
+            subsys &= ~CAST<subsys_int>(FONT);
+            TTF_Quit();
+        }
+
         SDL_Quit();
     }
 }

@@ -3,15 +3,13 @@ using namespace vexa;
 
 int main()
 {
-    Engine::Init(Engine::VIDEO);
+    Engine::Init(Engine::VIDEO | Engine::FONT);
 
-    Window window = Window{}.setSize({1280, 720}).setRenderer({}).create();
+    Window window = Window{}.setSize({1280, 720}).setRenderer({}).setResizable().create();
     Renderer& gfx = window.renderer();
 
-    Texture texture = gfx.loadTexture("tests/assets/gd.png");
-    if (!texture.exists()) {
-        log::error("failed to load texture: {}", texture.path());
-    }
+    Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
+    Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
 
     bool running = true;
     while(running)
@@ -21,7 +19,9 @@ int main()
 
         gfx.start(ColorF32::BLACK);
 
-        gfx.renderTexture(texture, {100, 100});
+        gfx.drawTexture(texture, {100, 100});
+
+        gfx.drawText(font, "Hello, World!", {400, 400}, Color::MAGENTA);
 
         gfx.finish();
         time::sleep(time::Millis{16.6});

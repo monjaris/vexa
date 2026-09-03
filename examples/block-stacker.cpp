@@ -1093,7 +1093,7 @@ int main() {
         }
 
         // start rendering and reset the window content to black
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
 
         // draw the white pieces on top of the black background
         for (int row = 0; row < 20 ;row++){
@@ -1106,7 +1106,7 @@ int main() {
                             static_cast<float>(block_length - block_margin),
                             static_cast<float>(block_length - block_margin)
                         },
-                        ColorU8::WHITE
+                        Color::WHITE
                     );
                 }
             }

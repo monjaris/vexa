@@ -176,7 +176,7 @@ class Game {
 
   void Render() {
     auto &gfx = window.renderer();
-    gfx.start(ColorU8::BLACK);
+    gfx.start(Color::BLACK);
 
     snake.Draw(gfx);
     food.Draw(gfx);

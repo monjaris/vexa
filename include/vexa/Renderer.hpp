@@ -1,7 +1,8 @@
 #pragma once
-#include "vexa/alt/memory.hpp"
 #include "vexa/core/common.hpp"
+#include "vexa/alt/memory.hpp"
 #include "Texture.hpp"
+#include "Font.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -49,43 +50,47 @@ public:
     bool getVsync();
 
     void start();  // sets color black
-    void start(void* null);  // edge-case, if you really want to keep the last used brush color
-    void start(ColorU8 color);
+    void start(nullptrT null);  // edge-case, if you really want to keep the last used brush color
+    void start(Color color);
     void start(ColorF32 color);
     void finish();
 
-    Texture loadTexture(Image texture_source);
-    Texture loadTexture(const char* texture_source_path);
-    Texture loadTexture(std::string_view texture_source_path);
+    // create texture from image
+    Texture loadTexture(Image&& image) noexcept;
+    // create texture from font
+    Texture loadTexture(Font& font, uint64 font_ize, const char* text) noexcept;
 
-    void renderTexture(const Texture& texture, Vec2 pos);
-    void renderTexture(const Texture& texture, Rect dest);
-    void renderTexture(const Texture& texture, Rect src, Rect dest);
+    void drawTexture(const Texture& texture, Vec2 pos);
+    void drawTexture(const Texture& texture, Vec2 pos, Color color);
+    void drawTexture(const Texture& texture, Rect src, Rect dest);
+    void drawTexture(const Texture& texture, Rect src, Rect dest, Color color);
 
-    void triangleFill(Triangle triangle, ColorU8 color);
+    void drawText(Font& font, const char* text, Vec2 pos, Color color);
+
+    void triangleFill(Triangle triangle, Color color);
     void triangleFill(Triangle triangle, ColorF32 color);
-    void triangleLines(Triangle triangle, ColorU8 color);
+    void triangleLines(Triangle triangle, Color color);
     void triangleLines(Triangle triangle, ColorF32 color);
-    template<usize N> void triangleFillN(Triangle (&triangle_array)[N], ColorU8 color);
+    template<usize N> void triangleFillN(Triangle (&triangle_array)[N], Color color);
     template<usize N> void triangleFillN(Triangle (&triangle_array)[N], ColorF32 color);
-    template<usize N> void triangleLinesN(Triangle (&triangle_array)[N], ColorU8 color);
+    template<usize N> void triangleLinesN(Triangle (&triangle_array)[N], Color color);
     template<usize N> void triangleLinesN(Triangle (&triangle_array)[N], ColorF32 color);
     //
-    void rectFill(Rect rectangle, ColorU8 color);
+    void rectFill(Rect rectangle, Color color);
     void rectFill(Rect rectangle, ColorF32 color);
-    void rectLines(Rect rectangle, ColorU8 color);
+    void rectLines(Rect rectangle, Color color);
     void rectLines(Rect rectangle, ColorF32 color);
-    template<usize N> void rectFillN(Rect (&rectangle_array)[N], ColorU8 color);
+    template<usize N> void rectFillN(Rect (&rectangle_array)[N], Color color);
     template<usize N> void rectFillN(Rect (&rectangle_array)[N], ColorF32 color);
-    template<usize N> void rectLinesN(Rect (&rectangle_array)[N], ColorU8 color);
+    template<usize N> void rectLinesN(Rect (&rectangle_array)[N], Color color);
     template<usize N> void rectLinesN(Rect (&rectangle_array)[N], ColorF32 color);
     //
-    void PolyFill(Vec2 pos, Vec2 size, ColorU8 color);
-    void PolyLines(Vec2 pos, Vec2 size, ColorU8 color);
+    void PolyFill(Vec2 pos, Vec2 size, Color color);
+    void PolyLines(Vec2 pos, Vec2 size, Color color);
     //
     void circleFill(Circle circle, ColorF32 color, fp32 quality = Circle::NORMAL);
-    void circleFill(Circle circle, ColorU8 color, fp32 quality = Circle::NORMAL);
-    void circleLines(Circle circle, ColorU8 color);
+    void circleFill(Circle circle, Color color, fp32 quality = Circle::NORMAL);
+    void circleLines(Circle circle, Color color);
     void circleLines(Circle circle, ColorF32 color);
 };
 
