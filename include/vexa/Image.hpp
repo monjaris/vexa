@@ -1,7 +1,7 @@
 #pragma once
 #include <string_view>
 #include "core/vec.hpp"
-#include "core/common.hpp"
+#include "core/memory.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -15,9 +15,10 @@ NAMESPACE_BEGIN(vexa)
 // int refcount;               /**< Application reference count, used when freeing surface */
 
 
-class Image
+class VX_NODISCARD Image
 {
     friend class Window;
+    friend class Font;
 
     struct M {
         bool is_loaded = false;
@@ -25,13 +26,18 @@ class Image
         const char* path;
     } m;
 
+    static constexpr const char* MSG_LOAD_FAIL_PATH = {
+        "Image::Load(): Failed to load image from path: '{}'"
+    };
+
 
 public:
     Image() = default;
-    Image(const Image&) = default;
-    Image& operator= (const Image&) = default;
     Image(Image&&) = default;
     Image& operator= (Image&&) = default;
+    // delete copy
+    Image(const Image&) = delete;
+    Image& operator= (const Image&) = delete;
     //
     ~Image();
 

@@ -22,7 +22,7 @@ private:
         CfgVal<Vec2i> m_size;
         CfgVal<Vec2i> m_pos;
         CfgVal<Vec2> m_aspect_ratio;
-        CfgVal<Image> m_icon;
+        CfgVal<const char*> m_icon_image_path;
         //
         CfgVal<bool> m_is_resizable;
         CfgVal<bool> m_is_maximized;
@@ -43,7 +43,7 @@ private:
             m_size(Vec2i{0, 0}),
             m_pos(Vec2i{0, 0}),
             m_aspect_ratio(Vec2{1, 1}),
-            m_icon(Image{}),
+            m_icon_image_path(nullptr),
             m_is_resizable(false),
             m_is_maximized(false),
             m_is_minimized(false),
@@ -66,7 +66,7 @@ private:
             m_size = m_size.defaultVal();
             m_pos = m_pos.defaultVal();
             m_aspect_ratio = m_aspect_ratio.defaultVal();
-            m_icon = m_icon.defaultVal();
+            m_icon_image_path = m_icon_image_path.defaultVal();
             m_is_resizable = m_is_resizable.defaultVal();
             m_is_maximized = m_is_maximized.defaultVal();
             m_is_minimized = m_is_minimized.defaultVal();
@@ -143,7 +143,7 @@ public:
     Window& setSize(Vec2i size);
     Window& setPosition(Vec2i position);
     Window& setAspectRatio(fp32 min_ratio, fp32 max_ratio);
-    Window& setIcon(Image image);
+    Window& setIcon(const char* image_path);
     Window& setResizable(bool yes = true);
     Window& setMaximized(bool yes = true);  Window& toggleMaximized();
     Window& setMinimized(bool yes = true);

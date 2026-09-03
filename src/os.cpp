@@ -1,5 +1,19 @@
-#include <unistd.h>
 #include "vexa/os.hpp"
+
+
+#if defined(_WIN32)
+    #include <direct.h>
+    #define CHANGE_DIR ::_chdir
+
+#elif defined(__unix__) || defined(__APPLE__)
+    #include <unistd.h>
+    #define CHANGE_DIR ::chdir
+
+#else
+    #error "Unknown OS."
+#endif
+
+
 NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(os)
 
@@ -14,6 +28,11 @@ auto cwd() noexcept -> StrBuf<PATH_MAX> {
     ::getcwd(buf.data(), buf.lengthMax());
     return buf;
 }
+
+bool setCwd(StrBuf<PATH_MAX> dir) noexcept {
+    return CHANGE_DIR(dir.cstr()) != 0;
+}
+
 
 NAMESPACE_END(os)
 NAMESPACE_END(vexa)

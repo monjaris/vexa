@@ -125,11 +125,11 @@ void This::start() {
     SDL_RenderClear(impl->m_renderer);
 }
 //
-void This::start(void* null) {
+void This::start(nullptrT) {
     SDL_RenderClear(impl->m_renderer);
 }
 // overload for clearing with Color8
-void This::start(ColorU8 color) {
+void This::start(Color color) {
     gfx::set_brush_color8(impl->m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderClear(impl->m_renderer);
 }
@@ -145,34 +145,40 @@ void This::finish() {
 
 
 
-Texture This::loadTexture(Image texture_source) {
+Texture This::loadTexture(Image&& texture_source) noexcept {
     return Texture::M_Load(impl->m_renderer, texture_source);
 }
 // overload
-Texture This::loadTexture(const char* texture_source_path) {
-    return loadTexture(Image::Load(texture_source_path));
+Texture This::loadTexture(Font& font, uint64 font_size, const char* text) noexcept {
+    font.setSize(font_size);
+    Image image = font.createImage(text, Color::BLACK, Color::WHITE);
+    return loadTexture(std::move(image));
 }
 
 
-void This::renderTexture(
-    const Texture& texture, Vec2 pos
-)
+
+// render texture at given pos
+void This::drawTexture(const Texture& texture, Vec2 pos)
 {
+    auto* sdl_texture = CAST<SDL_Texture*>(texture.m.texture);
+
     SDL_FRect dest = {
         pos.x, pos.y,
-        CAST<fp32>(CAST<SDL_Texture*>(texture.m.texture)->w),
-        CAST<fp32>(CAST<SDL_Texture*>(texture.m.texture)->h)
+        CAST<fp32>(sdl_texture->w),
+        CAST<fp32>(sdl_texture->h)
     };
 
-    SDL_RenderTexture(
-        impl->m_renderer, CAST<SDL_Texture*>(texture.m.texture),
-        nullptr, &dest
-    );
+    SDL_RenderTexture(impl->m_renderer, sdl_texture, nullptr, &dest);
 }
 // overload
-void This::renderTexture(
-    const Texture& texture, Rect src, Rect dest
-)
+void This::drawTexture(const Texture& texture, Vec2 pos, Color color)
+{
+    SDL_SetTextureColorMod(CAST<SDL_Texture*>(texture.m.texture), color.r, color.g, color.b);
+    SDL_SetTextureAlphaMod(CAST<SDL_Texture*>(texture.m.texture), color.a);
+    drawTexture(texture, pos);
+}
+// overload again
+void This::drawTexture(const Texture& texture, Rect src, Rect dest)
 {
     SDL_FRect src_rect = {src.pos.x, src.pos.x, src.size.y, src.size.y};
     SDL_FRect dest_rect = {dest.pos.x, dest.pos.x, dest.size.y, dest.size.y};
@@ -183,22 +189,30 @@ void This::renderTexture(
         dest.isEmpty()? nullptr : &dest_rect
     );
 }
-// overload again
-void This::renderTexture(
-    const Texture& texture, Rect dest
-)
-{
-    SDL_FRect dest_rect = {dest.pos.x, dest.pos.x, dest.size.y, dest.size.y};
-
-    SDL_RenderTexture(
-        impl->m_renderer, CAST<SDL_Texture*>(texture.m.texture),
-        nullptr, &dest_rect
-    );
+// and again
+void This::drawTexture(
+    const Texture& texture, Rect src, Rect dest, Color color
+){
+    SDL_SetTextureColorMod(CAST<SDL_Texture*>(texture.m.texture), color.r, color.g, color.b);
+    SDL_SetTextureAlphaMod(CAST<SDL_Texture*>(texture.m.texture), color.a);
+    drawTexture(texture, src, dest);
 }
 
 
 
-void This::triangleFill(Triangle triangle, ColorU8 color) {
+// render font with text
+void This::drawText(Font& font, const char* text, Vec2 pos, Color color) {
+    Image image = font.createImage(text, Color::TRANSPARENT, color);
+    Texture texture = loadTexture(std::move(image));
+    drawTexture(texture, pos, color);
+}
+
+
+
+//  SHAPE RENDERING METHODS //
+
+// render a `triangle` with `color`
+void This::triangleFill(Triangle triangle, Color color) {
     ColorF32 color_f32 = color.toF32();
     gfx::set_triangle_color32(color_f32.r, color_f32.g, color_f32.b, color_f32.a);
     gfx::fill_triangle(impl->m_renderer,
@@ -208,6 +222,7 @@ void This::triangleFill(Triangle triangle, ColorU8 color) {
     );
 }
 
+// render a `triangle` with `color`
 void This::triangleFill(Triangle triangle, ColorF32 color) {
     gfx::set_triangle_color32(color.r, color.g, color.b, color.a);
     gfx::fill_triangle(impl->m_renderer,
@@ -217,7 +232,7 @@ void This::triangleFill(Triangle triangle, ColorF32 color) {
     );
 }
 
-void This::triangleLines(Triangle triangle, ColorU8 color) {
+void This::triangleLines(Triangle triangle, Color color) {
     
 }
 
@@ -227,7 +242,7 @@ void This::triangleLines(Triangle triangle, ColorF32 color) {
 
 
 
-void This::rectFill(Rect rectangle, ColorU8 color) {
+void This::rectFill(Rect rectangle, Color color) {
     gfx::set_rectangle_color8(color.r, color.g, color.b, color.a);
     gfx::fill_rectangle(impl->m_renderer,
         rectangle.pos.x, rectangle.pos.y,
@@ -242,7 +257,7 @@ void This::rectFill(Rect rectangle, ColorF32 color) {
     );
 }
 
-void This::rectLines(Rect rectangle, ColorU8 color) {
+void This::rectLines(Rect rectangle, Color color) {
     gfx::set_rectangle_color8(color.r, color.g, color.b, color.a);
     gfx::line_rectangle(impl->m_renderer,
         rectangle.pos.x, rectangle.pos.y,
@@ -257,7 +272,7 @@ void This::rectLines(Rect rectangle, ColorF32 color) {
     );
 }
 
-template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorU8 color) {
+template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], Color color) {
     gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
 }
@@ -266,7 +281,7 @@ template<usize N> void This::rectFillN(Rect (&rectangle_array)[N], ColorF32 colo
     gfx::fill_N_rectangle(impl->m_renderer, rectangle_array);
 }
 
-template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorU8 color) {
+template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], Color color) {
     gfx::set_rectangle_color32(color.r, color.g, color.b, color.a);
     gfx::line_N_rectangle(impl->m_renderer, rectangle_array);
 }
@@ -278,17 +293,17 @@ template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorF32 col
 
 
 
-void This::PolyFill(Vec2 pos, Vec2 size, ColorU8 color) {
+void This::PolyFill(Vec2 pos, Vec2 size, Color color) {
     
 }
 
-void This::PolyLines(Vec2 pos, Vec2 size, ColorU8 color) {
+void This::PolyLines(Vec2 pos, Vec2 size, Color color) {
     
 }
 
 
 
-void This::circleFill(Circle circle, ColorU8 color, fp32 quality) {
+void This::circleFill(Circle circle, Color color, fp32 quality) {
     ColorF32 color_f32 = color.toF32();
     gfx::set_circle_color32(color_f32.r, color_f32.g, color_f32.b, color_f32.a);
     gfx::fill_circle(impl->m_renderer,
@@ -305,7 +320,7 @@ void This::circleFill(Circle circle, ColorF32 color, fp32 quality) {
     );
 }
 
-void This::circleLines(Circle circle, ColorU8 color) {
+void This::circleLines(Circle circle, Color color) {
     
 }
 

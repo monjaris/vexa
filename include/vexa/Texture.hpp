@@ -15,17 +15,18 @@ class VX_NODISCARD Texture
     struct M {
         bool is_loaded = false;
         void* texture = nullptr;
-        const char* path;
+        const char* path = nullptr;
     } m;
 
-    static Texture M_Load(void* renderer_ptr, Image image);
+    static Texture M_Load(void* renderer_ptr, Image& image) noexcept;
 
 public:
     Texture() = default;
-    Texture(const Texture&) = default;
-    Texture& operator= (const Texture&) = default;
     Texture(Texture&&) = default;
     Texture& operator= (Texture&&) = default;
+    // delete copy
+    Texture(const Texture&) = delete;
+    Texture& operator= (const Texture&) = delete;
     //
     ~Texture();
 

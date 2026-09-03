@@ -5,7 +5,7 @@ inline NAMESPACE_BEGIN(colors)
 
 // class declarations
 template <typename T> requires (is_same_t<uint8, T> || is_same_t<fp32, T>) struct ColorBase;
-struct ColorF32;  struct ColorU8;  // both derives from ColorBase template
+struct ColorF32;  struct Color;  // both derives from ColorBase template
 
 
 template <typename T>
@@ -33,11 +33,11 @@ struct ColorBase {
 
 
 
-struct ColorU8 : ColorBase<uint8> {
-    using This = ColorU8;
+struct Color : ColorBase<uint8> {
+    using This = Color;
     using Value = uint8;
 
-    constexpr ColorU8(
+    constexpr Color(
         Value r,
         Value g,
         Value b,
@@ -49,6 +49,7 @@ struct ColorU8 : ColorBase<uint8> {
     constexpr ColorF32 toF32() const noexcept;
 
 
+    static const This TRANSPARENT;
     static const This BLACK;
     static const This WHITE;
     static const This GREY;
@@ -76,7 +77,7 @@ struct ColorF32 : ColorBase<fp32> {
     {}
 
 
-    constexpr ColorU8 toU8() const noexcept;
+    constexpr Color toU8() const noexcept;
 
 
     static const This BLACK;
@@ -95,38 +96,39 @@ struct ColorF32 : ColorBase<fp32> {
 
 template<class T>
 concept ColorConcept = (
-    is_same_t<ColorU8, T> || is_same_t<ColorF32, T>
+    is_same_t<Color, T> || is_same_t<ColorF32, T>
 );
 
 
 
-constexpr ColorF32 ColorU8::toF32() const noexcept {
+constexpr ColorF32 Color::toF32() const noexcept {
     constexpr fp32 scale = 1.0f / 255.0f;
 
     return { r * scale,  g * scale,  b * scale,  a * scale };
 }
 
 
-constexpr ColorU8 ColorF32::toU8() const noexcept {
+constexpr Color ColorF32::toU8() const noexcept {
     constexpr fp32 scale = 255.0f;
 
     return {
-        static_cast<ColorU8::Value>(r * scale), static_cast<ColorU8::Value>(g * scale),
-        static_cast<ColorU8::Value>(b * scale), static_cast<ColorU8::Value>(a * scale)
+        static_cast<Color::Value>(r * scale), static_cast<Color::Value>(g * scale),
+        static_cast<Color::Value>(b * scale), static_cast<Color::Value>(a * scale)
     };
 }
 
 
 
-constexpr inline const ColorU8 ColorU8::BLACK   = {0, 0, 0};
-constexpr inline const ColorU8 ColorU8::WHITE   = {255, 255, 255};
-constexpr inline const ColorU8 ColorU8::GREY    = {128, 128, 128};
-constexpr inline const ColorU8 ColorU8::RED     = {255, 0, 0};
-constexpr inline const ColorU8 ColorU8::GREEN   = {0, 255, 0};
-constexpr inline const ColorU8 ColorU8::BLUE    = {0, 0, 255};
-constexpr inline const ColorU8 ColorU8::YELLOW  = {255, 255, 0};
-constexpr inline const ColorU8 ColorU8::CYAN    = {0, 255, 255};
-constexpr inline const ColorU8 ColorU8::MAGENTA = {255, 0, 255};
+constexpr inline const Color Color::TRANSPARENT   = {0, 0, 0, 0};
+constexpr inline const Color Color::BLACK   = {0, 0, 0};
+constexpr inline const Color Color::WHITE   = {255, 255, 255};
+constexpr inline const Color Color::GREY    = {128, 128, 128};
+constexpr inline const Color Color::RED     = {255, 0, 0};
+constexpr inline const Color Color::GREEN   = {0, 255, 0};
+constexpr inline const Color Color::BLUE    = {0, 0, 255};
+constexpr inline const Color Color::YELLOW  = {255, 255, 0};
+constexpr inline const Color Color::CYAN    = {0, 255, 255};
+constexpr inline const Color Color::MAGENTA = {255, 0, 255};
 
 
 constexpr inline const ColorF32 ColorF32::BLACK   = {0.0f, 0.0f, 0.0f};

@@ -29,7 +29,7 @@ public:
         return m_buf;
     }
 
-    constexpr const CharT* data() const noexcept {
+    constexpr const CharT* cstr() const noexcept {
         return m_buf;
     }
 

@@ -21,7 +21,7 @@ int main()
             {
                 case Event::QUIT: { running = false; }
 
-                case Event::KEY_REPEAT: {
+                case Event::KEY_DOWN: {
                     if (event->kb().key == Key::ESC) { running = false; }
                 }
 
@@ -29,7 +29,7 @@ int main()
             }
         }
 
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
 
         gfx.rectFill(Rect{250, 200, 200, 200}, ColorF32::CYAN);
         gfx.circleFill(Circle{{600, 400}, 80}, ColorF32::RED, Circle::CRISP);

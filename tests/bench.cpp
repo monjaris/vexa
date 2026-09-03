@@ -1,5 +1,5 @@
-#include "vexa.hpp"
-#include "alt/SDL3.h"
+#include "vexa/vexa.hpp"
+#include "vexa/alt/SDL3.h"
 
 namespace cn = vexa;
 
@@ -8,8 +8,9 @@ auto main() -> int
     using vexa::Engine;
     using vexa::Window;
     using vexa::Renderer;
-    using vexa::ColorU8;
+    using vexa::Color;
     using vexa::Rect;
+    using namespace vexa::types;
     namespace log = vexa::log;
     namespace time = vexa::time;
     Engine::Init(Engine::VIDEO);
@@ -68,9 +69,9 @@ auto main() -> int
         }
 
 
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
 
-        gfx.rectFill({Rect{100, 100, 250, 250}}, ColorU8::CYAN);
+        gfx.rectFill({Rect{100, 100, 250, 250}}, Color::CYAN);
 
         gfx.finish();
         time::sleep(time::Millis(dt - start.elapsed().millis()));
