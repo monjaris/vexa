@@ -87,6 +87,29 @@ auto enum_v(EnumType enum_member) -> enum_t<EnumType> {
 template<auto fn> using return_t = decltype(fn);
 
 
+
+template<class T> struct IsLvalReference { constexpr static bool value = false; };
+template<class T> struct IsLvalReference<T&> { constexpr static bool value = true; };
+template<class T> struct IsLvalReference<T&&> { constexpr static bool value = false; };
+//
+template<class T> struct IsRvalReference { constexpr static bool value = false; };
+template<class T> struct IsRvalReference<T&> { constexpr static bool value = false; };
+template<class T> struct IsRvalReference<T&&> { constexpr static bool value = true; };
+//
+template<class T> struct RemoveReferenceImpl { using Type = T; };
+template<class T> struct RemoveReferenceImpl<T&> { using Type = T; };
+template<class T> struct RemoveReferenceImpl<T&&> { using Type = T; };
+// apply
+template<class T>
+using rm_ref_t = RemoveReferenceImpl<T>::Type;
+
+template<class T> struct RemoveConstImpl { using Type = T; };
+template<class T> struct RemoveConstImpl<const T> { using Type = T; };
+// apply
+template<class T>
+using rm_const_t = RemoveConstImpl<T>::Type;
+
+
 template<typename CharT>
 concept CharConcept = (
     is_same_t<char8, CharT> ||

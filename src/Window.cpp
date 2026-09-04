@@ -5,22 +5,22 @@ NAMESPACE_BEGIN(vexa)
 #define FN "Window::{}(): "
 
 #define DEF_MSG static constexpr inline const char* const
-    DEF_MSG mf_failed_to_create_window
+    DEF_MSG ERR_CREATE_WINDOW
         { "an error occured while creating the renderer" };
 
-    DEF_MSG mf_window_never_existed_before
+    DEF_MSG ERR_NEVER_EXIST
         { "invalid call on a window that has never been created" };
 
-    DEF_MSG mf_window_currently_doesnt_exist
+    DEF_MSG ERR_NOT_EXIST
         { "invalid call on an already destroyed window" };
 
-    DEF_MSG mf_renderer_doesnt_exist
+    DEF_MSG ERR_RENDERER_NOT_EXIST
         { "window doesn't have a renderer" };
 
-    DEF_MSG me_window_already_exists
+    DEF_MSG ERR_ALREADY_EXISTS
         { "renderer already exists" };
 
-    DEF_MSG me_failed_to_create_input_ctx
+    DEF_MSG ERR_CREATE_INPUT_CTX
         { "an error occured while creating the input context" };
 
 #undef DEF_MSG
@@ -87,13 +87,17 @@ public:
     explicit Impl() = default;
 
     ~Impl() {
+        renderer = {};  // release renderer first
         if (window_exists) {
+            log::info("Window::destroy(): destroyed window [ID={}]",
+                SDL_GetWindowID(m_window)
+            );
             SDL_DestroyWindow(m_window);
             window_exists = false;
         }
     }
 
-    SDL_Window* ptr() { return m_window; }
+    SDL_Window* win() { return m_window; }
 
     SDL_Window* createWindow(Cfg config) {
         if (!window_exists)
@@ -102,12 +106,12 @@ public:
                 config.m_title, config.m_size->x, config.m_size->y,
                 This::M_ToSDL3WindowFlagRuntime(config.m_flags->value())
             );
-            IF_THEN(!m_window,   log::fatal(FN"{}", __func__, mf_failed_to_create_window);)
+            IF_THEN(!m_window,   log::fatal(FN"{}", __func__, ERR_CREATE_WINDOW);)
 
             m_id = SDL_GetWindowID(m_window);
             window_ever_existed = window_exists = true;
         }
-        else { log::error(FN"{}", __func__, me_window_already_exists); }
+        else { log::error(FN"{}", __func__, ERR_ALREADY_EXISTS); }
 
         return m_window;
     }
@@ -166,7 +170,7 @@ void This::m_trySetWithArgs(
 ) noexcept
 {
     if (impl && impl->window_exists) {
-        if (sdl_fn(impl->ptr(), sdl_fn_args...) == false) {
+        if (sdl_fn(impl->win(), sdl_fn_args...) == false) {
             log::error("Failed to set {} property", prop);
         }
     }
@@ -179,7 +183,7 @@ void This::m_trySetNoArgs(
 ) noexcept
 {
     if (impl && impl->window_exists) {
-        if (sdl_fn(impl->ptr()) == false) {
+        if (sdl_fn(impl->win()) == false) {
             log::error("Failed to set {} property", prop);
         }
     }
@@ -201,12 +205,12 @@ Window This::create() {
     auto& cfg = build.m_bconfig;
 
     auto* new_window = build.impl->createWindow(build.m_bconfig);
-    IF_THEN (!new_window,   log::fatal(FN"{}", __func__, mf_window_currently_doesnt_exist);)
+    IF_THEN (!new_window,   log::fatal(FN"{}", __func__, ERR_NOT_EXIST);)
     auto new_window_id = SDL_GetWindowID(new_window);
     log::info(FN"created new window [ID={}]", __func__, new_window_id);
 
     IF_THEN(!build.impl->createInputCtx(),
-        log::error(FN"{} [ID={}]", __func__, me_failed_to_create_input_ctx, new_window_id);
+        log::error(FN"{} [ID={}]", __func__, ERR_CREATE_INPUT_CTX, new_window_id);
     );
 
     if (!IS_CFG_DEFAULT(m_title))
@@ -249,6 +253,7 @@ Window This::create() {
 
 
 void This::destroy() {
+    log::info(FN"destroyed window [ID={}]", __func__, SDL_GetWindowID(impl->win()));
     impl = nullptr;
     m_bconfig.reset();
 }
@@ -260,78 +265,78 @@ bool This::exists() {
 
 
 uint32 This::id() const noexcept {
-    return SDL_GetWindowID(impl->ptr());
+    return SDL_GetWindowID(impl->win());
 }
 
 
 Renderer& This::renderer() noexcept {
     IF_THEN(!impl,
-        log::fatal(FN"{}", __func__, mf_window_never_existed_before);
+        log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
     );
     IF_THEN(!impl->window_ever_existed,
-        log::fatal(FN"{}", __func__, mf_window_never_existed_before);
+        log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
     )
     IF_THEN(!impl->window_exists,
-        log::fatal(FN"{}", __func__, mf_window_never_existed_before);
+        log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
     )
     IF_THEN(!impl->renderer.exists(),
-        log::error(FN"{}", __func__, mf_renderer_doesnt_exist);
+        log::error(FN"{}", __func__, ERR_RENDERER_NOT_EXIST);
     )
     return impl->renderer;
 }
 
 const char* This::title() {
-    return SDL_GetWindowTitle(impl->ptr());
+    return SDL_GetWindowTitle(impl->win());
 }
 
 Vec2i This::size() {
-    SDL_GetWindowSize(impl->ptr(), &m_bconfig.m_size->x, &m_bconfig.m_size->y);
+    SDL_GetWindowSize(impl->win(), &m_bconfig.m_size->x, &m_bconfig.m_size->y);
     return m_bconfig.m_size;
 }
 
 Vec2i This::position() {
-    SDL_GetWindowPosition(impl->ptr(), &m_bconfig.m_pos->x, &m_bconfig.m_pos->y);
+    SDL_GetWindowPosition(impl->win(), &m_bconfig.m_pos->x, &m_bconfig.m_pos->y);
     return m_bconfig.m_pos;
 }
 
 bool This::isResizable() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_RESIZABLE);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_RESIZABLE);
 }
 
 bool This::isMaximized() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_MAXIMIZED);
 }
 
 bool This::isMinimized() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MINIMIZED);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_MINIMIZED);
 }
 
 bool This::isFullScreen() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_FULLSCREEN);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_FULLSCREEN);
 }
 
 bool This::isBorderless() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_BORDERLESS);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_BORDERLESS);
 }
 
 bool This::isHidden() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_HIDDEN);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_HIDDEN);
 }
 
 bool This::isAlwaysOnTop() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_ALWAYS_ON_TOP);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_ALWAYS_ON_TOP);
 }
 
 bool This::isKeyboardGrabbed() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_KEYBOARD_GRABBED);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_KEYBOARD_GRABBED);
 }
 
 bool This::isMouseRelative() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_RELATIVE_MODE);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_MOUSE_RELATIVE_MODE);
 }
 
 bool This::isMouseGrabbed() {
-    return (m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MOUSE_GRABBED);
+    return (m_getActiveFlags(impl->win()) & SDL_WINDOW_MOUSE_GRABBED);
 }
 
 
@@ -348,7 +353,7 @@ Window& This::setRenderer(const Renderer::Cfg& renderer_cfg) {
     impl->renderer_set = true;
     impl->renderer.m_build_config = renderer_cfg;
     if (impl && impl->window_exists) {
-        impl->renderer = impl->renderer.create(impl->ptr());
+        impl->renderer = impl->renderer.create(impl->win());
     }
     return *this;
 }
@@ -388,7 +393,7 @@ Window& This::setIcon(const char* image_path) {
     }
 
     auto image = Image::Load(image_path);
-    SDL_SetWindowIcon(impl->ptr(), CAST<SDL_Surface*>(image.ptr()));
+    SDL_SetWindowIcon(impl->win(), CAST<SDL_Surface*>(image.ptr()));
 
     return *this;
 }
@@ -408,7 +413,7 @@ Window& This::setMaximized(bool yes) {
 }
 
 Window& This::toggleMaximized() {
-    setMaximized(!(m_getActiveFlags(impl->ptr()) & SDL_WINDOW_MAXIMIZED));
+    setMaximized(!(m_getActiveFlags(impl->win()) & SDL_WINDOW_MAXIMIZED));
     return *this;
 }
 

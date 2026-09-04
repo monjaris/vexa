@@ -38,5 +38,5 @@ int main()
         time::sleep(time::Millis{16.67});
     }
 
-    Engine::Close();
+    Engine::Quit();
 }

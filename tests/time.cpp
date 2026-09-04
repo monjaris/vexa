@@ -1,4 +1,4 @@
-#include "vexa.hpp"
+#include "vexa/vexa.hpp"
 
 #define LOGGER  vexa::log::info
 #define LOG(_msg)  LOGGER(_msg);

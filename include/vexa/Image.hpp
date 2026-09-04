@@ -23,7 +23,7 @@ class VX_NODISCARD Image
     struct M {
         bool is_loaded = false;
         void* image = nullptr;
-        const char* path;
+        const char* path = nullptr;
     } m;
 
     static constexpr const char* MSG_LOAD_FAIL_PATH = {
@@ -32,9 +32,9 @@ class VX_NODISCARD Image
 
 
 public:
-    Image() = default;
-    Image(Image&&) = default;
-    Image& operator= (Image&&) = default;
+    Image() noexcept = default;
+    Image(Image&& other) noexcept;
+    Image& operator= (Image&& other) noexcept;
     // delete copy
     Image(const Image&) = delete;
     Image& operator= (const Image&) = delete;
@@ -45,9 +45,8 @@ public:
     // Load and return a image from path
     static Image Load(const char* path) noexcept;
 
-    // returns `true` if image was unloaded
-    // returns `false` if it already was unloaded or didnt ever get loaded
-    static bool Unload(RefMut<Image> image_ref) noexcept;
+    // Unload referenced image from memory
+    static void Unload(RefMut<Image> image_ref) noexcept;
 
     bool operator== (const Image& other) const noexcept;
 

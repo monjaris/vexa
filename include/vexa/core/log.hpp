@@ -49,6 +49,7 @@ inline void error(std::format_string<Args...> fmt, Args&&... args) {
     std::print(stderr, ERROR_PREFIX);
     std::print(stderr, fmt, std::forward<Args>(args)...);
     std::print(stderr, ERROR_POSTFIX);
+    fflush(stdout);
 }
 
 template<int32 ret=1, typename... Args>
