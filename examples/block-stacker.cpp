@@ -209,7 +209,7 @@ void place_piece(PieceType piece_type, char grid[20][10]){
 
     for (int block = 0; block < 4; block++){
         if (grid[current_piece.blocks[block].row][current_piece.blocks[block].column] == 1){
-            vexa::Engine::Close();
+            vexa::Engine::Quit();
             exit(0);
         }
         grid[current_piece.blocks[block].row][current_piece.blocks[block].column] = 1;
@@ -1117,6 +1117,7 @@ int main() {
         // sleep for 16.666ms (60fps)
         time::sleep(time::Millis(frametime));
     }
-    // close the window
-    Engine::Close();
+
+    // quit the engine
+    Engine::Quit();
 }

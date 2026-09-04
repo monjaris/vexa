@@ -84,13 +84,13 @@ public:
         if (score_player >= scoreToWin)
         {
             std::cout << "You win!" << std::endl;
-            Engine::Close();
+            Engine::Quit();
             std::exit(0);
         }
         else if (score_cpu >= scoreToWin)
         {
             std::cout << "You lose!" << std::endl;
-            Engine::Close();
+            Engine::Quit();
             std::exit(0);
         }
     }
@@ -244,6 +244,6 @@ int main(void)
 
     }
 
-    Engine::Close();
+    Engine::Quit();
     return 0;
 }

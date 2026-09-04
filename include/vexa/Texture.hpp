@@ -12,7 +12,7 @@ class VX_NODISCARD Texture
         "Failed to load texture from path: '{}'"
     };
 
-    struct M {
+    struct {
         bool is_loaded = false;
         void* texture = nullptr;
         const char* path = nullptr;
@@ -21,9 +21,9 @@ class VX_NODISCARD Texture
     static Texture M_Load(void* renderer_ptr, Image& image) noexcept;
 
 public:
-    Texture() = default;
-    Texture(Texture&&) = default;
-    Texture& operator= (Texture&&) = default;
+    Texture() noexcept = default;
+    Texture(Texture&& other) noexcept;
+    Texture& operator= (Texture&& other) noexcept;
     // delete copy
     Texture(const Texture&) = delete;
     Texture& operator= (const Texture&) = delete;

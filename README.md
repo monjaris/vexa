@@ -38,18 +38,13 @@ int main()
         .setSize({1280, 720})
         .setRenderer(Renderer::Cfg{})
         .create();
+
     auto& gfx = window.renderer();
 
     bool running = true;
     while (running)
     {
-        // poll events
-        while (auto event = Event::Poll()) {
-            switch (event->type()) {
-                case Event::QUIT: { running = false; break; }
-                default: break;
-            }
-        }
+        if (Event::On(Event::QUIT)) running = false;
 
         gfx.start(ColorU8::BLACK);
 

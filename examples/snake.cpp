@@ -280,7 +280,7 @@ public:
 
   ~Game() {
     window.destroy();
-    Engine::Close();
+    Engine::Quit();
   }
 
   void Run() {

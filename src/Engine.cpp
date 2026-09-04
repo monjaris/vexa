@@ -21,7 +21,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
-            TTF_Init();
+            IF_THEN (TTF_Init(),   Font::ttf_context_loaded = true;)
         }
 
         return SDL_Init(subsys);
@@ -30,20 +30,21 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 }
 
 
-void This::Close() noexcept {
+void This::Quit() noexcept {
     if (m_init) {
         m_init = false;
-        m_subsystems.reset();
-        log::info("Engine::Close(): ");
+        log::info("Engine::Quit(): ");
 
         using subsys_int = enum_t<Subsystem>;
         subsys_int subsys = M_toSDLSubsystems(m_subsystems.value());
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
+            Font::ttf_context_loaded = false;
             TTF_Quit();
         }
 
+        m_subsystems.reset();
         SDL_Quit();
     }
 }

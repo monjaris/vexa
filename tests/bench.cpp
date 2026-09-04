@@ -77,5 +77,5 @@ auto main() -> int
         time::sleep(time::Millis(dt - start.elapsed().millis()));
     }
 
-    Engine::Close();
+    Engine::Quit();
 }
