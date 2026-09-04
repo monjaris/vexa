@@ -12,6 +12,21 @@ This::~Image() {
     Unload(RefMut{*this});
 }
 
+This::Image(Image&& other) noexcept
+    : m(other.m)
+{
+    other.m = {};
+}
+
+Image& This::operator= (Image&& other) noexcept {
+    if (this != address(other)) {
+        if (m.is_loaded) SDL_DestroySurface(EXTERN_CAST(m.image));
+        m = other.m;
+        other.m = {};
+    }
+    return *this;
+}
+
 
 Image This::Load(const char* path) noexcept {
     Image build = {};
@@ -28,13 +43,12 @@ Image This::Load(const char* path) noexcept {
 }
 
 
-bool This::Unload(RefMut<Image> image_ref) noexcept {
+void This::Unload(RefMut<Image> image_ref) noexcept {
     if (image_ref.get().m.is_loaded) {
         SDL_DestroySurface(EXTERN_CAST(image_ref.get().m.image));
     }
-    bool was_loaded = image_ref.get().m.is_loaded;
-    image_ref.get().m.is_loaded = false;
-    return was_loaded;
+
+    image_ref.get().m = {};
 }
 
 

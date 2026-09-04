@@ -28,13 +28,20 @@ private:
     static inline bool m_init = false;
     static inline Flags<Subsystem> m_subsystems;
     static inline time::Date m_init_date;
+    struct Guard {
+        ~Guard() {
+            if (m_init) {
+                Engine::Quit();
+            }
+        }
+    } guard;
 
     static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag) noexcept;
     static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag) noexcept;
 
 public:
     static bool Init(Subsystem initial_subsystems) noexcept;
-    static void Close() noexcept;
+    static void Quit() noexcept;
     static bool InitSubsystems(Subsystem subsystems) noexcept;
     static void CloseSubsystems(Subsystem subsystems) noexcept;
 

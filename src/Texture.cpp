@@ -8,6 +8,20 @@ NAMESPACE_BEGIN(vexa)
 using This = Texture;
 
 
+This::Texture(Texture&& other) noexcept
+{
+    m = std::move(other.m);
+    other.m = {};
+}
+
+Texture& This::operator= (Texture&& other) noexcept {
+    if (this != address(other)) {
+        SDL_DestroyTexture(EXTERN_CAST(m.texture));
+        m = other.m;
+        other.m = {};
+    }
+    return *this;
+}
 
 Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
     SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
@@ -42,16 +56,15 @@ const char* This::path() const noexcept {
 
 Vec2 This::pos() const noexcept {
     return {
-        CAST<fp32>(EXTERN_CAST(m.texture)->format),
+        CAST<fp32>(EXTERN_CAST(m.texture)->w),
         CAST<fp32>(EXTERN_CAST(m.texture)->h)
     };
 }
 
 
 This::~Texture() {
-    // passing nullptr is no-op here
     SDL_DestroyTexture(EXTERN_CAST(m.texture));
-    m.is_loaded = false;
+    m = {};
 }
 
 #undef EXTERN_CAST

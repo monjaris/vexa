@@ -44,6 +44,9 @@ public:
 
     ~Impl() {
         if (m_renderer_exists) {
+            log::info("Renderer::destroy(): destroyed renderer of window [ID={}]",
+                SDL_GetWindowID(m_window)
+            );
             SDL_DestroyRenderer(m_renderer);
             m_window = nullptr;
             m_renderer_exists = false;
@@ -98,8 +101,11 @@ Renderer This::create(void* window_ptr) {
 }
 
 void This::destroy() {
+    log::info("Renderer::destroy(): destroyed renderer of window [ID={}]",
+        SDL_GetWindowID(impl->m_window)
+    );
     impl->m_renderer_exists = false;
-    impl = nullptr;
+    impl.reset();
     m_build_config.reset();
 }
 
