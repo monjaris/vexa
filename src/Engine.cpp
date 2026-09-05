@@ -9,6 +9,11 @@ using This = Engine;
 
 
 bool This::Init(Subsystem initial_subsystems) noexcept {
+    // guard to release SDL_Init() memory with at process quit
+    struct Guard { ~Guard() { Engine::Quit(); } };
+    static Guard guard;
+
+
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
