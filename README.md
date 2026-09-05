@@ -44,7 +44,12 @@ int main()
     bool running = true;
     while (running)
     {
-        if (Event::On(Event::QUIT)) running = false;
+        while (auto event = Event::Poll()) {
+            switch (event->type()) {
+                case Event::QUIT: { running = false; break; }
+                default: {}
+            }
+        }
 
         gfx.start(ColorU8::BLACK);
 

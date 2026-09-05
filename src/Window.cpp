@@ -351,7 +351,7 @@ bool This::isMouseGrabbed() {
 
 Window& This::setRenderer(const Renderer::Cfg& renderer_cfg) {
     impl->renderer_set = true;
-    impl->renderer.m_build_config = renderer_cfg;
+    impl->renderer.m_bconfig = renderer_cfg;
     if (impl && impl->window_exists) {
         impl->renderer = impl->renderer.create(impl->win());
     }
@@ -384,6 +384,10 @@ Window& This::setAspectRatio(fp32 min, fp32 max) {
         SDL_SetWindowAspectRatio, min, max
     );
     return *this;
+}
+// overload
+Window& This::setAspectRatio(fp32 ratio) {
+    return this->setAspectRatio(ratio, ratio);
 }
 
 Window& This::setIcon(const char* image_path) {

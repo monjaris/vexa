@@ -143,6 +143,7 @@ public:
     Window& setSize(Vec2i size);
     Window& setPosition(Vec2i position);
     Window& setAspectRatio(fp32 min_ratio, fp32 max_ratio);
+    Window& setAspectRatio(fp32 ratio);  // overload: calls the main one
     Window& setIcon(const char* image_path);
     Window& setResizable(bool yes = true);
     Window& setMaximized(bool yes = true);  Window& toggleMaximized();

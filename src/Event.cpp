@@ -617,6 +617,7 @@ void This::m_toVexaEvent(SDL_Event* sdl_event) noexcept {
     m_date = Event::Date::DurationT{sdl_event->common.timestamp};
 }
 
+
 std::optional<Event> Event::Poll() noexcept {
     namespace i = internal;
 
@@ -628,14 +629,6 @@ std::optional<Event> Event::Poll() noexcept {
 
     return build;
 }
-
-bool This::On(This::Type event_type) noexcept {
-    if (SDL_PollEvent(&internal::event)) {
-        return event_type == M_ToVexaEventTypeRuntime(internal::event.type);
-    }
-    return false;
-}
-
 
 
 
