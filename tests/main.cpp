@@ -7,6 +7,8 @@ int main()
 
     Window window = Window{}.setSize({1280, 720}).setRenderer({}).setResizable().create();
     Renderer& gfx = window.renderer();
+    gfx.setMode(Renderer::STRETCH);
+    window.setAspectRatio(1.6);
 
     Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
     Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
@@ -14,8 +16,19 @@ int main()
     bool running = true;
     while(running)
     {
-        if (Event::On(Event::QUIT)) running = false;
-        if (Event::ActiveKeys()[Key::ESC]) running = false;
+        while (auto event = Event::Poll()) {
+            switch (event->type()) {
+                case Event::QUIT: { running = false; break; }
+
+                case Event::KEY_DOWN: {
+                    if (event->kb().key == Key::ESC) { running = false; }
+
+                    break;
+                }
+
+                default : break;
+            }
+        }
 
         gfx.start(ColorF32::BLACK);
 
