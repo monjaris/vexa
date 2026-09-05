@@ -27,8 +27,7 @@ set_toolchains("vexa-llvm")
         cxx_flags = {
             "-Wall", "-Wextra",
             "-fno-exceptions",
-            -- "-fsanitize=address",
-            -- "-fno-omit-frame-pointer",
+            "-fno-rtti",
             "-Wuninitialized", "-Werror=uninitialized",
             "-Wno-unused-parameter",
             "-Wno-unused-function",
@@ -49,6 +48,7 @@ set_toolchains("vexa-llvm")
         cxx_flags = {
             "-Wall",
             "-fno-exceptions",
+            "-fno-rtti",
             "-Wno-unused-parameter",
             "-Wno-unused-function",
             "-Wno-unused-variable",
@@ -74,7 +74,7 @@ set_pcxxheader("include/vexa/alt/SDL3.h")
 add_cxxflags(table.unpack(cxx_flags))
 add_ldflags(table.unpack(ld_flags))
 
---- OPTIONS (i put target-specific options to `./scripts/*` ;D)
+--- OPTIONS (i put target-specific options to `./scripts/*`)
 option("libcxx")
     set_default("libstdc++")
     set_values("libstdc++", "libc++")
