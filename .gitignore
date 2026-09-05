@@ -17,10 +17,11 @@
 # Scripts
 /run.sh
 
-# Directories
+# Directories\
 /vendor/SDL3-upstream/
 /entity/
 
-# Editors
+# Editors & LSP
 /.zed/
 /.vscode/
+/compile_commands.json

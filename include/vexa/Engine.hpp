@@ -28,13 +28,6 @@ private:
     static inline bool m_init = false;
     static inline Flags<Subsystem> m_subsystems;
     static inline time::Date m_init_date;
-    struct Guard {
-        ~Guard() {
-            if (m_init) {
-                Engine::Quit();
-            }
-        }
-    } guard;
 
     static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag) noexcept;
     static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag) noexcept;
