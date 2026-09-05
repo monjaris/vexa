@@ -34,7 +34,7 @@ using This = Renderer;
 
 class This::Impl {
     friend class Renderer;
-    bool m_renderer_exists = false;
+    bool m_init = false;
     bool m_renderer_ever_existed = false;
     SDL_Renderer* m_renderer = nullptr;
     SDL_Window* m_window = nullptr;
@@ -43,20 +43,20 @@ public:
     explicit Impl() = default;
 
     ~Impl() {
-        if (m_renderer_exists) {
+        if (m_init) {
             log::info("Renderer::destroy(): destroyed renderer of window [ID={}]",
                 SDL_GetWindowID(m_window)
             );
             SDL_DestroyRenderer(m_renderer);
             m_window = nullptr;
-            m_renderer_exists = false;
+            m_init = false;
         }
     }
 };
 
 
 
-This::Renderer(This::Cfg config): impl(new Impl{}), m_build_config(config) {}
+This::Renderer(This::Cfg config): impl(new Impl{}), m_bconfig(config) {}
 
 This::~Renderer() = default;
 
@@ -64,7 +64,7 @@ This::Renderer(Renderer&& other) noexcept
     : impl(std::move(other.impl))
 {
     other.impl = nullptr;
-    m_build_config = other.m_build_config;
+    m_bconfig = other.m_bconfig;
 }
 
 Renderer& This::operator= (Renderer&& other) noexcept {
@@ -73,7 +73,7 @@ Renderer& This::operator= (Renderer&& other) noexcept {
             // this->~Renderer();
         }
         impl = std::move(other.impl);  other.impl = nullptr;
-        m_build_config = other.m_build_config;
+        m_bconfig = other.m_bconfig;
     }
     return *this;
 }
@@ -81,9 +81,9 @@ Renderer& This::operator= (Renderer&& other) noexcept {
 
 Renderer This::create(void* window_ptr) {
     Renderer build = {};
-    build.m_build_config = m_build_config;
+    build.m_bconfig = m_bconfig;
 
-    IF_THEN(impl->m_renderer_exists, log::error(FN"{}", __func__, me_couldnt_create_renderer_already_exists);)
+    IF_THEN(impl->m_init, log::error(FN"{}", __func__, me_couldnt_create_renderer_already_exists);)
 
     build.impl->m_window = (SDL_Window*)window_ptr;
     // try creating renderer, exit with message on fail
@@ -92,7 +92,7 @@ Renderer This::create(void* window_ptr) {
         SDL_GetError());)
 
     // mark renderer is created
-    build.impl->m_renderer_ever_existed = build.impl->m_renderer_exists = true;
+    build.impl->m_renderer_ever_existed = build.impl->m_init = true;
     log::info(FN"created new renderer for window [ID={}]",
         __func__, SDL_GetWindowID((SDL_Window*)window_ptr)
     );
@@ -104,26 +104,54 @@ void This::destroy() {
     log::info("Renderer::destroy(): destroyed renderer of window [ID={}]",
         SDL_GetWindowID(impl->m_window)
     );
-    impl->m_renderer_exists = false;
+    impl->m_init = false;
     impl.reset();
-    m_build_config.reset();
+    m_bconfig.reset();
 }
 
 bool This::exists() {
-    return impl->m_renderer_exists;
+    return impl->m_init;
 }
 
 
 
 
 Renderer& This::setVsync(bool enabled) {
-    m_build_config.vsync = enabled;
+    m_bconfig.vsync = enabled;
+    if (impl->m_init) {
+        SDL_SetRenderVSync(impl->m_renderer, enabled);
+    }
     return *this;
 }
 
-bool This::getVsync() {
-    return m_build_config.vsync;
+bool This::vsync() {
+    int vsync;
+    SDL_GetWindowSurfaceVSync(impl->m_window, &vsync);
+    return vsync;
 }
+
+void This::setMode(Mode render_mode) {
+    m_bconfig.mode = CAST<uint8>(render_mode);
+    if (impl->m_init) {
+        int win_w, win_h;
+        SDL_GetWindowSize(impl->m_window, &win_w, &win_h);
+        SDL_SetRenderLogicalPresentation(
+            impl->m_renderer, win_w, win_h, SDL_RendererLogicalPresentation(CAST<uint8>(render_mode))
+        );
+    }
+}
+
+This::Mode This::mode() {
+    int win_w, win_h;
+    SDL_RendererLogicalPresentation rlp;
+
+    SDL_GetWindowSize(impl->m_window, &win_w, &win_h);
+    SDL_GetRenderLogicalPresentation(impl->m_renderer, &win_w, &win_h, &rlp);
+
+    return CAST<Mode>(rlp);
+}
+
+
 
 
 void This::start() {

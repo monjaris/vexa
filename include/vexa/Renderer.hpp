@@ -17,22 +17,36 @@ class VX_NODISCARD Renderer
     {
         friend class Renderer;
         friend class Window;
+
         CfgVal<bool> vsync;
+        CfgVal<uint8> mode;
 
     public:
         constexpr M_Cfg () noexcept:
-            vsync(false)
+            vsync(false),
+            mode(0)
         {}
 
         void reset() noexcept {
             vsync = vsync.defaultVal();
         }
     }
-    m_build_config;
+    m_bconfig;
 
 
 public:
+    enum class Mode : uint8
+    {
+        NONE = 0,
+        STRETCH = 1,
+        LETTERBOX = 2,
+        OVERSCAN = 3,
+        INTEGER_SCALE = 4
+    };
+    using enum Mode;
+
     using Cfg = M_Cfg;
+
 
     Renderer(Cfg config = Cfg{});
     // rule of 5
@@ -47,7 +61,9 @@ public:
     bool exists();
 
     Renderer& setVsync(bool enabled = true);
-    bool getVsync();
+    bool vsync();
+    void setMode(Mode render_mode);
+    Mode mode();
 
     void start();  // sets color black
     void start(nullptrT null);  // edge-case, if you really want to keep the last used brush color
@@ -93,5 +109,7 @@ public:
     void circleLines(Circle circle, Color color);
     void circleLines(Circle circle, ColorF32 color);
 };
+
+
 
 NAMESPACE_END(vexa)
