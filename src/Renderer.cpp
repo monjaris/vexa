@@ -208,6 +208,9 @@ void This::drawTexture(
 
 // render font with text
 void This::drawText(Font& font, const char* text, Vec2 pos, Color color) {
+    static const char* previous = nullptr;
+    if (previous != nullptr && previous == text) return;
+    previous = text;
     Image image = font.createImage(text, Color::TRANSPARENT, color);
     Texture texture = loadTexture(std::move(image));
     drawTexture(texture, pos, color);
