@@ -49,7 +49,7 @@ class VX_NODISCARD Duration
 {
     ValueType m_nanos = 0;
 
-    Duration(void* null, ValueType nanos): m_nanos(nanos) {}
+    Duration([[maybe_unused]] nullptrT null, ValueType nanos): m_nanos(nanos) {}
 
 public:
     using ValueT = ValueType;

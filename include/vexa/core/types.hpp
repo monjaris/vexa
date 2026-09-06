@@ -110,11 +110,27 @@ template<class T>
 using rm_const_t = RemoveConstImpl<T>::Type;
 
 
+template<class T> struct NoDeduceIMpl { using Type = T; };
+template<class T> using NoDeduce = NoDeduceIMpl<T>::Type;
+
+
 template<typename CharT>
 concept CharConcept = (
-    is_same_t<char8, CharT> ||
-    is_same_t<unsigned char, CharT> ||
-    is_same_t<wchar_t, CharT> ||
-    is_same_t<char16, CharT> ||
-    is_same_t<char32, CharT>
+    is_any_same_t<CharT, char8, char16, char32, unsigned char, wchar_t>
 );
+
+template<typename IntT>
+concept IntConcept = (
+    is_any_same_t<IntT, int8, int16, int32, int64>
+);
+
+template<typename UintT>
+concept UintConcept = (
+    is_any_same_t<UintT, uint8, uint16, uint32, uint64>
+);
+
+template<typename FloatT>
+concept FloatConcept = (
+    is_any_same_t<FloatT, fp32, fp64>
+);
+

@@ -39,6 +39,7 @@ Checks: >
   readability-duplicate-include,
   readability-inconsistent-declaration-parameter-name,
   readability-misplaced-array-index,
+  cppcoreguidelines-init-variables
   readability-non-const-parameter,
   readability-redundant-control-flow,
   readability-redundant-declaration,

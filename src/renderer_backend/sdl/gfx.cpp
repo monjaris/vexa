@@ -1,7 +1,5 @@
 #include "vexa/alt/SDL3.h"
 #include "vexa/renderer_backend/gfx.hpp"
-#include <algorithm>
-#include <span>
 
 // forward declare so we can use them without including <cmath>
 extern "C" { float cosf(float);  float sinf(float); }
@@ -74,7 +72,7 @@ void gfx::line_wide(void* renderer_ptr, fp32 x1, fp32 y1, fp32 x2, fp32 y2, uint
 
 //
 void gfx::fill_triangle(
-    void* renderer_ptr, fp32 ax,fp32 ay, fp32 bx,fp32 by, fp32 cx,fp32 cy
+    void* renderer_ptr, fp32 ax,fp32 ay, fp32 bx,fp32 by, fp32 cx, fp32 cy
 ){
     auto& clr = g::triangle_rgba;
 
@@ -180,64 +178,6 @@ void gfx::line_N_rectangle(
 ) {
     
 }
-
-
-//
-// template<fp32 t_quality>
-// void gfx::fill_circle(
-//     void* renderer_ptr,
-//     fp32 x, fp32 y, fp32 r
-// )
-// {
-//     auto& clr = g::circle_rgba;
-
-    
-
-//     uint32 segments = t_quality * (2.0f * PI32 * r);
-//     SDL_Vertex vertices[t_quality * 300];
-//     int32 indices[t_quality * 900 + 1];
-
-//     fp32 step_rad = 2.0f * PI32 / segments;
-
-//     vertices[0] = {
-//         .position = {x, y},
-//         .color = {clr[0], clr[1], clr[2], clr[3]},
-//         .tex_coord = {0.0f, 0.0f}
-//     };
-
-//     for (uint64 i = 0; i < segments; ++i) {
-//         fp32 angle = step_rad * i;
-
-//         fp32 x_i = x + ::cosf(angle) * r;
-//         fp32 y_i = y + ::sinf(angle) * r;
-
-//         vertices[i + 1] = {
-//             .position = {x_i, y_i},
-//             .color = {clr[0], clr[1], clr[2], clr[3]},
-//             .tex_coord = {0.0f, 0.0f}
-//         };
-
-//         uint32 current = i + 1;
-//         uint32 next = current % segments + 1;
-
-//         indices[i * 3 + 0] = 0;
-//         indices[i * 3 + 1] = current;
-//         indices[i * 3 + 2] = next;
-//     }
-
-//     SDL_RenderGeometry(
-//         SDL_REND,
-//         nullptr,
-//         vertices,
-//         segments + 1,
-//         indices,
-//         segments * 3
-//     );
-// }
-
-
-
-
 
 
 

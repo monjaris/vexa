@@ -1054,7 +1054,8 @@ int main() {
                         physics(grid);
                     }
                     if (event->kb().key == Key::D || event->kb().key == Key::RIGHT) {
-                        right(grid);                    }
+                        right(grid);
+                    }
 
                     if (event->kb().key == Key::A || event->kb().key == Key::LEFT) {
                         left(grid);
