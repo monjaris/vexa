@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.hpp"
 #include "time.hpp"
+#include "Font.hpp"
 NAMESPACE_BEGIN(vexa)
 
 

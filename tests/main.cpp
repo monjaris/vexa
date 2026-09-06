@@ -16,12 +16,18 @@ int main()
     bool running = true;
     while(running)
     {
+        static auto result = 0;
+
         while (auto event = Event::Poll()) {
             switch (event->type()) {
                 case Event::QUIT: { running = false; break; }
 
                 case Event::KEY_DOWN: {
                     if (event->kb().key == Key::ESC) { running = false; }
+
+                    if (event->kb().key == Key::SPACE) {
+                        result = rng::random<int>(1, 19);
+                    }
 
                     break;
                 }
@@ -32,9 +38,16 @@ int main()
 
         gfx.start(ColorF32::BLACK);
 
+        std::string text = std::to_string(result);
+        gfx.drawText(
+            font, text.c_str(),
+            {500.f, 500.f}, Color::YELLOW
+        );
+
         gfx.drawTexture(texture, {100, 100});
 
         gfx.drawText(font, "Hello, World!", {400, 400}, Color::MAGENTA);
+
 
         gfx.finish();
         time::sleep(time::Millis{16.6});

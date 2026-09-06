@@ -8,3 +8,4 @@
 #include "time.hpp"
 #include "input.hpp"
 #include "os.hpp"
+#include "rng.hpp"
