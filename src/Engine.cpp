@@ -1,18 +1,16 @@
 #include "vexa/alt/SDL3.h"
-#include "vexa/alt/SDL3-TTF.hpp"
 #include "vexa/Engine.hpp"
 #include "vexa/os.hpp"
+#include "Font.hpp"
 NAMESPACE_BEGIN(vexa)
 
 using This = Engine;
 
 
-
 bool This::Init(Subsystem initial_subsystems) noexcept {
-    // guard to release SDL_Init() memory with at process quit
+    // guard to release SDL_Init() memory at process quit
     struct Guard { ~Guard() { Engine::Quit(); } };
     static Guard guard;
-
 
     if (!m_init) {
         m_init = true;
@@ -26,7 +24,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
-            IF_THEN (TTF_Init(),   Font::ttf_context_loaded = true;)
+            Font::M_InitSystem();
         }
 
         return SDL_Init(subsys);
@@ -45,8 +43,7 @@ void This::Quit() noexcept {
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
-            Font::ttf_context_loaded = false;
-            TTF_Quit();
+            Font::M_QuitSystem();
         }
 
         m_subsystems.reset();

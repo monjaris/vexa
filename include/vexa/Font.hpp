@@ -10,11 +10,22 @@ NAMESPACE_BEGIN(vexa)
 class VX_NODISCARD Font
 {
     struct {
+        uint32 id = 0;
         bool is_loaded = false;
         void* font_handle = nullptr;
         const char* path = nullptr;
         fp32 size = 0;
     } m;
+
+    static inline uint32 M_id_counter = 0;
+
+
+    // `ttf_context_loaded` turns true when Engine initializes Engine::FONT subsystem
+    friend class Engine;
+    static inline bool m_context_init = false;
+
+    static bool M_InitSystem();
+    static void M_QuitSystem();
 
 
     static constexpr const char* MSG_LOAD_FAIL = {
@@ -28,11 +39,6 @@ class VX_NODISCARD Font
     static constexpr const char* MSG_CONTEXT_UNINITED = {
         "FONT subsystem(Engine::FONT) is not initialized"
     };
-
-    // `ttf_context_loaded` turns true when Engine initializes Engine::FONT subsystem
-    friend class Engine;
-    static inline bool ttf_context_loaded = false;
-
 
 public:
     // ctor

@@ -16,7 +16,7 @@ using Seconds = Duration<fp64, 1'000'000'000lu>;
 template<typename T>
 struct is_duration : std::false_type {};
 
-template<typename ValueT, uint64_t Scale>
+template<typename ValueT, uint64 Scale>
 struct is_duration<Duration<ValueT, Scale>> : std::true_type {};
 
 template<typename T>
@@ -28,7 +28,7 @@ concept DurationConcept = is_duration_v<T>;
 
 
 // Date (time point)
-template<DurationConcept> class TimePoint;
+template<DurationConcept> class VX_NODISCARD TimePoint;
 using Date = TimePoint<Nanos>;
 using LongDate = TimePoint<Millis>;
 

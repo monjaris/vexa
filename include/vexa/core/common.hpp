@@ -54,4 +54,22 @@ public:
 
 
 
+template<class T>
+bool isContained(T cont, typename T::value_type elem) {
+    for (usize i=0;  i < cont;  ++i) {
+        if (cont[i] == elem) return true;
+    }
+    return false;
+}
+
+template<class T>
+bool contains(T cont, typename T::ValueT elem) {
+    for (usize i=0;  i < cont;  ++i) {
+        if (cont[i] == elem) return true;
+    }
+    return false;
+}
+
+
+
 NAMESPACE_END(vexa)

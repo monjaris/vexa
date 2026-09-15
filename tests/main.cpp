@@ -26,7 +26,7 @@ int main()
                     if (event->kb().key == Key::ESC) { running = false; }
 
                     if (event->kb().key == Key::SPACE) {
-                        result = rng::random<int>(1, 19);
+                        result = rng::random<int32>(1, 19);
                     }
 
                     break;
@@ -36,7 +36,7 @@ int main()
             }
         }
 
-        gfx.start(ColorF32::BLACK);
+        gfx.start(Color::BLACK);
 
         std::string text = std::to_string(result);
         gfx.drawText(
@@ -47,7 +47,6 @@ int main()
         gfx.drawTexture(texture, {100, 100});
 
         gfx.drawText(font, "Hello, World!", {400, 400}, Color::MAGENTA);
-
 
         gfx.finish();
         time::sleep(time::Millis{16.6});
