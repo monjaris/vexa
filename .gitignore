@@ -18,7 +18,7 @@
 /run.sh
 
 # Directories\
-/vendor/SDL3-upstream/
+vendor/**/.git
 /entity/
 
 # Editors & LSP
