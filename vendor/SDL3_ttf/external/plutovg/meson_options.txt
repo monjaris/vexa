@@ -1,0 +1,8 @@
+option('examples', type : 'feature', value : 'auto')
+option('tests', type : 'feature', value : 'auto')
+
+option('image-write',
+    type : 'feature',
+    value : 'enabled',
+    description : 'Disable png or jpg image write'
+)
