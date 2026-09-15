@@ -18,7 +18,8 @@
 /run.sh
 
 # Directories\
-vendor/**/.git
+/vendor/SDL3/.git/
+/vendor/SDL3_ttf/.git/
 /entity/
 /docs/
 
