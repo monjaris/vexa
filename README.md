@@ -36,7 +36,7 @@ int main()
     // create a window with 1280x720 size and default renderer
     auto window = Window{}
         .setSize({1280, 720})
-        .setRenderer(Renderer::Cfg{})
+        .setRenderer({})
         .create();
 
     auto& gfx = window.renderer();
