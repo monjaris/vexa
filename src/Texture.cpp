@@ -33,6 +33,7 @@ Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
         log::error(This::MSG_LOAD_FAIL, "");
     } else {
         build.m.is_loaded = true;
+        build.m.id = ++M_id_counter;
     }
 
     build.m.path = image.path();
@@ -48,6 +49,10 @@ This::operator bool() const noexcept {
 
 bool This::exists() const noexcept {
     return operator bool();
+}
+
+uint32 This::id() const noexcept {
+    return m.id;
 }
 
 const char* This::path() const noexcept {

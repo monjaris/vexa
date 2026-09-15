@@ -67,7 +67,6 @@ set_toolchains("vexa-llvm")
 set_languages("c++23")
 add_includedirs("include/")
 add_includedirs("include/vexa/alt")
--- add_includedirs("include/renderer_backend/renderer")
 add_includedirs("vendor/SDL3/include")
 set_pcxxheader("include/vexa/alt/SDL3.h")
 --

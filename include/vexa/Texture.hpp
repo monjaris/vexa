@@ -12,7 +12,11 @@ class VX_NODISCARD Texture
         "Failed to load texture from path: '{}'"
     };
 
+
+    static inline uint32 M_id_counter = 0;
+
     struct {
+        uint32 id = 0;
         bool is_loaded = false;
         void* texture = nullptr;
         const char* path = nullptr;
@@ -32,6 +36,7 @@ public:
 
     explicit operator bool() const noexcept;
     bool exists() const noexcept;
+    uint32 id() const noexcept;
     const char* path() const noexcept;
     Vec2 pos() const noexcept;
 };
