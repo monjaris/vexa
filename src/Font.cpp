@@ -10,6 +10,28 @@ NAMESPACE_BEGIN(vexa)
 using This = Font;
 
 
+// helper
+static void quitIfShould(uint32 id_counter) {
+    if (id_counter == 0) {
+        TTF_Quit();
+    }
+}
+
+bool This::M_InitSystem() {
+    struct Guard { ~Guard() { quitIfShould(This::M_id_counter); } };
+    static Guard guard;
+
+    m_context_init = true;
+    return TTF_Init();
+}
+
+void This::M_QuitSystem() {
+    m_context_init = false;
+    quitIfShould(This::M_id_counter);
+}
+
+
+
 This::Font() noexcept = default;
 
 This::~Font() noexcept {
@@ -36,7 +58,7 @@ Font& This::operator= (Font&& other) noexcept {
 
 
 Font This::Load(const char* path, usize load_size) noexcept {
-    if (!This::ttf_context_loaded) {
+    if (!This::m_context_init) {
         log::error(FN"{}", __func__, This::MSG_CONTEXT_UNINITED);
     }
 
@@ -47,6 +69,7 @@ Font This::Load(const char* path, usize load_size) noexcept {
         log::error(FN"{}", __func__, This::MSG_LOAD_FAIL);
     } else {
         build.m.is_loaded = true;
+        build.m.id = M_id_counter;
         build.m.path = path;
         build.m.size = load_size;
     }
@@ -55,10 +78,6 @@ Font This::Load(const char* path, usize load_size) noexcept {
 }
 
 void This::Unload(RefMut<Font> font) noexcept {
-    // if (!This::ttf_context_loaded) {
-        // log::error(FN"{}", __func__, This::MSG_CONTEXT_UNINITED);
-    // }
-
     TTF_CloseFont(EXTERN_CAST(font.getConst().m.font_handle));
     font.get().m = {};
 }
