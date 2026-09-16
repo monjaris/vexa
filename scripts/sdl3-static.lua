@@ -52,6 +52,12 @@ target("sdl3")
             "-DSDL_TESTS=OFF",
             "-DSDL_EXAMPLES=OFF",
             "-DSDL_DEPS_SHARED=ON",
+            -- when installing it from AUR, cmake would inherit lto from xmake and linkage fails
+            "-DCMAKE_C_FLAGS=-fPIC",
+            "-DCMAKE_CXX_FLAGS=-fPIC",
+            "-DCMAKE_EXE_LINKER_FLAGS=",
+            "-DCMAKE_SHARED_LINKER_FLAGS=",
+            "-DCMAKE_MODULE_LINKER_FLAGS=",
         }
 
         if video == o_WL then
