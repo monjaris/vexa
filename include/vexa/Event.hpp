@@ -193,7 +193,7 @@ private:
         struct Input : AnyBase {
             uint32 device_id;
             uint32 window_id;
-            uint8 button;
+            MouseBtn button;
             bool down;
             uint8 clicks;
             float x;
