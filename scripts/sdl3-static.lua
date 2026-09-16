@@ -52,12 +52,12 @@ target("sdl3")
             "-DSDL_TESTS=OFF",
             "-DSDL_EXAMPLES=OFF",
             "-DSDL_DEPS_SHARED=ON",
-            -- when installing it from AUR, cmake would inherit lto from xmake and linkage fails
-            "-DCMAKE_C_FLAGS=-fPIC",
-            "-DCMAKE_CXX_FLAGS=-fPIC",
-            "-DCMAKE_EXE_LINKER_FLAGS=",
-            "-DCMAKE_SHARED_LINKER_FLAGS=",
-            "-DCMAKE_MODULE_LINKER_FLAGS=",
+            -- -- when installing it from AUR, cmake would inherit lto from xmake and linkage fails
+            -- "-DCMAKE_C_FLAGS=-fPIC",
+            -- "-DCMAKE_CXX_FLAGS=-fPIC",
+            -- "-DCMAKE_EXE_LINKER_FLAGS=",
+            -- "-DCMAKE_SHARED_LINKER_FLAGS=",
+            -- "-DCMAKE_MODULE_LINKER_FLAGS=",
         }
 
         if video == o_WL then
@@ -77,6 +77,20 @@ target("sdl3")
             table.insert(args, "Ninja")
         end
 
+
+        -- set environment variables so that it doesnt clash
+        local cflags = os.getenv("CFLAGS") or ""
+        local cxxflags = os.getenv("CXXFLAGS") or ""
+        local ldflags = os.getenv("LDFLAGS") or ""
+        cflags = cflags:gsub("%-flto=[^%s]+", "")
+        cflags = cflags:gsub("%-flto", "")
+        cxxflags = cxxflags:gsub("%-flto=[^%s]+", "")
+        cxxflags = cxxflags:gsub("%-flto", "")
+        ldflags = ldflags:gsub("%-flto=[^%s]+", "")
+        ldflags = ldflags:gsub("%-flto", "")
+        os.setenv("CFLAGS", cflags)
+        os.setenv("CXXFLAGS", cxxflags)
+        os.setenv("LDFLAGS", ldflags)
 
         print("SDL3: cmake configure..")
         os.vrunv(cmake.program, args)
