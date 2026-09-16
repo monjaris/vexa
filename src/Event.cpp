@@ -323,7 +323,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                 {Type{ev_type}, ev_date},
                 i::event.button.which,
                 i::event.button.windowID,
-                i::event.button.button,
+                MouseBtn(i::event.button.button),
                 i::event.button.down,
                 i::event.button.clicks,
                 i::event.button.x,
