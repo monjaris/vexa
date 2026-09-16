@@ -39,9 +39,7 @@ target("vexa")
         local sdl  = path.join(os.projectdir(), "build", "sdl3-local", "lib", "libSDL3.a")
         local ttf  = path.join(os.projectdir(), "build", "sdl3_ttf-local", "lib", "libSDL3_ttf.a")
         target:add("shflags", {
-            "-Wl,--whole-archive",
             sdl, ttf,
-            "-Wl,--no-whole-archive",
         }, {force = true})
     end)
 
