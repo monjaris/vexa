@@ -1,0 +1,10 @@
+prefix=@PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Vexa
+Description: Modern cross-platform graphics framework in C++23
+Version: @VERSION@
+Libs: -L${libdir} -lvexa
+Cflags: -I${includedir}
