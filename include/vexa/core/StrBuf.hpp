@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 #include "vexa/core/defs.hpp"
 #include "vexa/core/utils.hpp"
 NAMESPACE_BEGIN(vexa)
