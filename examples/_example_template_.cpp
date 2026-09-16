@@ -30,7 +30,7 @@ int main()
             {
                 case Event::QUIT: { running = false; }
 
-                case Event::KEY_REPEAT: {
+                case Event::KEY_DOWN: {
                     if (event->kb().key == Key::ESC) { running = false; }
                 }
 
@@ -38,10 +38,10 @@ int main()
             }
         }
 
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
         gfx.rectFill(Rect{100, 100, 250, 250}, ColorF32::CYAN);
         gfx.finish();
     }
 
-    Engine::Close();
+    Engine::Quit();
 }
