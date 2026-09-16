@@ -612,9 +612,9 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
 }
 
 
-void This::m_toVexaEvent(SDL_Event* sdl_event) noexcept {
-    m_type = M_ToVexaEventTypeRuntime(sdl_event->type);
-    m_date = Event::Date::DurationT{sdl_event->common.timestamp};
+void This::m_toVexaEvent(void* sdl_event) noexcept {
+    m_type = M_ToVexaEventTypeRuntime(CAST<SDL_Event*>(sdl_event)->type);
+    m_date = Event::Date::DurationT{CAST<SDL_Event*>(sdl_event)->common.timestamp};
 }
 
 

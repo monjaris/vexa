@@ -370,7 +370,7 @@ private:
 
 
     static void M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept;
-    void m_toVexaEvent(SDL_Event* sdl_event) noexcept;
+    void m_toVexaEvent(void* sdl_event) noexcept;
 
 
 public:
