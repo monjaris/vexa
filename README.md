@@ -24,7 +24,7 @@ You do not need a system SDL3 package.
 Minimal example
 
 ```c++
-#include "vexa/vexa.hpp"
+#include <vexa/vexa.hpp>
 
 using namespace vexa;
 
