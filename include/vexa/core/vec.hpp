@@ -40,9 +40,6 @@ struct Vec2 {
     ValueT x;
     ValueT y;
 
-    constexpr Vec2(): x(ValueT{}), y(ValueT{}) {}
-    constexpr Vec2(ValueT x, ValueT y): x(x), y(y) {}
-
     constexpr bool operator== (Vec2 other) const noexcept { return VecEqu(*this, other); }
 
     constexpr Vec2& operator+= (const Vec2& other) noexcept {
