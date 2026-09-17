@@ -311,10 +311,8 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                 i::event.motion.which,
                 i::event.motion.windowID,
                 i::event.motion.state,
-                i::event.motion.x,
-                i::event.motion.y,
-                i::event.motion.xrel,
-                i::event.motion.yrel
+                {i::event.motion.x, i::event.motion.y},
+                {i::event.motion.xrel, i::event.motion.yrel}
             };
             break;
         }
@@ -326,8 +324,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                 MouseBtn(i::event.button.button),
                 i::event.button.down,
                 i::event.button.clicks,
-                i::event.button.x,
-                i::event.button.y
+                {i::event.button.x, i::event.button.y}
             };
             break;
         }
@@ -336,8 +333,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                 {Type{ev_type}, ev_date},
                 i::event.wheel.which,
                 i::event.wheel.windowID,
-                i::event.wheel.x,
-                i::event.wheel.y,
+                {i::event.wheel.x, i::event.wheel.y},
                 (i::event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED)
                     ? Mouse::Wheel::Direction::FLIPPED
                     : Mouse::Wheel::Direction::NORMAL,

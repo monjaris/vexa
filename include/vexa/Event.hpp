@@ -184,10 +184,8 @@ private:
             uint32 device_id;
             uint32 window_id;
             uint32 state;
-            fp32 x;
-            fp32 y;
-            fp32 xrel;
-            fp32 yrel;
+            Vec2 pos;
+            Vec2 rel;
         };
 
         struct Input : AnyBase {
@@ -196,15 +194,13 @@ private:
             MouseBtn button;
             bool down;
             uint8 clicks;
-            float x;
-            float y;
+            Vec2 pos;
         };
 
         struct Wheel : AnyBase {
             uint32 device_id;
             uint32 window_id;
-            float x;
-            float y;
+            Vec2 pos;
             enum class Direction {NORMAL, FLIPPED} direction;
             float mouse_x;
             float mouse_y;
