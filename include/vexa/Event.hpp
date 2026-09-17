@@ -397,7 +397,7 @@ public:
     VX_NODISCARD auto text() const noexcept { return m.text; };
     VX_NODISCARD auto textEdit() const noexcept { return m.text_edit; };
     VX_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candids; };
-    VX_NODISCARD auto mouseButton() const noexcept { return m.mouse; };
+    VX_NODISCARD auto mouse() const noexcept { return m.mouse; };
     VX_NODISCARD auto mouseDevice() const noexcept { return m.mouse_device; };
     VX_NODISCARD auto mouseMotion() const noexcept { return m.mouse_motion; };
     VX_NODISCARD auto mouseWheel() const noexcept { return m.mouse_wheel; };
