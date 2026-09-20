@@ -51,9 +51,9 @@ int main()
             }
         }
 
-        gfx.start(ColorU8::BLACK);
+        gfx.start(Color::BLACK);
 
-        gfx.rectFill(Rect{480, 200, 320, 320}, ColorF32::CYAN);
+        gfx.rectFill(Rect{480, 200, 320, 320}, Color::CYAN);
 
         gfx.finish();
         time::sleep(time::Millis(16.67));
