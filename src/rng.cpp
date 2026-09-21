@@ -26,11 +26,5 @@ T random(NoDeduce<T> min, NoDeduce<T> max) {
 }
 
 
-// Explicit instantiations
-template int32  random<int32>(NoDeduce<int32>,  NoDeduce<int32>);
-template int64  random<int64>(NoDeduce<int64>,  NoDeduce<int64>);
-template uint32 random<uint32>(NoDeduce<uint32>, NoDeduce<uint32>);
-template uint64 random<uint64>(NoDeduce<uint64>, NoDeduce<uint64>);
-
 NAMESPACE_END(rng)
 NAMESPACE_END(vexa)
