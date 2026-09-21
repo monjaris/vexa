@@ -46,6 +46,9 @@ T random(NoDeduce<T> min, NoDeduce<T> max);
 template<UintConcept T>
 T random(NoDeduce<T> min, NoDeduce<T> max);
 
+template<FloatConcept T>
+T random(NoDeduce<T> min, NoDeduce<T> max);
+
 
 // Instantiate templates here
 #define INST_TEMPLATE_RANDOM($TYPE) \
@@ -61,6 +64,8 @@ INST_TEMPLATE_RANDOM(uint16)
 INST_TEMPLATE_RANDOM(uint32)
 INST_TEMPLATE_RANDOM(uint64)
 //
+INST_TEMPLATE_RANDOM(fp32)
+INST_TEMPLATE_RANDOM(fp64)
 
 
 #undef INST_TEMPLATE_RANDOM
