@@ -8,10 +8,13 @@ namespace vexa {
     }
 }
 
+
+
 #define NAMESPACE_BEGIN($NAME) namespace $NAME {
 #define NAMESPACE_END($NS_NAME_OPTIN) }
 #define CAST static_cast
-#define TODO($MESSAGE) auto _vexa_todo = $MESSAGE
+#define PANIC() __builtin_trap()
+
 #define IF_THEN($CONDITION, $STATEMENT) if(($CONDITION)) {DEFINE_STMT($STATEMENT)}
 #define CASE_OR($CASE_1, $CASE_2)  case $CASE_1: case $CASE_2
 
@@ -19,10 +22,32 @@ namespace vexa {
 #define CASSERT($COND, $MESSAGE) { if(!($COND)) vx_force_compile_time_error($MESSAGE); }
 consteval void vx_force_compile_time_error(const char*) {}
 
-// #define DEBUG_LN() (void)(vexa::log::debug("{}:{} -> {}()", __FILE__, __LINE__, __func__), "")
-// #define DEBUG_FUNC_MODE __func__
-// #define DEBUG_FUNC_TEMPLATE($MODE) DEFINE_STMT(vexa::log::debug("{}()", $MODE);)
-// #define DEBUG_FUNC() DEBUG_FUNC_TEMPLATE(DEBUG_FUNC_MODE)
+
+
+#if defined(_WIN32)
+extern "C" int _write(int, const void*, unsigned int);
+#define VX_WRITE ::_write
+#else
+extern "C" long write(int, const void*, unsigned long);
+#define VX_WRITE ::write
+#endif
+
+
+#define TODO_IMPL "Unimplemented: "
+
+#define TODO($WHAT) do { \
+        static constexpr char _todo_msg[] = $WHAT; \
+        static constexpr char _todo_prefix[] = "\033[34m[TODO]\033[0m "; \
+        static constexpr char _file_name[] = "\033[4m" __FILE__ "\033[0m"; \
+        static constexpr char _line[] = ":\033[1m" VX_LINE_STR "\033[0m"; \
+        static constexpr char _nl = '\n'; \
+        VX_WRITE(2, _todo_prefix, sizeof(_todo_prefix) - 1); \
+        VX_WRITE(2, _todo_msg, sizeof(_todo_msg) - 1); \
+        VX_WRITE(2, _file_name, sizeof(_file_name) - 1); \
+        VX_WRITE(2, _line, sizeof(_line) - 1); \
+        VX_WRITE(2, &_nl, 1); \
+        PANIC(); \
+    } while (0);
 
 
 #define DO_PRAGMA($PRAGMA) _Pragma(#$PRAGMA)
@@ -35,6 +60,10 @@ consteval void vx_force_compile_time_error(const char*) {}
 #define IGNORE_WARNING_END($DIAGNOSTIC_OPTIN) \
     DO_PRAGMA(GCC diagnostic pop)
 
+
+#define VX_STRINGIFY_IMPL(x) #x
+#define VX_STRINGIFY(x) VX_STRINGIFY_IMPL(x)
+#define VX_LINE_STR VX_STRINGIFY(__LINE__)
 
 
 #define GEN_BITOPS($TYPE, $UNDERLYING) \
@@ -64,7 +93,10 @@ consteval void vx_force_compile_time_error(const char*) {}
 
 #define VX_NODISCARD  [[nodiscard]]
 
+#define LAUNDER($PTR) __builtin_launder($PTR);
+
 #define VX_STATIC_ERR($MESSAGE) static_assert(false, $MESSAGE)
+
 
 #define VX_STATIC_CLASS : private CN_SC
 class CN_SC {

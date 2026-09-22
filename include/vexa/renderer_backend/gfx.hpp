@@ -54,13 +54,13 @@ constexpr uint32 MAX_SEGMENTS = 128;
 //
 void fill_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segments);
 //
-void line_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, const uint32 quality);
+void line_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segments);
 //
 template<usize N>
-void fill_N_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, const uint32 quality);
+void fill_N_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segments);
 //
 template<usize N>
-void line_N_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, const uint32 quality);
+void line_N_circle(void* renderer_ptr, fp32 x, fp32 y, fp32 r, uint32 segments);
 
 
 
