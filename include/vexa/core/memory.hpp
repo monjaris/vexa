@@ -38,47 +38,65 @@ requires (!IsLvalReference<T>::Value)
 
 
 template<class T>
-class OwnHeap
+class Uptr
 {
     T* m_ptr;
 
-    // hiding because Alloc should be the way to do it
-    // no need to use this class if you are not hallocating
 public:
-    OwnHeap(T* ptr) noexcept: m_ptr(ptr) {}
-    ~OwnHeap() { delete m_ptr; }
+    Uptr() noexcept = default;
+    explicit Uptr(T* ptr) noexcept: m_ptr(ptr) {}
+
+    ~Uptr() noexcept { delete m_ptr; }
 
     // delete copy
-    OwnHeap(const OwnHeap&) = delete;
-    OwnHeap& operator= (const OwnHeap&) = delete;
+    Uptr(const Uptr&) = delete;
+    Uptr& operator= (const Uptr&) = delete;
 
     // move ownership
-    OwnHeap(OwnHeap&& other) noexcept: m_ptr(other.m_ptr) {
+    Uptr(Uptr&& other) noexcept: m_ptr(other.m_ptr) {
         other.m_ptr = nullptr;
     }
     // delete and move ownership
-    OwnHeap& operator= (OwnHeap&& other) noexcept {
+    Uptr& operator= (Uptr&& other) noexcept {
         if (this != &other) {
-            delete m_ptr;
-            m_ptr = other.m_ptr;
+            this->reset(other.m_ptr);
             other.m_ptr = nullptr;
         }
         return *this;
     }
 
-    static OwnHeap Alloc() noexcept {
-        return OwnHeap(new T{});
+    static Uptr Alloc() {
+        return Uptr(new T{});
     }
 
     template<class... Args>
     requires (sizeof...(Args) > 0)
-    static OwnHeap Alloc(Args&&... args) noexcept {
-        return OwnHeap(new T{forwardRV<Args>(args)...});
+    static Uptr Alloc(Args&&... args) {
+        return Uptr(new T{forwardRV<Args>(args)...});
     }
 
-    T* get() const noexcept {
-        return m_ptr;
+    void operator= (nullptrT null) noexcept {
+        m_ptr = null;
     }
+
+    void reset(T* new_ptr = nullptr) noexcept {
+        T* old_ptr = m_ptr;
+        m_ptr = new_ptr;
+        delete old_ptr;
+    }
+
+    bool isNull() {
+        return !m_ptr;
+    }
+
+    const T* get() const noexcept { return m_ptr; }
+    T* get() noexcept { return m_ptr; }
+
+    const T* operator-> () const noexcept { return m_ptr; }
+    T* operator-> () noexcept { return m_ptr; }
+
+    const T& operator* () const noexcept { return *m_ptr; }
+    T& operator* () noexcept { return *m_ptr; }
 };
 
 

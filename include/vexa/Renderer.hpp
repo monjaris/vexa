@@ -1,6 +1,5 @@
 #pragma once
 #include "vexa/core/common.hpp"
-#include "vexa/alt/memory.hpp"
 #include "Texture.hpp"
 #include "Font.hpp"
 NAMESPACE_BEGIN(vexa)
@@ -11,7 +10,7 @@ class VX_NODISCARD Renderer
     // friend needs to access this->impl
     friend class Window;
     class Impl;
-    std::unique_ptr<Impl> impl;
+    Uptr<Impl> impl;
 
     class VX_NODISCARD M_Cfg
     {
@@ -106,8 +105,8 @@ public:
     //
     void circleFill(Circle circle, ColorF32 color, fp32 quality = Circle::NORMAL);
     void circleFill(Circle circle, Color color, fp32 quality = Circle::NORMAL);
-    void circleLines(Circle circle, Color color);
-    void circleLines(Circle circle, ColorF32 color);
+    void circleLines(Circle circle, Color color, fp32 quality = Circle::NORMAL);
+    void circleLines(Circle circle, ColorF32 color, fp32 quality = Circle::NORMAL);
 };
 
 

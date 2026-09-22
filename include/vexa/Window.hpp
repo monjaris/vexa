@@ -1,4 +1,5 @@
 #pragma once
+#include "vexa/core/StaticPimpl.hpp"
 #include "Renderer.hpp"
 NAMESPACE_BEGIN(vexa)
 
@@ -9,7 +10,7 @@ public:
 
 private:
     class Impl;
-    Uptr<Impl> impl;
+    StaticPimpl<Impl, 40, true> m;
 
 
     class VX_NODISCARD M_Cfg
@@ -126,16 +127,16 @@ public:
     const char* title();
     Vec2i size();
     Vec2i position();
-    bool isResizable();
-    bool isMaximized();
-    bool isMinimized();
-    bool isFullScreen();
-    bool isBorderless();
-    bool isHidden();
-    bool isAlwaysOnTop();
-    bool isKeyboardGrabbed();
-    bool isMouseGrabbed();
-    bool isMouseRelative();
+    bool isResizable() const noexcept;
+    bool isMaximized() const noexcept;
+    bool isMinimized() const noexcept;
+    bool isFullScreen() const noexcept;
+    bool isBorderless() const noexcept;
+    bool isHidden() const noexcept;
+    bool isAlwaysOnTop() const noexcept;
+    bool isKeyboardGrabbed() const noexcept;
+    bool isMouseGrabbed() const noexcept;
+    bool isMouseRelative() const noexcept;
 
 
     Window& setRenderer(const Renderer::Cfg& renderer_cfg);
