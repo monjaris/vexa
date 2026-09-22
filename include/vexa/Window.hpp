@@ -127,6 +127,7 @@ public:
     const char* title();
     Vec2i size();
     Vec2i position();
+    Vec2 aspectRatio();
     bool isResizable() const noexcept;
     bool isMaximized() const noexcept;
     bool isMinimized() const noexcept;

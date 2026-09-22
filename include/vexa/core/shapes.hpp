@@ -105,7 +105,6 @@ struct Rect {
 
 
 
-
 struct VX_NODISCARD Circle {
     Vec2 pos;
     Vec2::ValueT radius;
