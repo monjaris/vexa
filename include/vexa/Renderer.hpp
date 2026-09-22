@@ -80,7 +80,8 @@ public:
     void drawTexture(const Texture& texture, Rect src, Rect dest);
     void drawTexture(const Texture& texture, Rect src, Rect dest, Color color);
 
-    void drawText(Font& font, const char* text, Vec2 pos, Color color);
+    void drawText(Font& font, const char* text, Vec2 pos, Color color, Color bg = {0, 0, 0, 0});
+    void drawText(Font& font, std::string text, Vec2 pos, Color color, Color bg = {0, 0, 0, 0});
 
     void triangleFill(Triangle triangle, Color color);
     void triangleFill(Triangle triangle, ColorF32 color);

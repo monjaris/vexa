@@ -35,7 +35,8 @@ constexpr VectorT::ValueT VecDist(const VectorT& first, const VectorT& second) {
 }
 
 
-struct Vec2 {
+struct VX_NODISCARD Vec2
+{
     using ValueT = fp32;
     ValueT x;
     ValueT y;
@@ -57,7 +58,8 @@ struct Vec2 {
 };
 
 
-struct Vec2i {
+struct VX_NODISCARD Vec2i
+{
     using ValueT = int32;
     ValueT x;
     ValueT y;
@@ -81,7 +83,8 @@ struct Vec2i {
 };
 
 
-struct Vec2u {
+struct VX_NODISCARD Vec2u
+{
     using ValueT = uint32;
     ValueT x;
     ValueT y;

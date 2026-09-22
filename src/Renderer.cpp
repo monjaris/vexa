@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include "vexa/Renderer.hpp"
 #include "vexa/renderer_backend/gfx.hpp"
 NAMESPACE_BEGIN(vexa)
@@ -234,12 +235,27 @@ void This::drawTexture(
 
 
 
-// render font with text
-void This::drawText(Font& font, const char* text, Vec2 pos, Color color) {
-    Image image = font.createImage(text, Color::TRANSPARENT, color);
-    Texture texture = loadTexture(std::move(image));
-    drawTexture(texture, pos, color);
+namespace internal {
+    std::unordered_map<std::string, Texture> text_cache;
 }
+namespace intern = internal;
+
+
+// render font with text
+void This::drawText(Font& font, const char* text, Vec2 pos, Color color, Color bg) {
+    if (!intern::text_cache.contains(text)) {
+        Image image = font.createImage(text, bg, color);
+        Texture texture = this->loadTexture(std::move(image));
+        intern::text_cache.emplace(text, std::move(texture));
+    }
+
+    drawTexture(intern::text_cache[text], pos, color);
+}
+// overload
+void This::drawText(Font& font, std::string text, Vec2 pos, Color color, Color bg) {
+    this->drawText(font, text.c_str(), pos, color, bg);
+}
+
 
 
 
