@@ -1,5 +1,4 @@
 #pragma once
-#include <numeric>
 #include "core/defs.hpp"
 
 NAMESPACE_BEGIN(vexa)
@@ -41,34 +40,14 @@ public:
 };
 
 template<IntConcept T>
-T random(NoDeduce<T> min, NoDeduce<T> max);
+extern T random(NoDeduce<T> min, NoDeduce<T> max);
 
 template<UintConcept T>
-T random(NoDeduce<T> min, NoDeduce<T> max);
+extern T random(NoDeduce<T> min, NoDeduce<T> max);
 
 template<FloatConcept T>
-T random(NoDeduce<T> min, NoDeduce<T> max);
+extern T random(NoDeduce<T> min, NoDeduce<T> max);
 
-
-// Instantiate templates here
-#define INST_TEMPLATE_RANDOM($TYPE) \
-    extern template $TYPE random<$TYPE>(NoDeduce<$TYPE>, NoDeduce<$TYPE>);
-
-INST_TEMPLATE_RANDOM(int8)
-INST_TEMPLATE_RANDOM(int16)
-INST_TEMPLATE_RANDOM(int32)
-INST_TEMPLATE_RANDOM(int64)
-//
-INST_TEMPLATE_RANDOM(uint8)
-INST_TEMPLATE_RANDOM(uint16)
-INST_TEMPLATE_RANDOM(uint32)
-INST_TEMPLATE_RANDOM(uint64)
-//
-INST_TEMPLATE_RANDOM(fp32)
-INST_TEMPLATE_RANDOM(fp64)
-
-
-#undef INST_TEMPLATE_RANDOM
 
 NAMESPACE_END(rng)
 NAMESPACE_END(vexa)

@@ -66,7 +66,7 @@ void gfx::line_thin(void* renderer_ptr, fp32 x1, fp32 y1, fp32 x2, fp32 y2) {
 
 //
 void gfx::line_wide(void* renderer_ptr, fp32 x1, fp32 y1, fp32 x2, fp32 y2, uint32 w) {
-    
+    TODO(TODO_IMPL)
 }
 
 
@@ -100,7 +100,7 @@ void gfx::fill_triangle(
 
 //
 void gfx::line_triangle_rgba32(void* renderer_ptr, fp32 a, fp32 b, fp32 c) {
-    ;
+    TODO(TODO_IMPL)
 }
 
 
@@ -112,7 +112,7 @@ void gfx::fill_N_triangle_rgba32(
     fp32 (&b)[N],
     fp32 (&c)[N]
 ) {
-
+    TODO(TODO_IMPL)
 }
 
 
@@ -124,7 +124,7 @@ void gfx::line_N_triangle_rgba32(
     fp32 (&b)[N],
     fp32 (&c)[N]
 ) {
-
+    TODO(TODO_IMPL)
 }
 
 
@@ -160,8 +160,7 @@ void gfx::fill_N_rectangle(
     fp32 (&w)[N],
     fp32 (&h)[N]
 ) {
-    // SDL_RenderFillRects needs an SDL_FRect array,
-    // so these scalar arrays need to be packed first.
+    TODO(TODO_IMPL)
 }
 
 
@@ -176,7 +175,7 @@ void gfx::line_N_rectangle(
     fp32 (&w)[N],
     fp32 (&h)[N]
 ) {
-    
+    TODO(TODO_IMPL)
 }
 
 
@@ -241,7 +240,7 @@ void gfx::line_circle(
     fp32 r,
     const uint32 quality
 ) {
-
+    TODO(TODO_IMPL)
 }
 
 
@@ -254,7 +253,7 @@ void gfx::fill_N_circle(
     fp32 r,
     const uint32 quality
 ) {
-
+    TODO(TODO_IMPL)
 }
 
 
@@ -267,7 +266,7 @@ void gfx::line_N_circle(
     fp32 r,
     const uint32 quality
 ) {
-
+    TODO(TODO_IMPL)
 }
 
 

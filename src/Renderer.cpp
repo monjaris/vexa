@@ -56,7 +56,7 @@ public:
 
 
 
-This::Renderer(This::Cfg config): impl(new Impl{}), m_bconfig(config) {}
+This::Renderer(This::Cfg config): impl(Uptr<Impl>::Alloc()), m_bconfig(config) {}
 
 This::~Renderer() = default;
 
@@ -69,7 +69,7 @@ This::Renderer(Renderer&& other) noexcept
 
 Renderer& This::operator= (Renderer&& other) noexcept {
     if (this != &other) {
-        if (impl == nullptr) {
+        if (impl.get() == nullptr) {
             // this->~Renderer();
         }
         impl = std::move(other.impl);  other.impl = nullptr;
@@ -267,11 +267,19 @@ void This::triangleFill(Triangle triangle, ColorF32 color) {
 }
 
 void This::triangleLines(Triangle triangle, Color color) {
-    
+    gfx::set_triangle_color32(color.r, color.g, color.b, color.a);
+    gfx::line_triangle_rgba32(impl->m_renderer,
+        triangle.first.x, triangle.first.y,
+        triangle.middle.x
+    );
 }
 
 void This::triangleLines(Triangle triangle, ColorF32 color) {
-    
+    gfx::set_triangle_color32(color.r, color.g, color.b, color.a);
+    gfx::line_triangle_rgba32(impl->m_renderer,
+        triangle.first.x, triangle.first.y,
+        triangle.middle.x
+    );
 }
 
 
@@ -328,11 +336,11 @@ template<usize N> void This::rectLinesN(Rect (&rectangle_array)[N], ColorF32 col
 
 
 void This::PolyFill(Vec2 pos, Vec2 size, Color color) {
-    
+    TODO(TODO_IMPL)
 }
 
 void This::PolyLines(Vec2 pos, Vec2 size, Color color) {
-    
+    TODO(TODO_IMPL)
 }
 
 
@@ -354,12 +362,20 @@ void This::circleFill(Circle circle, ColorF32 color, fp32 quality) {
     );
 }
 
-void This::circleLines(Circle circle, Color color) {
-    
+void This::circleLines(Circle circle, Color color, fp32 quality) {
+    gfx::set_circle_color32(color.r, color.g, color.b, color.a);
+    gfx::line_circle(impl->m_renderer,
+        circle.pos.x, circle.pos.y, circle.radius,
+        circle.segments(quality)
+    );
 }
 
-void This::circleLines(Circle circle, ColorF32 color) {
-    
+void This::circleLines(Circle circle, ColorF32 color, fp32 quality) {
+    gfx::set_circle_color32(color.r, color.g, color.b, color.a);
+    gfx::line_circle(impl->m_renderer,
+        circle.pos.x, circle.pos.y, circle.radius,
+        circle.segments(quality)
+    );
 }
 
 

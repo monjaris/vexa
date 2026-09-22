@@ -48,6 +48,8 @@ int main()
 
         gfx.drawText(font, "Hello, World!", {400, 400}, Color::MAGENTA);
 
+        gfx.circleFill(Circle{{600, 400}, 100}, Color::RED);
+
         gfx.finish();
         time::sleep(time::Millis{16.6});
     }
