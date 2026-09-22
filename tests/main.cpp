@@ -8,7 +8,6 @@ int main()
     Window window = Window{}.setSize({1280, 720}).setRenderer({}).setResizable().create();
     Renderer& gfx = window.renderer();
     gfx.setMode(Renderer::STRETCH);
-    window.setAspectRatio(1.6);
 
     Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
     Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);

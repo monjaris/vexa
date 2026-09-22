@@ -300,6 +300,12 @@ Vec2i This::position() {
     return m_bconfig.m_pos;
 }
 
+Vec2 This::aspectRatio() {
+    SDL_GetWindowAspectRatio(m->m_window, &m_bconfig.m_aspect_ratio->x, &m_bconfig.m_aspect_ratio->y);
+    return m_bconfig.m_aspect_ratio;
+}
+
+
 bool This::isResizable() const noexcept {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_RESIZABLE);
 }
