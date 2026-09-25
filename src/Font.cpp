@@ -1,6 +1,7 @@
 #include "vexa/alt/SDL3-TTF.hpp"
 #include "vexa/Font.hpp"
 #include "vexa/core/log.hpp"
+#include "vexa/core/utils.hpp"
 NAMESPACE_BEGIN(vexa)
 
 #define EXTERN_CAST($OBJ) (static_cast<TTF_Font*>($OBJ))
