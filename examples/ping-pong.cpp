@@ -7,8 +7,6 @@
 \*=============================================*/
 
 #include "vexa/vexa.hpp"
-#include <random>
-#include <iostream>
 
 using namespace vexa;
 
@@ -26,123 +24,107 @@ bool pointInRect(Rect rect, Vec2i point)
         }
     }
     return false;
-} // a bit of a C-style function but im too lazy to add internals to Rect
+}
 
 class Ball
 {
-/*
-    * Vexa currently doesnt support circles, so ill use a rectangle and pretend its a ball
-    * so it can be easily changed into a ball when circles are implemented
-    * e.g. by simply modifying the draw method to something like drawcircle()
-    * But who am i kidding, the api is likely to change for such a new framework.
-*/
 public:
-    Vec2i pos = {window_size.x/2, window_size.y/2};
-    Vec2 speed  = {3,3};
-    float radius = 5;
+    Circle circle = Circle{{window_size.x / 2.f, window_size.y / 2.f}, 5};
+    Vec2 speed = {3, 3};
 
-    int score_player = 0, score_cpu = 0; // The ball can keep the scores cos why not
+    int score_player = 0, score_cpu = 0;
 
-    void Draw(Renderer& gfx)
+    void draw(Renderer& gfx)
     {
-
-        Rect CircleRect = Rect
-        {
-        pos.x - radius,
-        pos.y - radius,
-        radius * 2,
-        radius * 2
-        };
-
-        gfx.rectFill(CircleRect, ColorF32::RED);
+        gfx.circleFill(circle, Color::WHITE, Circle::PERFECT);
     }
 
-    void Update()
+    void update()
     {
-        pos.x += speed.x;
-        pos.y += speed.y;
+        circle.pos.x += speed.x;
+        circle.pos.y += speed.y;
 
-        if (pos.x - radius <= 0)
+        if (circle.pos.x - circle.radius <= 0)
         {
             score_cpu++;
-            CheckWin();
-            Reset();
+            checkWindowBounds();
+            resetPosition();
         }
-        else if (pos.x + radius >= window_size.x)
+        else if (circle.pos.x + circle.radius >= window_size.x)
         {
             score_player++;
-            CheckWin();
-            Reset();
+            checkWindowBounds();
+            resetPosition();
         }
-        if ((pos.y + radius >= window_size.y) || (pos.y - radius <= 0))
-            speed.y *= -1.1; // -1.1 so every hit the direction switches and the speed grows a little (exponentially)
+
+        if ((circle.pos.y + circle.radius >= window_size.y) || (circle.pos.y - circle.radius <= 0))
+            speed.y *= -1.1;
     }
 
-    void CheckWin()
+    void checkWindowBounds()
     {
-        std::cout << score_player << ":" << score_cpu << std::endl; // i know this isnt exactly supposed to be here but its staying..,
+        log::print("{} : {}", score_player, score_cpu);
+
         if (score_player >= scoreToWin)
         {
-            std::cout << "You win!" << std::endl;
+            log::print("You WON!");
             Engine::Quit();
             std::exit(0);
         }
         else if (score_cpu >= scoreToWin)
         {
-            std::cout << "You lose!" << std::endl;
+            log::print("Game OVER!");
             Engine::Quit();
             std::exit(0);
         }
     }
 
-    void Reset()
+    void resetPosition()
     {
-        pos.x = window_size.x / 2;
-        pos.y = window_size.y / 2;
-
-        std::random_device rd;
-        std::default_random_engine engine(rd());
-        std::bernoulli_distribution dist(0.5);
-        // i dont fully understand this part
-        // but it basically generates a random number "object"
-        // and the later used dist function uses this object to get a random boolean
+        circle.pos.x = window_size.x / 2;
+        circle.pos.y = window_size.y / 2;
 
         int speed_choices[2] = {-1, 1};
-        speed.x = 3 * speed_choices[dist(engine)];
-        speed.y = 3 * speed_choices[dist(engine)];
+        speed.x = 3 * rng::random<int>(speed_choices[0], speed_choices[1]);
+        speed.y = 3 * rng::random<int>(speed_choices[0], speed_choices[1]);
     }
 
-    bool CheckCollisionRect(Rect rect)
+    bool checkCollisionRect(const Rect& rect)
     {
-        // My idea is to just to check 4 corners of the ball
-        // i know it isnt perfect, but will do for now
-        Vec2i bottom_right = {pos.x + (int)(2*radius), pos.y + (int)(2*radius)};
-        Vec2i bottom_left = {pos.x, pos.y + (int)(2*radius)};
-        Vec2i top_right = {pos.x + (int)(2*radius), pos.y};
-        // pos itself is top left
+        // Find the closest point on the rectangle to the circle center.
+        float closest_x = math::clamp(
+            circle.pos.x,
+            rect.pos.x,
+            (rect.pos.x + rect.size.x)
+        );
 
-        if (pointInRect(rect, bottom_right)) return true;
-        if (pointInRect(rect, bottom_left)) return true;
-        if (pointInRect(rect, top_right)) return true;
-        if (pointInRect(rect, pos)) return true;
-        return false;
+        float closest_y = math::clamp(
+            circle.pos.y,
+            rect.pos.y,
+            (rect.pos.y + rect.size.y)
+        );
+
+        float dx = circle.pos.x - closest_x;
+        float dy = circle.pos.y - closest_y;
+
+        return (dx * dx + dy * dy) <= (circle.radius * circle.radius);
     }
-
 };
+
 
 class Paddle
 {
 protected:
-    void KeepIn()
+    void clampPosition()
     {
-        body.pos.y  = math::clamp(body.pos.y, 0, window_size.y - body.size.y);
+        body.pos.y = math::clamp(body.pos.y, 0, window_size.y - body.size.y);
     }
 
 public:
-    Rect body = Rect{0,0,0,0};
+    Rect body = Rect{0, 0, 0, 0};
     int speed;
 
-    void Draw(Renderer& gfx)
+    void draw(Renderer& gfx)
     {
         gfx.rectFill(body, ColorF32::WHITE);
     }
@@ -152,7 +134,7 @@ public:
         if (key == Key::UP) body.pos.y -= speed;
         else if (key == Key::DOWN) body.pos.y += speed;
 
-        KeepIn();
+        clampPosition();
     }
 
 };
@@ -160,28 +142,29 @@ public:
 class MachinePaddle : public Paddle
 {
 public:
-    void Update(int ball_y)
+    void update(int ball_y)
     {
         int center_y = body.pos.y + (body.size.y / 2);
+
         if (center_y > ball_y) body.pos.y -= speed;
         if (center_y < ball_y) body.pos.y += speed;
 
-        KeepIn();
+        clampPosition();
     }
 };
 
 int main(void)
 {
-
     Engine::Init(Engine::VIDEO);
 
     constexpr auto dt = time::Millis{16.6f};
 
     auto window = Window {}
-    .setResizable()
-    .setSize(window_size)
-    .setRenderer(Renderer::Cfg{})
-    .create();
+        .setResizable()
+        .setSize(window_size)
+        .setRenderer(Renderer::Cfg{})
+        .create();
+
     auto& gfx = window.renderer();
 
     Paddle player;
@@ -190,17 +173,21 @@ int main(void)
     player.speed = 5;
 
     MachinePaddle machine;
-    machine.body.pos = {(float)window_size.x - 20, (float)window_size.y - 10};
+    machine.body.pos = {
+        (float)window_size.x - 20,
+        (float)window_size.y - 10
+    };
     machine.body.size = {10, 100};
     machine.speed = 3;
-
 
     Ball ball;
 
     bool running = true;
+
     while (running)
     {
         auto begin = time::now();
+
         while (auto event = Event::Poll())
         {
             switch (event->type())
@@ -208,40 +195,46 @@ int main(void)
                 case Event::KEY_DOWN:
                 {
                     auto key = event->kb().key;
-                    if (key == Key::Q) running = false;
+
+                    if (key == Key::Q)
+                        running = false;
 
                     player.Update(key);
 
                     break;
                 }
+
                 case Event::QUIT:
                 {
                     running = false;
                     break;
                 }
-                default: break;
+
+                default:
+                    break;
             }
         }
 
-        if (ball.CheckCollisionRect(player.body))
-            ball.speed.x *= -1.1;
-        if (ball.CheckCollisionRect(machine.body))
-            ball.speed.x *= -1.1;
+        if (ball.checkCollisionRect(player.body)) ball.speed.x *= -1.1;
 
-        machine.Update(ball.pos.y);
-        ball.Update();
+        if (ball.checkCollisionRect(machine.body)) ball.speed.x *= -1.1;
+
+        machine.update(ball.circle.pos.y);
+        ball.update();
 
         if (!running) break;
+
         gfx.start(Color::BLACK);
 
-        player.Draw(gfx);
-        ball.Draw(gfx);
-        machine.Draw(gfx);
-
+        player.draw(gfx);
+        ball.draw(gfx);
+        machine.draw(gfx);
 
         gfx.finish();
-        time::sleep(time::Millis(dt.millis() - begin.elapsed().millis()));
 
+        time::sleep(
+            time::Millis(dt.millis() - begin.elapsed().millis())
+        );
     }
 
     Engine::Quit();
