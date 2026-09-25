@@ -6,7 +6,7 @@ OS="linux"
 PLAT="x86_64"
 MODE="release"  # or debug
 VIDEO="wayland"  # or x11
-RENDERER="sdl"  # or gpu
+RENDERER="sdl"  # no other renderer backends for now
 LIBCPP="libstdc++"  # or libc++
 
 
