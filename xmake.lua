@@ -105,6 +105,7 @@ target("game")  add_files("tests/game.cpp")  add_deps("vexa")
 target("main")  add_files("tests/main.cpp")  add_deps("vexa")
 target("bench")  add_files("tests/bench.cpp")  add_deps("vexa")
 target("sdl")  add_files("tests/sdl3.cpp")  add_deps("vexa")
+target("font")  add_files("tests/font.cpp")  add_deps("vexa")
 target("time")  add_files("tests/time.cpp")  add_deps("vexa")
 
 --- EXAMPLES
