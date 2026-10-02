@@ -321,7 +321,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                 {Type{ev_type}, ev_date},
                 i::event.button.which,
                 i::event.button.windowID,
-                MouseBtn(i::event.button.button),
+                MouseBtn{i::event.button.button},
                 i::event.button.down,
                 i::event.button.clicks,
                 {i::event.button.x, i::event.button.y}
@@ -339,8 +339,6 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
                     : Mouse::Wheel::Direction::NORMAL,
                 i::event.wheel.mouse_x,
                 i::event.wheel.mouse_y,
-                // AMBIGUOUS: Integer scroll offsets (integer_x/y) do not exist directly on SDL_MouseWheelEvent in SDL3.
-                // SDL3 wheel deltas are native floats (event.wheel.x / y).
                 0,
                 0
             };
@@ -385,7 +383,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         CASE_OR(JOYSTICK_BUTTON_DOWN, JOYSTICK_BUTTON_UP): {
             ev.m.joystick_button = Joystick::Button {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.jbutton.which,
                 i::event.jbutton.button,
                 i::event.jbutton.down
@@ -394,7 +392,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         case Type::JOYSTICK_BATTERY_UPDATED: {
             ev.m.joystick_battery = Joystick::Battery {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.jbattery.which,
                 Joystick::Battery::UNKNOWN,
                 i::event.jbattery.percent
@@ -403,7 +401,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         CASE_OR(JOYSTICK_ADDED, JOYSTICK_REMOVED): {
             ev.m.joystick_device = Joystick::Device {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.jdevice.which
             };
             break;
@@ -412,7 +410,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         //  GAMEPAD  //
         case Type::GAMEPAD_AXIS_MOTION: {
             ev.m.gamepad_axis = Gamepad::Axis {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.gaxis.which,
                 i::event.gaxis.value,
                 i::event.gaxis.axis
@@ -421,7 +419,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         CASE_OR(GAMEPAD_BUTTON_DOWN, GAMEPAD_BUTTON_UP): {
             ev.m.gamepad_button = Gamepad::Button {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.gbutton.which,
                 i::event.gbutton.button,
                 i::event.gbutton.down
@@ -430,7 +428,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         CASE_OR(GAMEPAD_ADDED, GAMEPAD_REMOVED): {
             ev.m.gamepad_device = Gamepad::Device {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.gdevice.which
             };
             break;
@@ -439,7 +437,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         case Type::GAMEPAD_TOUCHPAD_MOTION:
         case Type::GAMEPAD_TOUCHPAD_UP: {
             ev.m.gamepad_touchpad = Gamepad::Touchpad {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.gtouchpad.which,
                 i::event.gtouchpad.touchpad,
                 i::event.gtouchpad.finger,
@@ -451,7 +449,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         }
         case Type::GAMEPAD_SENSOR_UPDATE: {
             ev.m.gamepad_sensor = Gamepad::Sensor {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.gsensor.which
             };
             break;
@@ -463,7 +461,7 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
         case Type::FINGER_MOTION:
         case Type::FINGER_CANCELED: {
             ev.m.touch_finger = Touch::Finger {
-    {Type{ev_type}, ev_date},
+                {Type{ev_type}, ev_date},
                 i::event.tfinger.windowID,
                 i::event.tfinger.touchID,
                 i::event.tfinger.fingerID,
@@ -509,8 +507,6 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
             break;
         }
         case Type::PEN_AXIS: {
-            // AMBIGUOUS: SDL_PenAxisEvent maps axis values using SDL_PenAxis enum values.
-            // Converting directly to internal Touch::Axis::axis representation.
             ev.m.pen_axis = Touch::Axis {
                 {Type{ev_type}, ev_date},
                 i::event.paxis.which,
@@ -608,13 +604,14 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
 }
 
 
+
 void This::m_toVexaEvent(void* sdl_event) noexcept {
     m_type = M_ToVexaEventTypeRuntime(CAST<SDL_Event*>(sdl_event)->type);
     m_date = Event::Date::DurationT{CAST<SDL_Event*>(sdl_event)->common.timestamp};
 }
 
 
-std::optional<Event> Event::Poll() noexcept {
+VX_NODISCARD std::optional<Event> Event::Poll() noexcept {
     namespace i = internal;
 
     if (!SDL_PollEvent(&i::event)) return std::nullopt;
@@ -628,7 +625,7 @@ std::optional<Event> Event::Poll() noexcept {
 
 
 
-This::Type This::type() const noexcept {
+VX_NODISCARD This::Type This::type() const noexcept {
     return m_type;
 }
 
@@ -636,11 +633,11 @@ VX_NODISCARD This::Date This::date() const noexcept {
     return m_date;
 }
 
-bool This::isFirst() const noexcept {
+VX_NODISCARD bool This::isFirst() const noexcept {
     return m_type == Type::FIRST;
 }
 
-bool This::isLast() const noexcept {
+VX_NODISCARD bool This::isLast() const noexcept {
     return m_type == Type::LAST;
 }
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env sh
 cd "$(dirname "$0")" || exit 1
 
-PROJ="vexa"
-OS="linux"
-PLAT="x86_64"
 MODE="release"  # or debug
+
+PROJ="vexa"
+OS="$(xmake lua -c 'print(os.host())')"
+PLAT="$(xmake lua -c 'print(os.arch())')"
 VIDEO="wayland"  # or x11
 RENDERER="sdl"  # no other renderer backends for now
 LIBCPP="libstdc++"  # or libc++

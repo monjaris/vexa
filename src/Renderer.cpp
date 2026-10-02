@@ -9,7 +9,7 @@ NAMESPACE_BEGIN(vexa)
 
 /*
  * I used a little ambigious and unusual naming here(for shorter names):
- * m - message,  f - fatal, e - error  (before first underscore)
+ * m - message,  f - fatal, e - error  (applies to pre-first underscore)
  */
 IGNORE_WARNING_BEGIN("-Wunused-const-variable")
 #define DEF_MSG static constexpr inline const char* const

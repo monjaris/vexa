@@ -26,7 +26,7 @@ class StaticPimpl
 public:
     StaticPimpl() noexcept = default;
 
-    consteval bool ensure() {
+    consteval void ensure() {
         if constexpr (pedantic) {
             static_assert(storage_size == sizeof(ImplT),
                 "Implementation type's size and specified size on declaration are not equal\n"
@@ -39,15 +39,7 @@ public:
     }
 
     constexpr void construct() {
-        if constexpr (pedantic) {
-            static_assert(storage_size == sizeof(ImplT),
-                "Implementation type's size and specified size on declaration are not equal\n"
-            );
-        } else {
-            static_assert(storage_size >= sizeof(ImplT),
-                "Implementation type's size is less than specified size on declaration\n"
-            );
-        }
+        this->ensure();
 
         new (m_data) ImplT {};
     }

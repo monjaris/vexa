@@ -1,5 +1,6 @@
 #pragma once
 #include "vexa/core/StaticPimpl.hpp"
+#include "vexa/core/watchdog.hpp"
 #include "Renderer.hpp"
 NAMESPACE_BEGIN(vexa)
 
@@ -17,67 +18,63 @@ private:
     {
         friend class Window;
 
-        CfgVal<Flags<Trait>> m_flags;
-        //
-        CfgVal<const char*> m_title;
-        CfgVal<Vec2i> m_size;
-        CfgVal<Vec2i> m_pos;
-        CfgVal<Vec2> m_aspect_ratio;
-        CfgVal<const char*> m_icon_image_path;
-        //
-        CfgVal<bool> m_is_resizable;
-        CfgVal<bool> m_is_maximized;
-        CfgVal<bool> m_is_minimized;
-        CfgVal<bool> m_is_fullscreen;
-        CfgVal<bool> m_is_borderless;
-        CfgVal<bool> m_is_hidden;
-        CfgVal<bool> m_is_on_top;
-        CfgVal<bool> m_is_mouse_grabbed;
-        CfgVal<bool> m_is_mouse_relative;
-        CfgVal<bool> m_is_keyboard_grabbed;
-
     public:
-        constexpr M_Cfg() noexcept:
-            m_flags(CfgVal<Flags<Trait>>{Trait{}}),
+        CfgVal<Flags<Trait>> flags;
+        //
+        CfgVal<const char*> title;
+        CfgVal<Vec2i> size;
+        CfgVal<Vec2i> pos;
+        CfgVal<Vec2> aspect_ratio;
+        CfgVal<const char*> icon_image_path;
+        //
+        CfgVal<bool> is_resizable;
+        CfgVal<bool> is_maximized;
+        CfgVal<bool> is_minimized;
+        CfgVal<bool> is_fullscreen;
+        CfgVal<bool> is_borderless;
+        CfgVal<bool> is_hidden;
+        CfgVal<bool> is_on_top;
+        CfgVal<bool> is_mouse_grabbed;
+        CfgVal<bool> is_mouse_relative;
+        CfgVal<bool> is_keyboard_grabbed;
 
-            m_title(""),
-            m_size(Vec2i{0, 0}),
-            m_pos(Vec2i{0, 0}),
-            m_aspect_ratio(Vec2{1, 1}),
-            m_icon_image_path(nullptr),
-            m_is_resizable(false),
-            m_is_maximized(false),
-            m_is_minimized(false),
-            m_is_fullscreen(false),
-            m_is_borderless(false),
-            m_is_hidden(false),
-            m_is_on_top(false),
-            m_is_mouse_grabbed(false),
-            m_is_mouse_relative(false),
-            m_is_keyboard_grabbed(false)
+        constexpr M_Cfg() noexcept:
+            flags(CfgVal<Flags<Trait>>{Trait{}}),
+
+            title(""),
+            size(Vec2i{0, 0}),
+            pos(Vec2i{0, 0}),
+            aspect_ratio(Vec2{1, 1}),
+            icon_image_path(nullptr),
+            is_resizable(false),
+            is_maximized(false),
+            is_minimized(false),
+            is_fullscreen(false),
+            is_borderless(false),
+            is_hidden(false),
+            is_on_top(false),
+            is_mouse_grabbed(false),
+            is_mouse_relative(false),
+            is_keyboard_grabbed(false)
         {}
 
-        auto flags() -> decltype(m_flags) {
-            return m_flags;
-        }
-
         M_Cfg& reset() {
-            m_flags = m_flags.defaultVal();
-            m_title = m_title.defaultVal();
-            m_size = m_size.defaultVal();
-            m_pos = m_pos.defaultVal();
-            m_aspect_ratio = m_aspect_ratio.defaultVal();
-            m_icon_image_path = m_icon_image_path.defaultVal();
-            m_is_resizable = m_is_resizable.defaultVal();
-            m_is_maximized = m_is_maximized.defaultVal();
-            m_is_minimized = m_is_minimized.defaultVal();
-            m_is_fullscreen = m_is_fullscreen.defaultVal();
-            m_is_borderless = m_is_borderless.defaultVal();
-            m_is_hidden = m_is_hidden.defaultVal();
-            m_is_on_top = m_is_on_top.defaultVal();
-            m_is_mouse_grabbed = m_is_mouse_grabbed.defaultVal();
-            m_is_mouse_relative = m_is_mouse_relative.defaultVal();
-            m_is_keyboard_grabbed = m_is_keyboard_grabbed.defaultVal();
+            flags = flags.defaultVal();
+            title = title.defaultVal();
+            size = size.defaultVal();
+            pos = pos.defaultVal();
+            aspect_ratio = aspect_ratio.defaultVal();
+            icon_image_path = icon_image_path.defaultVal();
+            is_resizable = is_resizable.defaultVal();
+            is_maximized = is_maximized.defaultVal();
+            is_minimized = is_minimized.defaultVal();
+            is_fullscreen = is_fullscreen.defaultVal();
+            is_borderless = is_borderless.defaultVal();
+            is_hidden = is_hidden.defaultVal();
+            is_on_top = is_on_top.defaultVal();
+            is_mouse_grabbed = is_mouse_grabbed.defaultVal();
+            is_mouse_relative = is_mouse_relative.defaultVal();
+            is_keyboard_grabbed = is_keyboard_grabbed.defaultVal();
             return *this;
         }
     }

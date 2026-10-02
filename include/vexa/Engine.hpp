@@ -36,7 +36,7 @@ public:
     static bool Init(Subsystem initial_subsystems) noexcept;
     static void Quit() noexcept;
     static bool InitSubsystems(Subsystem subsystems) noexcept;
-    static void CloseSubsystems(Subsystem subsystems) noexcept;
+    static void QuitSubsystems(Subsystem subsystems) noexcept;
 
     static bool setMouseCaptured(bool yes) noexcept;
 
