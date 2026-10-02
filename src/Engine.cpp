@@ -8,10 +8,6 @@ using This = Engine;
 
 
 bool This::Init(Subsystem initial_subsystems) noexcept {
-    // guard to release SDL_Init() memory at process quit
-    struct Guard { ~Guard() { Engine::Quit(); } };
-    static Guard guard;
-
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
@@ -36,10 +32,17 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 void This::Quit() noexcept {
     if (m_init) {
         m_init = false;
-        log::info("Engine::Quit(): ");
+        log::info("Engine::Quit(): uptime: {}s", Uptime().seconds());
 
         using subsys_int = enum_t<Subsystem>;
         subsys_int subsys = M_toSDLSubsystems(m_subsystems.value());
+
+        for (auto& window_ptr : intern::windows) {
+            auto& window = *CAST<Window*>(window_ptr);
+
+            log::info("WWWid: {}", window.id());
+            window.~Window();
+        }
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
@@ -58,7 +61,7 @@ bool This::InitSubsystems(Subsystem subsystems) noexcept {
 }
 
 
-void This::CloseSubsystems(Subsystem subsystems) noexcept {
+void This::QuitSubsystems(Subsystem subsystems) noexcept {
     m_subsystems.sub(subsystems);
     SDL_QuitSubSystem(M_toSDLSubsystems(m_subsystems.value()));
 }

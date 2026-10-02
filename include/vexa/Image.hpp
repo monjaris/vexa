@@ -1,11 +1,10 @@
 #pragma once
-#include <string_view>
 #include "core/vec.hpp"
 #include "core/memory.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
-/* TODO */
+/* Image TODO (pasted from vendored code) */
 // SDL_SurfaceFlags flags;     /**< The flags of the surface, read-only */
 // SDL_PixelFormat format;     /**< The format of the surface, read-only */
 // int w;                      /**< The width of the surface, read-only. */
