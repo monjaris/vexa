@@ -39,7 +39,15 @@ public:
     }
 
     constexpr void construct() {
-        this->ensure();
+        if constexpr (pedantic) {
+            static_assert(storage_size == sizeof(ImplT),
+                "Implementation type's size and specified size on declaration are not equal\n"
+            );
+        } else {
+            static_assert(storage_size >= sizeof(ImplT),
+                "Implementation type's size is less than specified size on declaration\n"
+            );
+        }
 
         new (m_data) ImplT {};
     }
