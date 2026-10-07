@@ -87,9 +87,9 @@ on_config(function ()
         add_ldflags("-stdlib=libc++")
         add_shflags("-stdlib=libc++")
     elseif libcxx == "libstdc++" then
-        -- gnu's C++ is default anyway
+        -- stdlibc++ is default anyway
     else
-        raise("unsupported libcxx '%s': use 'libstdc++' or 'libc++'", tostring(libcxx))
+        raise(string.format("unsupported libcxx '%s': use 'libstdc++' or 'libc++'", libcxx))
     end
 end)
 
@@ -97,6 +97,7 @@ end)
 --- TARGETS
 includes("scripts/sdl3-static.lua")
 includes("scripts/sdl3_ttf-static.lua")
+includes("scripts/tfmt-dynamic.lua")
 includes("scripts/vexa-dynamic.lua")
 
 
