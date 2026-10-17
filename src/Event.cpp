@@ -1,15 +1,14 @@
 #include <utility>
+#include <algorithm>
 #include "vexa/alt/SDL3.h"
 #include "vexa/Event.hpp"
-
+NAMESPACE_BEGIN(vexa)
 
 // store global event object without PIMPL
 namespace internal {
     SDL_Event event;
 };
 
-
-NAMESPACE_BEGIN(vexa)
 
 using This = Event;
 

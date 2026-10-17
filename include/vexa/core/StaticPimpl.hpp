@@ -1,7 +1,11 @@
 #pragma once
 #include "defs.hpp"
-#include <cstddef>
 NAMESPACE_BEGIN(vexa)
+
+
+namespace internal {
+    enum class Byte : uint8 {};
+};
 
 
 template<
@@ -9,16 +13,16 @@ template<
     class ImplT,
     // the size of the memory we statically allocate for ImplT object
     usize storage_size,
-    // enables compilation error on `(storage_size != sizeof(ImplT))` (instead of `<`)
+    // enables compilation error on `(storage_size != sizeof(ImplT))` (instead of `size1 < size2`)
     bool pedantic = false,
     // alignment of storage, rarely needs to be explicitly specified
-    usize alignment = alignof(std::max_align_t)
+    usize alignment = 32  // 16 or 32 is ok
 >
 class StaticPimpl
 {
     static constexpr usize m_size = storage_size;
 
-    alignas(alignment) std::byte m_data[m_size];
+    alignas(alignment) internal::Byte m_data[m_size];
 
     ImplT* mGet() { return LAUNDER(reinterpret_cast<ImplT*>(m_data)); }
     const ImplT* mGetConst() const { return LAUNDER(reinterpret_cast<const ImplT*>(m_data)); }

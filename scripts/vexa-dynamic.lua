@@ -9,16 +9,19 @@ option("renderer-backend")
 option_end()
 
 
+includes("../vendor/tiny-fmt")
+
 target("vexa")
     set_kind("shared")
     set_languages("c++23")
-    add_includedirs(path.join(os.projectdir(), "vendor", "SDL3_ttf", "include"), {public = true})
-    add_files(path.join(os.projectdir(), "src/*.cpp"))
+    add_includedirs("../include", "../vendor")
+    add_files("../src/*.cpp")
 
     -- local dependencies
-    add_deps("sdl3", "sdl3_ttf")
+    add_deps("sdl3", "sdl3_ttf", "tiny-fmt")
     add_syslinks("pthread", "dl", "m", "rt")
-    add_shflags("-Wl,--no-undefined", {force = true})
+    add_shflags("-Wl,--no-undefined")
+
 
     on_load(function (target)
         local rb = get_config("renderer-backend") or o_SDL
@@ -38,9 +41,7 @@ target("vexa")
     on_config(function (target)
         local sdl  = path.join(os.projectdir(), "build", "sdl3-local", "lib", "libSDL3.a")
         local ttf  = path.join(os.projectdir(), "build", "sdl3_ttf-local", "lib", "libSDL3_ttf.a")
-        target:add("shflags", {
-            sdl, ttf,
-        }, {force = true})
+        target:add("shflags", {sdl, ttf})
     end)
 
 target_end()

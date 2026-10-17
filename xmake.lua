@@ -3,29 +3,17 @@ add_rules("mode.debug", "mode.release");
 add_rules("plugin.compile_commands.autoupdate")
 -- add_rules("c++.unity_build")
 
---- TOOLCHAIN
-toolchain("vexa-llvm")
-    set_kind("standalone")
-    set_toolset("cc", "clang"); set_toolset("cxx", "clang++");
-    set_toolset("as",    "clang"); set_toolset("ar",    "llvm-ar")
-    set_toolset("ld",    "clang++"); set_toolset("sh",    "clang++")
-    set_toolset("ex",    "clang++"); set_toolset("strip", "llvm-strip")
-toolchain_end()
-
-set_toolchains("vexa-llvm")
-
 
 --- SCRIPT-BEGIN
-    cxx_flags = {"-Wall"}
+    cxx_flags = {"-W-attributes"}
     ld_flags = {""}
 
     if is_mode("debug") then
         set_optimize("none")
-        set_symbols("debug")
         set_strip("none")
         debug = true
         cxx_flags = {
-            "-Wall", "-Wextra",
+            -- "-Wall", "-Wextra",
             "-fno-exceptions",
             "-fno-rtti",
             "-Wuninitialized", "-Werror=uninitialized",
@@ -33,7 +21,6 @@ set_toolchains("vexa-llvm")
             "-Wno-unused-function",
             "-Wno-unused-variable",
             "-Wno-unused-const-variable",
-            "-ftime-trace",
         };
         ld_flags = {
             -- "-fsanitize=address",
@@ -42,11 +29,10 @@ set_toolchains("vexa-llvm")
 
     elseif is_mode("release") then
         set_optimize("fastest")
-        set_symbols("none")
         set_strip("all")
         debug = false
         cxx_flags = {
-            "-Wall",
+            -- "-Wall",
             "-fno-exceptions",
             "-fno-rtti",
             "-Wno-unused-parameter",
@@ -79,7 +65,7 @@ option("libcxx")
     set_values("libstdc++", "libc++")
 option_end()
 
---- config-time stuff
+--- ON-CONFIG
 on_config(function ()
     local libcxx = get_config("libcxx")
     if libcxx == "libc++" then
@@ -97,9 +83,7 @@ end)
 --- TARGETS
 includes("scripts/sdl3-static.lua")
 includes("scripts/sdl3_ttf-static.lua")
-includes("scripts/tfmt-dynamic.lua")
 includes("scripts/vexa-dynamic.lua")
-
 
 --- TESTS
 target("game")  add_files("tests/game.cpp")  add_deps("vexa")

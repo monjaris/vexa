@@ -1,6 +1,11 @@
 #pragma once
-#include <print>
+#include <cstdlib>
+#include <string>
+#include <utility>
+#include "vexa/alt/tiny-fmt.hpp"
 #include "defs.hpp"
+#include "memory.hpp"
+
 NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(log)
 
@@ -38,44 +43,45 @@ static constexpr const char* const FATAL_POSTFIX  = "!\n";
 
 
 template<class... Args>
-inline void print(std::format_string<Args...> fmt, Args&&... args) {
+inline void print(tfmt::format_string<Args...> fmt, Args&&... args) {
     if (!intern::logging_enabled) return;
-    std::print(stdout, PRINT_PREFIX);
-    std::print(stdout, fmt, std::forward<Args>(args)...);
-    std::print(stdout, PRINT_POSTFIX);
+    tfmt::print(stdout, PRINT_PREFIX);
+    tfmt::print(stdout, fmt, mem::forward<Args>(args)...);
+    tfmt::print(stdout, PRINT_POSTFIX);
 }
 
 
 template<class... Args>
-inline void info(std::format_string<Args...> fmt, Args&&... args) {
+inline void info(tfmt::format_string<Args...> fmt, Args&&... args) {
     if (!intern::logging_enabled) return;
-    std::print(stdout, INFO_PREFIX);
-    std::print(stdout, fmt, std::forward<Args>(args)...);
-    std::print(stdout, INFO_POSTFIX);
+    tfmt::print(stdout, INFO_PREFIX);
+    tfmt::print(stdout, fmt, mem::forward<Args>(args)...);
+    tfmt::print(stdout, INFO_POSTFIX);
+}
+
+
+template<class... Args>
+inline void warning(tfmt::format_string<Args...> fmt, Args&&... args) {
+    if (!intern::logging_enabled) return;
+    tfmt::print(stderr, WARNING_PREFIX);
+    tfmt::print(stderr, fmt, mem::forward<Args>(args)...);
+    tfmt::print(stderr, WARNING_POSTFIX);
 }
 
 template<class... Args>
-inline void warning(std::format_string<Args...> fmt, Args&&... args) {
+inline void error(tfmt::format_string<Args...> fmt, Args&&... args) {
     if (!intern::logging_enabled) return;
-    std::print(stderr, WARNING_PREFIX);
-    std::print(stderr, fmt, std::forward<Args>(args)...);
-    std::print(stderr, WARNING_POSTFIX);
-}
-
-template<class... Args>
-inline void error(std::format_string<Args...> fmt, Args&&... args) {
-    if (!intern::logging_enabled) return;
-    std::print(stderr, ERROR_PREFIX);
-    std::print(stderr, fmt, std::forward<Args>(args)...);
-    std::print(stderr, ERROR_POSTFIX);
+    tfmt::print(stderr, ERROR_PREFIX);
+    tfmt::print(stderr, fmt, mem::forward<Args>(args)...);
+    tfmt::print(stderr, ERROR_POSTFIX);
     fflush(stdout);
 }
 
 template<int32 ret=1, class... Args>
-inline void fatal(std::format_string<Args...> fmt, Args&&... args) {
+inline void fatal(tfmt::format_string<Args...> fmt, Args&&... args) {
     if (!intern::logging_enabled) return;
-    std::print(stderr, "{}{}{}",
-        FATAL_PREFIX, std::format(fmt, std::forward<Args>(args)...), FATAL_POSTFIX
+    tfmt::print(stderr, "{}{}{}",
+        FATAL_PREFIX, tfmt::format(fmt, mem::forward<Args>(args)...), FATAL_POSTFIX
     );
     ::exit(ret);
 }
