@@ -1,4 +1,3 @@
-#include <utility>
 #include <algorithm>
 #include "vexa/alt/SDL3.h"
 #include "vexa/Event.hpp"
@@ -169,7 +168,7 @@ static constexpr TypeMap type_maps[] = {
 constexpr inline uint64 This::M_ToSDL3EventTypeRuntime(This::Type type) noexcept
 {
     for(const auto& [mk_type, sdl_type] : type_maps)  if(mk_type == type)  return sdl_type;
-    std::unreachable();
+    VX_UNREACHABLE();
 }
 consteval inline uint64 This::M_ToSDL3EventTypeCompt(This::Type type) noexcept
 {
@@ -179,7 +178,7 @@ consteval inline uint64 This::M_ToSDL3EventTypeCompt(This::Type type) noexcept
 constexpr inline This::Type This::M_ToVexaEventTypeRuntime(uint64 sdl_type) noexcept
 {
     for(const auto& [mk_type, _sdl_type] : type_maps)  if(_sdl_type == sdl_type)  return mk_type;
-    std::unreachable();
+    VX_UNREACHABLE();
 }
 consteval inline This::Type This::M_ToVexaEventTypeCompt(uint64 type) noexcept
 {
