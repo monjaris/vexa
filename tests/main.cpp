@@ -1,4 +1,5 @@
 #include "vexa/vexa.hpp"
+
 using namespace vexa;
 
 int main()
@@ -37,9 +38,8 @@ int main()
 
         gfx.start(Color::BLACK);
 
-        std::string text = std::to_string(result);
         gfx.drawText(
-            font, text.c_str(),
+            font, tfmt::format("{}", result),
             {500.f, 500.f}, Color::YELLOW
         );
 
@@ -47,10 +47,9 @@ int main()
 
         gfx.drawText(font, "Hello, World!", {400, 400}, Color::MAGENTA);
 
-        gfx.circleFill(Circle{{600, 400}, 100}, Color::RED);
+        gfx.circleFill(Circle{{600, 400}, 100}, Color::RED, Circle::NORMAL);
 
         gfx.finish();
         time::sleep(time::Millis{16.6});
     }
-
 }

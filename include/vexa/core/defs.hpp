@@ -1,10 +1,22 @@
 #pragma once
+#include <type_traits>  // very thin header
 
 #define VX_VERSION "v0.2.0"
+
 
 namespace vexa {
     inline namespace types {
         #include "types.hpp"
+
+        // get underlying type via cross-compiler instrinct
+        template<class T> using enum_t = std::underlying_type_t<T>;
+
+        // get integral value of an enum(class) member
+        template<class EnumType>
+        enum_t<EnumType> enum_v(EnumType enum_member) {
+            return static_cast<enum_t<EnumType>>(enum_member);
+        }
+
     }
 }
 

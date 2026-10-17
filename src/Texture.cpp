@@ -30,7 +30,7 @@ Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
     Texture build;
 
     if (texture_handle == nullptr) {
-        log::error(This::MSG_LOAD_FAIL, "");
+        log::error(This::MSG_LOAD_FAIL, image.path());
     } else {
         build.m.is_loaded = true;
         build.m.id = ++M_id_counter;

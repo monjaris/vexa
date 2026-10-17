@@ -1,7 +1,7 @@
 #pragma once
 #include "defs.hpp"
 NAMESPACE_BEGIN(vexa)
-inline NAMESPACE_BEGIN(memory)
+inline NAMESPACE_BEGIN(mem)
 
 
 template<typename T>
@@ -17,20 +17,20 @@ constexpr T* address(const T& obj) {
 
 
 template<typename T>
-constexpr rm_ref_t<T>&& move(T&& value) {
-    return CAST<rm_ref_t<T>&&>(value);
+constexpr RmRef<T>&& move(T&& value) {
+    return CAST<RmRef<T>&&>(value);
 }
 
 
 template<typename T>
-constexpr T&& forwardRV(RemoveReferenceImpl<T>& value) noexcept {
+constexpr T&& forward(RmRef<T>& value) noexcept {
     return CAST<T&&>(value);
 }
 // must overload
 template<typename T>
-constexpr T&& forwardRV(RemoveReferenceImpl<T>&& value) noexcept
-requires (!IsLvalReference<T>::Value)
+constexpr T&& forward(RmRef<T>&& value) noexcept
 {
+    static_assert(!is_lvref<T>);
     return CAST<T&&>(value);
 }
 
@@ -72,7 +72,7 @@ public:
     template<class... Args>
     requires (sizeof...(Args) > 0)
     static Uptr Alloc(Args&&... args) {
-        return Uptr(new T{forwardRV<Args>(args)...});
+        return Uptr(new T{forward<Args>(args)...});
     }
 
     void operator= (nullptrT null) noexcept {
@@ -131,5 +131,5 @@ public:
 
 
 
-NAMESPACE_END(memory)
+NAMESPACE_END(mem)
 NAMESPACE_END(vexa)

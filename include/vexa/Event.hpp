@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include "core/common.hpp"
 #include "core/Key.hpp"
 #include "time.hpp"
@@ -432,10 +433,10 @@ public:
 
 
 private:
-    // ..
+    // TODO: add comment
     constexpr static inline uint64 M_ToSDL3EventTypeRuntime(Type type) noexcept;
     consteval static inline uint64 M_ToSDL3EventTypeCompt(Type type) noexcept;
-    // ..
+    // TODO: add comment
     constexpr static inline Type M_ToVexaEventTypeRuntime(uint64 type) noexcept;
     consteval static inline Type M_ToVexaEventTypeCompt(uint64 type) noexcept;
 };
@@ -443,7 +444,7 @@ private:
 
 
 
-enum VX_NODISCARD Event::Type : uint64 {
+enum Event::Type : uint64 {
     FIRST = 0,
 
     QUIT = 0x100,
