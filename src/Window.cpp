@@ -213,7 +213,6 @@ Window This::create() {
     auto* new_window = build.m->createWindow(build.m_bconfig);
     IF_THEN (!new_window,   log::fatal(FN"{}", __func__, ERR_NOT_EXIST);)
     auto new_window_id = SDL_GetWindowID(new_window);
-    intern::windows.push_back(new_window);  // push to internal windows vector
     log::info(FN"created new window [ID={}]", __func__, new_window_id);
 
     IF_THEN(!build.m->createInputCtx(),

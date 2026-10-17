@@ -1,5 +1,4 @@
 #pragma once
-#include <concepts>
 #include "defs.hpp"
 #include "math.hpp"
 NAMESPACE_BEGIN(vexa)

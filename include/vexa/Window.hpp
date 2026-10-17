@@ -1,6 +1,5 @@
 #pragma once
 #include "vexa/core/StaticPimpl.hpp"
-#include "vexa/core/watchdog.hpp"
 #include "Renderer.hpp"
 NAMESPACE_BEGIN(vexa)
 
@@ -161,7 +160,7 @@ private:
 };
 
 
-enum VX_NODISCARD Window::Trait : uint64 {
+enum Window::Trait : uint64 {
     NONE = 0,
 
     /* general */

@@ -1,7 +1,7 @@
 #include "vexa/alt/SDL3.h"
 #include "vexa/Engine.hpp"
 #include "vexa/os.hpp"
-#include "Font.hpp"
+#include "vexa/Font.hpp"
 NAMESPACE_BEGIN(vexa)
 
 using This = Engine;
@@ -32,17 +32,10 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 void This::Quit() noexcept {
     if (m_init) {
         m_init = false;
-        log::info("Engine::Quit(): uptime: {}s", Uptime().seconds());
+        log::info("Engine::Quit(): uptime = {}s", Uptime().millis() / 1000.0);
 
         using subsys_int = enum_t<Subsystem>;
         subsys_int subsys = M_toSDLSubsystems(m_subsystems.value());
-
-        for (auto& window_ptr : intern::windows) {
-            auto& window = *CAST<Window*>(window_ptr);
-
-            log::info("WWWid: {}", window.id());
-            window.~Window();
-        }
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
