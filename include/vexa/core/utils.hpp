@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.hpp"
-#include <type_traits>
 NAMESPACE_BEGIN(vexa)
 
 template<class EnumType>

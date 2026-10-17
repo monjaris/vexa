@@ -1,4 +1,5 @@
 #include "vexa/vexa.hpp"
+#include <string>
 
 using namespace vexa;
 

@@ -1,5 +1,4 @@
 #pragma once
-#include <concepts>
 #include "core/defs.hpp"
 NAMESPACE_BEGIN(vexa::time)
 
