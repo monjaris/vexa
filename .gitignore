@@ -13,6 +13,8 @@
 /*.debug
 /main
 /game
+/format
+/format_to
 
 # Scripts
 /run.sh
