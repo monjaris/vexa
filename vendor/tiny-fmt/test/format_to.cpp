@@ -7,7 +7,7 @@ int main()
     char buffer[120];
     auto [buffer_end, buffer_err] = tfmt::format_to(buffer, "{}, {}, {}", 1, 2, 3);
 
-    int val;
+    int val = {};
     tfmt::vformat("{}", tfmt::make_format_args(val));
 
     if (buffer_err) {
