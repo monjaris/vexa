@@ -24,7 +24,7 @@ add_rules("plugin.compile_commands.autoupdate")
         };
         ld_flags = {
             -- "-fsanitize=address",
-            -- "-flto=full"
+            -- "-flto"
         }
 
     elseif is_mode("release") then
@@ -41,7 +41,7 @@ add_rules("plugin.compile_commands.autoupdate")
             "-Wno-unused-const-variable",
         };
         ld_flags = {
-            "-flto=full"
+            "-flto"
         }
 
     end
