@@ -7,4 +7,4 @@ Name: Vexa
 Description: Modern cross-platform graphics framework in C++23
 Version: @VERSION@
 Libs: -L${libdir} -lvexa
-Cflags: -I${includedir}
+Cflags: -I${includedir} -I${includedir}/vexa/vendor/SDL3/include -I${includedir}/vexa/vendor/SDL3_ttf/include -I${includedir}/vexa/vendor/tiny-fmt/include

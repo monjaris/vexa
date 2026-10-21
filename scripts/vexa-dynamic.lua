@@ -11,8 +11,15 @@ option_end()
 
 includes("../vendor/tiny-fmt")
 
+target("tiny-fmt")
+    set_symbols("none")
+target_end()
+
+
 target("vexa")
     set_kind("shared")
+    add_rules("linker.soname")
+    set_version("0.4.0", {soname = "0"})
     set_languages("c++23")
     add_includedirs("../include", "../vendor")
     add_files("../src/*.cpp")

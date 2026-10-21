@@ -381,7 +381,6 @@ public:
 
     static ActiveKeysState ActiveKeys() noexcept;
     static std::optional<Event> Poll() noexcept;
-    static bool On(Type event_type) noexcept;
 
 
     //  Get event type  //

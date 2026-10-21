@@ -1,6 +1,10 @@
 #include "vexa/core/defs.hpp"
-NAMESPACE_BEGIN(vexa::gfx)
 
+// forward decl
+struct SDL_Renderer;
+
+
+NAMESPACE_BEGIN(vexa::gfx)
 
 
 // sets implementation-side global color variable and internal renderer color to a value
