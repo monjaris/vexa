@@ -74,9 +74,9 @@ note: If you want to publish, fork the repo and do the same steps then make a PR
 
 # Layout
 - `include/vexa/`       public headers
-- `src/`                       library sources
+- `src/`                       sources files
 - `vendor/`                vendored code
-- `scripts/`                 build scripts
+- `scripts/`                 xmake related scripts
 
 # License (MIT)
 

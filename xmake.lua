@@ -54,7 +54,6 @@ set_languages("c++23")
 add_includedirs("include/")
 add_includedirs("include/vexa/alt")
 add_includedirs("vendor/SDL3/include")
-set_pcxxheader("include/vexa/alt/SDL3.h")
 --
 add_cxxflags(table.unpack(cxx_flags))
 add_ldflags(table.unpack(ld_flags))
