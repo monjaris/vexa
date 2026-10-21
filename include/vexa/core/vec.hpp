@@ -20,7 +20,7 @@ static constexpr inline VectorT VecAdd(const VectorT& left, const VectorT& right
 
 template<VectorConcept VectorT>
 static constexpr inline VectorT VecSub(const VectorT& left, const VectorT& right) noexcept {
-    return {left.x + right.x, left.y + right.y};
+    return {left.x - right.x, left.y - right.y};
 }
 
 

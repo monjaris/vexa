@@ -1,3 +1,4 @@
+#include "vexa/alt/SDL3.h"
 #include "vexa/core/log.hpp"
 #include "vexa/Image.hpp"
 NAMESPACE_BEGIN(vexa)
