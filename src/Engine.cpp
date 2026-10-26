@@ -7,7 +7,7 @@ NAMESPACE_BEGIN(vexa)
 using This = Engine;
 
 
-bool This::Init(Subsystem initial_subsystems) noexcept {
+bool This::Init(Subsystem initial_subsystems) {
     if (!m_init) {
         m_init = true;
         m_subsystems = initial_subsystems;
@@ -29,7 +29,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
 }
 
 
-void This::Quit() noexcept {
+void This::Quit() {
     if (m_init) {
         m_init = false;
         log::info("Engine::Quit(): uptime = {}s", Uptime().millis() / 1000.0);
@@ -48,33 +48,33 @@ void This::Quit() noexcept {
 }
 
 
-bool This::InitSubsystems(Subsystem subsystems) noexcept {
+bool This::InitSubsystems(Subsystem subsystems) {
     m_subsystems.add(subsystems);
     return SDL_InitSubSystem(M_toSDLSubsystems(m_subsystems.value()));
 }
 
 
-void This::QuitSubsystems(Subsystem subsystems) noexcept {
+void This::QuitSubsystems(Subsystem subsystems) {
     m_subsystems.sub(subsystems);
     SDL_QuitSubSystem(M_toSDLSubsystems(m_subsystems.value()));
 }
 
 
-bool This::setMouseCaptured(bool yes) noexcept {
+bool This::setMouseCaptured(bool yes) {
     return SDL_CaptureMouse(yes);
 }
 
 
 
-time::Date This::InitDate() noexcept {
+time::Date This::InitDate() {
     return m_init_date;
 }
 
-time::Nanos This::Uptime() noexcept {
+time::Nanos This::Uptime() {
     return m_init_date.elapsed();
 }
 
-VX_NODISCARD bool This::IsMouseCaptured() noexcept {
+VX_NODISCARD bool This::IsMouseCaptured() {
     return (SDL_GetWindowFlags(nullptr) & SDL_WINDOW_MOUSE_CAPTURE);
 }
 
@@ -82,7 +82,7 @@ VX_NODISCARD bool This::IsMouseCaptured() noexcept {
 
 
 
-constexpr This::Subsystem This::M_toVexaSubsystems(uint32 sdl_flag) noexcept {
+constexpr This::Subsystem This::M_toVexaSubsystems(uint32 sdl_flag) {
     switch (sdl_flag)
     {
         VX_MAP(AUDIO, SDL_INIT_AUDIO);
@@ -98,7 +98,7 @@ constexpr This::Subsystem This::M_toVexaSubsystems(uint32 sdl_flag) noexcept {
     return NON_COMPAT;
 }
 
-constexpr uint32 This::M_toSDLSubsystems(Subsystem subsys) noexcept {
+constexpr uint32 This::M_toSDLSubsystems(Subsystem subsys) {
     switch (subsys)
     {
         VX_REVERSE_MAP(SDL_INIT_AUDIO, AUDIO);

@@ -28,27 +28,27 @@ public:
             bool result;
 
             // Continue chain with a Key
-            Proxy operator[](Key key) const noexcept {
+            Proxy operator[](Key key) const {
                 return Proxy{state, result && state.key_data[static_cast<usize>(key)]};
             }
 
             // Continue chain with a KeyMod
-            Proxy operator[](KeyMod mod) const noexcept {
+            Proxy operator[](KeyMod mod) const {
                 return Proxy{state, result && ((state.mod_data & static_cast<uint16>(mod)) != 0)};
             }
 
             // Final conversion
-            operator bool() const noexcept {
+            operator bool() const {
                 return result;
             }
         };
 
         // Entry points
-        Proxy operator[](Key key) const noexcept {
+        Proxy operator[](Key key) const {
             return Proxy{*this, key_data[static_cast<usize>(key)]};
         }
 
-        Proxy operator[](KeyMod mod) const noexcept {
+        Proxy operator[](KeyMod mod) const {
             return Proxy{*this, (mod_data & static_cast<uint16>(mod)) != 0};
         }
 
@@ -366,78 +366,78 @@ private:
     } m;
 
 
-    static void M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept;
-    void m_toVexaEvent(void* sdl_event) noexcept;
+    static void M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date);
+    void m_toVexaEvent(void* sdl_event);
 
 
 public:
-    Event() noexcept;
+    Event();
     // rule of 5
-    ~Event() noexcept;
-    Event(Event&&) noexcept;
-    Event(const Event&) noexcept;
-    Event& operator= (const Event&) noexcept;
-    Event& operator= (Event&&) noexcept;
+    ~Event();
+    Event(Event&&);
+    Event(const Event&);
+    Event& operator= (const Event&);
+    Event& operator= (Event&&);
 
-    static ActiveKeysState ActiveKeys() noexcept;
-    static std::optional<Event> Poll() noexcept;
+    static ActiveKeysState ActiveKeys();
+    static std::optional<Event> Poll();
 
 
     //  Get event type  //
-    VX_NODISCARD Type type() const noexcept;
-    VX_NODISCARD Date date() const noexcept;
+    VX_NODISCARD Type type() const;
+    VX_NODISCARD Date date() const;
 
     //  Bool-Getters  //
-    VX_NODISCARD bool isFirst() const noexcept;
-    VX_NODISCARD bool isLast() const noexcept;
+    VX_NODISCARD bool isFirst() const;
+    VX_NODISCARD bool isLast() const;
 
     //  Getters  //
-    VX_NODISCARD auto kb() const noexcept { return m.kb; }
-    VX_NODISCARD auto kbDevice() const noexcept { return m.kb_device; };
-    VX_NODISCARD auto text() const noexcept { return m.text; };
-    VX_NODISCARD auto textEdit() const noexcept { return m.text_edit; };
-    VX_NODISCARD auto textEditCandidates() const noexcept { return m.text_edit_candids; };
-    VX_NODISCARD auto mouse() const noexcept { return m.mouse; };
-    VX_NODISCARD auto mouseDevice() const noexcept { return m.mouse_device; };
-    VX_NODISCARD auto mouseMotion() const noexcept { return m.mouse_motion; };
-    VX_NODISCARD auto mouseWheel() const noexcept { return m.mouse_wheel; };
-    VX_NODISCARD auto joystickDevice() const noexcept { return m.joystick_device; };
-    VX_NODISCARD auto joystickAxis() const noexcept { return m.joystick_axis; };
-    VX_NODISCARD auto joystickBall() const noexcept { return m.joystick_ball; };
-    VX_NODISCARD auto joystickHat() const noexcept { return m.joystick_hat; };
-    VX_NODISCARD auto joystickButton() const noexcept { return m.joystick_button; };
-    VX_NODISCARD auto joystickBattery() const noexcept { return m.joystick_battery; };
-    VX_NODISCARD auto gamepadDevice() const noexcept { return m.gamepad_device; };
-    VX_NODISCARD auto gamepadAxis() const noexcept { return m.gamepad_axis; };
-    VX_NODISCARD auto gamepadButton() const noexcept { return m.gamepad_button; };
-    VX_NODISCARD auto gamepadTouchpad() const noexcept { return m.gamepad_touchpad; };
-    VX_NODISCARD auto gamepadSensor() const noexcept { return m.gamepad_sensor; };
-    VX_NODISCARD auto touchFinger() const noexcept { return m.touch_finger; };
-    VX_NODISCARD auto touchPinch() const noexcept { return m.touch_pinch; };
-    VX_NODISCARD auto touchPen() const noexcept { return m.touch_pen; };
-    VX_NODISCARD auto touchProximity() const noexcept { return m.touch_proximity; };
-    VX_NODISCARD auto touchMotion() const noexcept { return m.pen_motion; };
-    VX_NODISCARD auto touchButton() const noexcept { return m.pen_button; };
-    VX_NODISCARD auto touchAxis() const noexcept { return m.pen_axis; };
-    VX_NODISCARD auto window() const noexcept { return m.window; };
-    VX_NODISCARD auto renderer() const noexcept { return m.renderer; };
-    VX_NODISCARD auto sensor() const noexcept { return m.sensor; };
-    VX_NODISCARD auto display() const noexcept { return m.display; };
-    VX_NODISCARD auto clipboard() const noexcept { return m.clipboard; };
-    VX_NODISCARD auto externalDrop() const noexcept { return m.extern_drop; };
-    VX_NODISCARD auto audioDevice() const noexcept { return m.audio_device; };
-    VX_NODISCARD auto cameraDevice() const noexcept { return m.camera_device; };
-    VX_NODISCARD auto quit() const noexcept { return m.quit_ev; };
-    VX_NODISCARD auto custom() const noexcept { return m.custom_ev; };
+    VX_NODISCARD auto kb() const { return m.kb; }
+    VX_NODISCARD auto kbDevice() const { return m.kb_device; };
+    VX_NODISCARD auto text() const { return m.text; };
+    VX_NODISCARD auto textEdit() const { return m.text_edit; };
+    VX_NODISCARD auto textEditCandidates() const { return m.text_edit_candids; };
+    VX_NODISCARD auto mouse() const { return m.mouse; };
+    VX_NODISCARD auto mouseDevice() const { return m.mouse_device; };
+    VX_NODISCARD auto mouseMotion() const { return m.mouse_motion; };
+    VX_NODISCARD auto mouseWheel() const { return m.mouse_wheel; };
+    VX_NODISCARD auto joystickDevice() const { return m.joystick_device; };
+    VX_NODISCARD auto joystickAxis() const { return m.joystick_axis; };
+    VX_NODISCARD auto joystickBall() const { return m.joystick_ball; };
+    VX_NODISCARD auto joystickHat() const { return m.joystick_hat; };
+    VX_NODISCARD auto joystickButton() const { return m.joystick_button; };
+    VX_NODISCARD auto joystickBattery() const { return m.joystick_battery; };
+    VX_NODISCARD auto gamepadDevice() const { return m.gamepad_device; };
+    VX_NODISCARD auto gamepadAxis() const { return m.gamepad_axis; };
+    VX_NODISCARD auto gamepadButton() const { return m.gamepad_button; };
+    VX_NODISCARD auto gamepadTouchpad() const { return m.gamepad_touchpad; };
+    VX_NODISCARD auto gamepadSensor() const { return m.gamepad_sensor; };
+    VX_NODISCARD auto touchFinger() const { return m.touch_finger; };
+    VX_NODISCARD auto touchPinch() const { return m.touch_pinch; };
+    VX_NODISCARD auto touchPen() const { return m.touch_pen; };
+    VX_NODISCARD auto touchProximity() const { return m.touch_proximity; };
+    VX_NODISCARD auto touchMotion() const { return m.pen_motion; };
+    VX_NODISCARD auto touchButton() const { return m.pen_button; };
+    VX_NODISCARD auto touchAxis() const { return m.pen_axis; };
+    VX_NODISCARD auto window() const { return m.window; };
+    VX_NODISCARD auto renderer() const { return m.renderer; };
+    VX_NODISCARD auto sensor() const { return m.sensor; };
+    VX_NODISCARD auto display() const { return m.display; };
+    VX_NODISCARD auto clipboard() const { return m.clipboard; };
+    VX_NODISCARD auto externalDrop() const { return m.extern_drop; };
+    VX_NODISCARD auto audioDevice() const { return m.audio_device; };
+    VX_NODISCARD auto cameraDevice() const { return m.camera_device; };
+    VX_NODISCARD auto quit() const { return m.quit_ev; };
+    VX_NODISCARD auto custom() const { return m.custom_ev; };
 
 
 private:
     // TODO: add comment
-    constexpr static inline uint64 M_ToSDL3EventTypeRuntime(Type type) noexcept;
-    consteval static inline uint64 M_ToSDL3EventTypeCompt(Type type) noexcept;
+    constexpr static inline uint64 M_ToSDL3EventTypeRuntime(Type type);
+    consteval static inline uint64 M_ToSDL3EventTypeCompt(Type type);
     // TODO: add comment
-    constexpr static inline Type M_ToVexaEventTypeRuntime(uint64 type) noexcept;
-    consteval static inline Type M_ToVexaEventTypeCompt(uint64 type) noexcept;
+    constexpr static inline Type M_ToVexaEventTypeRuntime(uint64 type);
+    consteval static inline Type M_ToVexaEventTypeCompt(uint64 type);
 };
 
 

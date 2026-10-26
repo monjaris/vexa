@@ -28,7 +28,7 @@ class StaticPimpl
     const ImplT* mGetConst() const { return LAUNDER(reinterpret_cast<const ImplT*>(m_data)); }
 
 public:
-    StaticPimpl() noexcept = default;
+    StaticPimpl() = default;
 
     consteval void ensure() {
         if constexpr (pedantic) {

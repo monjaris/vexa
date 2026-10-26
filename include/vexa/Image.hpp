@@ -31,9 +31,9 @@ class VX_NODISCARD Image
 
 
 public:
-    Image() noexcept = default;
-    Image(Image&& other) noexcept;
-    Image& operator= (Image&& other) noexcept;
+    Image() = default;
+    Image(Image&& other);
+    Image& operator= (Image&& other);
     // delete copy
     Image(const Image&) = delete;
     Image& operator= (const Image&) = delete;
@@ -42,12 +42,12 @@ public:
 
 
     // Load and return a image from path
-    static Image Load(const char* path) noexcept;
+    static Image Load(const char* path);
 
     // Unload referenced image from memory
-    static void Unload(RefMut<Image> image_ref) noexcept;
+    static void Unload(RefMut<Image> image_ref);
 
-    bool operator== (const Image& other) const noexcept;
+    bool operator== (const Image& other) const;
 
     void* ptr();
     Vec2i size();

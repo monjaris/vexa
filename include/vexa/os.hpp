@@ -6,8 +6,8 @@ NAMESPACE_BEGIN(vexa)
 NAMESPACE_BEGIN(os)
 
 
-StrBuf<PATH_MAX> cwd() noexcept;
-bool setCwd(StrBuf<PATH_MAX> dir) noexcept;
+StrBuf<PATH_MAX> cwd();
+bool setCwd(StrBuf<PATH_MAX> dir);
 
 
 NAMESPACE_END(os)

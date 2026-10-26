@@ -37,7 +37,7 @@ private:
         CfgVal<bool> is_mouse_relative;
         CfgVal<bool> is_keyboard_grabbed;
 
-        constexpr M_Cfg() noexcept:
+        constexpr M_Cfg():
             flags(CfgVal<Flags<Trait>>{Trait{}}),
 
             title(""),
@@ -93,13 +93,13 @@ private:
     void m_trySetWithArgs(
         const char* prop, auto& build_config_var, auto config_val,
         auto (*sdl_fn), Args... sdl_fn_args
-    ) noexcept;
+    );
 
     // wrap SDL function that takes only the window pointer
     void m_trySetNoArgs(
         const char* prop, auto& build_config_var, auto config_val,
         auto (*sdl_fn)
-    ) noexcept;
+    );
 
 
 public:
@@ -117,23 +117,23 @@ public:
     Window create();
     void destroy();
     bool exists();
-    uint32 id() const noexcept;
+    uint32 id() const;
 
-    Renderer& renderer() noexcept;
+    Renderer& renderer();
     const char* title();
     Vec2i size();
     Vec2i position();
     Vec2 aspectRatio();
-    bool isResizable() const noexcept;
-    bool isMaximized() const noexcept;
-    bool isMinimized() const noexcept;
-    bool isFullScreen() const noexcept;
-    bool isBorderless() const noexcept;
-    bool isHidden() const noexcept;
-    bool isAlwaysOnTop() const noexcept;
-    bool isKeyboardGrabbed() const noexcept;
-    bool isMouseGrabbed() const noexcept;
-    bool isMouseRelative() const noexcept;
+    bool isResizable() const;
+    bool isMaximized() const;
+    bool isMinimized() const;
+    bool isFullScreen() const;
+    bool isBorderless() const;
+    bool isHidden() const;
+    bool isAlwaysOnTop() const;
+    bool isKeyboardGrabbed() const;
+    bool isMouseGrabbed() const;
+    bool isMouseRelative() const;
 
 
     Window& setRenderer(const Renderer::Cfg& renderer_cfg);

@@ -33,22 +33,22 @@ void This::M_QuitSystem() {
 
 
 
-This::Font() noexcept = default;
+This::Font() = default;
 
-This::~Font() noexcept {
+This::~Font() {
     if (m.is_loaded) {
         Unload(RefMut{*this});
     }
 }
 
 
-This::Font(Font&& other) noexcept
+This::Font(Font&& other)
 {
     m = std::move(other.m);
     other.m = {};
 }
 
-Font& This::operator= (Font&& other) noexcept {
+Font& This::operator= (Font&& other) {
     if (this != address(other)) {
         TTF_CloseFont(EXTERN_CAST(m.font_handle));
         m = std::move(other.m);
@@ -58,7 +58,7 @@ Font& This::operator= (Font&& other) noexcept {
 }
 
 
-Font This::Load(const char* path, usize load_size) noexcept {
+Font This::Load(const char* path, usize load_size) {
     if (!This::m_context_init) {
         log::error(FN"{}", __func__, This::MSG_CONTEXT_UNINITED);
     }
@@ -78,13 +78,13 @@ Font This::Load(const char* path, usize load_size) noexcept {
     return build;
 }
 
-void This::Unload(RefMut<Font> font) noexcept {
+void This::Unload(RefMut<Font> font) {
     TTF_CloseFont(EXTERN_CAST(font.getConst().m.font_handle));
     font.get().m = {};
 }
 
 
-Image This::createImage(const char* text, Color bg, Color fg) noexcept {
+Image This::createImage(const char* text, Color bg, Color fg) {
     SDL_Surface* surface = TTF_RenderText_Shaded(
         EXTERN_CAST(m.font_handle), text, cstrLen(text),
         {fg.r, fg.g, fg.b, fg.a},
@@ -104,22 +104,22 @@ Image This::createImage(const char* text, Color bg, Color fg) noexcept {
 }
 
 
-bool This::exists() const noexcept {
+bool This::exists() const {
     return m.is_loaded;
 }
 
 
-void This::setSize(fp32 font_size) noexcept {
+void This::setSize(fp32 font_size) {
     m.size = font_size;
     TTF_SetFontSize(EXTERN_CAST(m.font_handle), font_size);
 }
 
 
-const char* This::path() const noexcept {
+const char* This::path() const {
     return m.path;
 }
 
-fp32 This::size() const noexcept {
+fp32 This::size() const {
     return m.size;
 }
 

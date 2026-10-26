@@ -8,13 +8,13 @@ NAMESPACE_BEGIN(vexa)
 using This = Texture;
 
 
-This::Texture(Texture&& other) noexcept
+This::Texture(Texture&& other)
 {
     m = std::move(other.m);
     other.m = {};
 }
 
-Texture& This::operator= (Texture&& other) noexcept {
+Texture& This::operator= (Texture&& other) {
     if (this != address(other)) {
         SDL_DestroyTexture(EXTERN_CAST(m.texture));
         m = other.m;
@@ -23,7 +23,7 @@ Texture& This::operator= (Texture&& other) noexcept {
     return *this;
 }
 
-Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
+Texture This::M_Load(void* renderer_ptr, Image& image) {
     SDL_Texture* texture_handle = SDL_CreateTextureFromSurface(
         CAST<SDL_Renderer*>(renderer_ptr), CAST<SDL_Surface*>(image.ptr())
     );
@@ -43,23 +43,23 @@ Texture This::M_Load(void* renderer_ptr, Image& image) noexcept {
 }
 
 
-This::operator bool() const noexcept {
+This::operator bool() const {
     return m.is_loaded;
 }
 
-bool This::exists() const noexcept {
+bool This::exists() const {
     return operator bool();
 }
 
-uint32 This::id() const noexcept {
+uint32 This::id() const {
     return m.id;
 }
 
-const char* This::path() const noexcept {
+const char* This::path() const {
     return m.path;
 }
 
-Vec2 This::pos() const noexcept {
+Vec2 This::pos() const {
     return {
         CAST<fp32>(EXTERN_CAST(m.texture)->w),
         CAST<fp32>(EXTERN_CAST(m.texture)->h)

@@ -23,12 +23,12 @@ constexpr RmRef<T>&& move(T&& value) {
 
 
 template<typename T>
-constexpr T&& forward(RmRef<T>& value) noexcept {
+constexpr T&& forward(RmRef<T>& value) {
     return CAST<T&&>(value);
 }
 // must overload
 template<typename T>
-constexpr T&& forward(RmRef<T>&& value) noexcept
+constexpr T&& forward(RmRef<T>&& value)
 {
     static_assert(!is_lvref<T>);
     return CAST<T&&>(value);
@@ -43,21 +43,21 @@ class Uptr
     T* m_ptr;
 
 public:
-    Uptr() noexcept = default;
-    explicit Uptr(T* ptr) noexcept: m_ptr(ptr) {}
+    Uptr() = default;
+    explicit Uptr(T* ptr): m_ptr(ptr) {}
 
-    ~Uptr() noexcept { delete m_ptr; }
+    ~Uptr() { delete m_ptr; }
 
     // delete copy
     Uptr(const Uptr&) = delete;
     Uptr& operator= (const Uptr&) = delete;
 
     // move ownership
-    Uptr(Uptr&& other) noexcept: m_ptr(other.m_ptr) {
+    Uptr(Uptr&& other): m_ptr(other.m_ptr) {
         other.m_ptr = nullptr;
     }
     // delete and move ownership
-    Uptr& operator= (Uptr&& other) noexcept {
+    Uptr& operator= (Uptr&& other) {
         if (this != &other) {
             this->reset(other.m_ptr);
             other.m_ptr = nullptr;
@@ -75,11 +75,11 @@ public:
         return Uptr(new T{forward<Args>(args)...});
     }
 
-    void operator= (nullptrT null) noexcept {
+    void operator= (nullptrT null) {
         m_ptr = null;
     }
 
-    void reset(T* new_ptr = nullptr) noexcept {
+    void reset(T* new_ptr = nullptr) {
         T* old_ptr = m_ptr;
         m_ptr = new_ptr;
         delete old_ptr;
@@ -89,14 +89,14 @@ public:
         return !m_ptr;
     }
 
-    const T* get() const noexcept { return m_ptr; }
-    T* get() noexcept { return m_ptr; }
+    const T* get() const { return m_ptr; }
+    T* get() { return m_ptr; }
 
-    const T* operator-> () const noexcept { return m_ptr; }
-    T* operator-> () noexcept { return m_ptr; }
+    const T* operator-> () const { return m_ptr; }
+    T* operator-> () { return m_ptr; }
 
-    const T& operator* () const noexcept { return *m_ptr; }
-    T& operator* () noexcept { return *m_ptr; }
+    const T& operator* () const { return *m_ptr; }
+    T& operator* () { return *m_ptr; }
 };
 
 
@@ -108,7 +108,7 @@ class VX_NODISCARD Ref
 public:
     explicit Ref(T& data): m_data(&data) {}
 
-    VX_NODISCARD const T& get() const noexcept { return *m_data; }
+    VX_NODISCARD const T& get() const { return *m_data; }
 };
 
 
@@ -120,11 +120,11 @@ class VX_NODISCARD RefMut
 public:
     explicit RefMut(T& object): m_data(&object) {}
 
-    T& get() noexcept {
+    T& get() {
         return *m_data;
     }
 
-    const T& getConst() const noexcept {
+    const T& getConst() const {
         return *m_data;
     }
 };

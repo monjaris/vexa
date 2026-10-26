@@ -5,31 +5,31 @@ NAMESPACE_BEGIN(vexa)
 template<class EnumType>
 inline constexpr usize enum_len = CAST<usize>(EnumType::COUNT);
 
-VX_NODISCARD constexpr usize cstrLen(const char8* cstr) noexcept {
+VX_NODISCARD constexpr usize cstrLen(const char8* cstr) {
     usize n = 0; while (*cstr++ != '\0') ++n;
     return n;
 }
 
-VX_NODISCARD constexpr usize cstrLen(const char16* cstr) noexcept {
+VX_NODISCARD constexpr usize cstrLen(const char16* cstr) {
     usize n = 0; while (*cstr++ != '\0') ++n;
     return n;
 }
 
-VX_NODISCARD constexpr usize cstrLen(const char32* cstr) noexcept {
+VX_NODISCARD constexpr usize cstrLen(const char32* cstr) {
     usize n = 0; while (*cstr++ != '\0') ++n;
     return n;
 }
 
 
 template<typename T, usize N>
-inline consteval usize elemSize(const T (&array)[N]) noexcept {
+inline consteval usize elemSize(const T (&array)[N]) {
     return sizeof(T);  (void)array;
 }
 // overload for containers with the underlying type that has ::value_type or ::ValueT
 template<typename T> requires
 ( requires { typename T::ValueT; } ||
 requires { typename T::value_type; } )
-inline consteval usize elemSize(const T&) noexcept {
+inline consteval usize elemSize(const T&) {
     if constexpr (requires { typename T::ValueT; }) return sizeof(typename T::ValueT);
     else return sizeof(typename T::value_type);
 }

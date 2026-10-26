@@ -310,7 +310,7 @@ constexpr bool operator== (const KeyMod first, const KeyMod second) {
 }
 
 
-constexpr bool filterMods(KeyMod source, KeyMod has, KeyMod has_not=KeyMod::NONE) noexcept {
+constexpr bool filterMods(KeyMod source, KeyMod has, KeyMod has_not=KeyMod::NONE) {
     return bool(source & has) && (source & has_not)==KeyMod::NONE;
 }
 

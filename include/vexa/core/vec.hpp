@@ -9,17 +9,17 @@ template<class T>
 concept VectorConcept = requires(T t) { t.x, t.y; };
 
 template<VectorConcept VectorT>
-static constexpr inline bool VecEqu(const VectorT& left, const VectorT& right) noexcept {
+static constexpr inline bool VecEqu(const VectorT& left, const VectorT& right) {
     return (left.x == right.x) && (left.y == right.y);
 }
 
 template<VectorConcept VectorT>
-static constexpr inline VectorT VecAdd(const VectorT& left, const VectorT& right) noexcept {
+static constexpr inline VectorT VecAdd(const VectorT& left, const VectorT& right) {
     return {left.x + right.x, left.y + right.y};
 }
 
 template<VectorConcept VectorT>
-static constexpr inline VectorT VecSub(const VectorT& left, const VectorT& right) noexcept {
+static constexpr inline VectorT VecSub(const VectorT& left, const VectorT& right) {
     return {left.x - right.x, left.y - right.y};
 }
 
@@ -40,20 +40,20 @@ struct VX_NODISCARD Vec2
     ValueT x;
     ValueT y;
 
-    constexpr bool operator== (Vec2 other) const noexcept { return VecEqu(*this, other); }
+    constexpr bool operator== (Vec2 other) const { return VecEqu(*this, other); }
 
-    constexpr Vec2& operator+= (const Vec2& other) noexcept {
+    constexpr Vec2& operator+= (const Vec2& other) {
         *this = VecAdd(*this, other);  return *this;
     }
-    constexpr Vec2& operator-= (const Vec2& other) noexcept {
+    constexpr Vec2& operator-= (const Vec2& other) {
         *this = VecSub(*this, other);  return *this;
     }
 
-    constexpr Vec2 operator+ (const Vec2& other) const noexcept { return VecAdd(*this,other); }
-    constexpr Vec2 operator- (const Vec2& other) const noexcept { return VecSub(*this,other); }
-    constexpr ValueT operator, (const Vec2& other) const noexcept { return VecDist(*this,other); }
+    constexpr Vec2 operator+ (const Vec2& other) const { return VecAdd(*this,other); }
+    constexpr Vec2 operator- (const Vec2& other) const { return VecSub(*this,other); }
+    constexpr ValueT operator, (const Vec2& other) const { return VecDist(*this,other); }
 
-    constexpr ValueT dist(const Vec2& other) const noexcept { return (*this),other; }
+    constexpr ValueT dist(const Vec2& other) const { return (*this),other; }
 };
 
 
@@ -65,20 +65,20 @@ struct VX_NODISCARD Vec2i
 
     constexpr Vec2i(): x(ValueT{}), y(ValueT{}) {}
     constexpr Vec2i(ValueT x, ValueT y): x(x), y(y) {}
-    constexpr bool operator== (Vec2i other) const noexcept { return VecEqu(*this, other); }
+    constexpr bool operator== (Vec2i other) const { return VecEqu(*this, other); }
 
-    constexpr Vec2i& operator+= (const Vec2i& other) noexcept {
+    constexpr Vec2i& operator+= (const Vec2i& other) {
         *this = VecAdd(*this, other);  return *this;
     }
-    constexpr Vec2i& operator-= (const Vec2i& other) noexcept {
+    constexpr Vec2i& operator-= (const Vec2i& other) {
         *this = VecSub(*this, other);  return *this;
     }
 
-    constexpr Vec2i operator+ (const Vec2i& other) const noexcept { return VecAdd(*this,other); }
-    constexpr Vec2i operator- (const Vec2i& other) const noexcept { return VecSub(*this,other); }
-    constexpr ValueT operator, (const Vec2i& other) const noexcept { return VecDist(*this,other); }
+    constexpr Vec2i operator+ (const Vec2i& other) const { return VecAdd(*this,other); }
+    constexpr Vec2i operator- (const Vec2i& other) const { return VecSub(*this,other); }
+    constexpr ValueT operator, (const Vec2i& other) const { return VecDist(*this,other); }
 
-    constexpr ValueT dist(const Vec2i& other) const noexcept { return (*this),other; }
+    constexpr ValueT dist(const Vec2i& other) const { return (*this),other; }
 };
 
 
@@ -88,20 +88,20 @@ struct VX_NODISCARD Vec2u
     ValueT x;
     ValueT y;
     constexpr Vec2u(ValueT x, ValueT y): x(x), y(y) {}
-    constexpr bool operator== (Vec2u other) const noexcept { return VecEqu(*this, other); }
+    constexpr bool operator== (Vec2u other) const { return VecEqu(*this, other); }
 
-    constexpr Vec2u& operator+= (const Vec2u& other) noexcept {
+    constexpr Vec2u& operator+= (const Vec2u& other) {
         *this = VecAdd(*this, other);  return *this;
     }
-    constexpr Vec2u& operator-= (const Vec2u& other) noexcept {
+    constexpr Vec2u& operator-= (const Vec2u& other) {
         *this = VecSub(*this, other);  return *this;
     }
 
-    constexpr Vec2u operator+ (const Vec2u& other) const noexcept { return VecAdd(*this,other); }
-    constexpr Vec2u operator- (const Vec2u& other) const noexcept { return VecSub(*this,other); }
-    constexpr ValueT operator, (const Vec2u& other) const noexcept { return VecDist(*this,other); }
+    constexpr Vec2u operator+ (const Vec2u& other) const { return VecAdd(*this,other); }
+    constexpr Vec2u operator- (const Vec2u& other) const { return VecSub(*this,other); }
+    constexpr ValueT operator, (const Vec2u& other) const { return VecDist(*this,other); }
 
-    constexpr ValueT dist(const Vec2u& other) const noexcept { return (*this),other; }
+    constexpr ValueT dist(const Vec2u& other) const { return (*this),other; }
 };
 
 

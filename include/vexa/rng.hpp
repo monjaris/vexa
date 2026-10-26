@@ -21,11 +21,11 @@ private:
     static constexpr uint64 magic_5 = 8;
 
 public:
-    explicit constexpr FastRand(ValueT seed) noexcept
+    explicit constexpr FastRand(ValueT seed)
         : state(seed)
     {}
 
-    constexpr ValueT generate() noexcept {
+    constexpr ValueT generate() {
         ValueT x = state;
 
         x ^= x << magic_1;

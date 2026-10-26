@@ -79,22 +79,22 @@ extern "C" long write(int, const void*, unsigned long);
 
 
 #define GEN_BITOPS($TYPE, $UNDERLYING) \
-    constexpr $TYPE operator~ ($TYPE right) noexcept { \
+    constexpr $TYPE operator~ ($TYPE right) { \
         return CAST<$TYPE>(~CAST<$UNDERLYING>(right)); \
     } \
-    constexpr $TYPE operator& ($TYPE left, $TYPE right) noexcept { \
+    constexpr $TYPE operator& ($TYPE left, $TYPE right) { \
         return static_cast<$TYPE>(CAST<$UNDERLYING>(left) & CAST<$UNDERLYING>(right)); \
     } \
     \
-    constexpr $TYPE operator| ($TYPE left, $TYPE right) noexcept { \
+    constexpr $TYPE operator| ($TYPE left, $TYPE right) { \
         return static_cast<$TYPE>(CAST<$UNDERLYING>(left) | CAST<$UNDERLYING>(right)); \
     } \
     \
-    constexpr $TYPE& operator&= ($TYPE& left, const $TYPE& right) noexcept { \
+    constexpr $TYPE& operator&= ($TYPE& left, const $TYPE& right) { \
         return (left = left & right); \
     } \
     \
-    constexpr $TYPE& operator|= ($TYPE& left, const $TYPE& right) noexcept { \
+    constexpr $TYPE& operator|= ($TYPE& left, const $TYPE& right) { \
         return (left = left | right); \
     } \
 
@@ -123,4 +123,4 @@ class CN_SC {
 #define VX_UNREACHABLE() __builtin_unreachable()
 
 #define VX_UNUSE(...)  (unuse_symbol(__VA_ARGS__));
-namespace vexa { template<typename... Args> constexpr void unuse_symbol(Args&&...) noexcept {} }
+namespace vexa { template<typename... Args> constexpr void unuse_symbol(Args&&...) {} }
