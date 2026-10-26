@@ -12,7 +12,7 @@ bool This::Init(Subsystem initial_subsystems) noexcept {
         m_init = true;
         m_subsystems = initial_subsystems;
         m_init_date = time::now();
-        log::info("Initializing VEXA-{}", VX_VERSION);
+        log::info("Initializing vexa-{}", VX_VERSION);
         log::info("Engine::Init(): working-directory: {}", os::cwd().data());
 
         using subsys_int = enum_t<Subsystem>;
