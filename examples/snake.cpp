@@ -279,16 +279,16 @@ public:
   }
 
   ~Game() {
-    window.destroy();
     Engine::Quit();
   }
 
   void Run() {
-    window = Window{}
+    Window _window = Window{}
                  .setSize({WINDOW_W, WINDOW_H})
                  .setTitle("Snake")
                  .setRenderer(Renderer::Cfg{})
                  .create();
+    window = std::move(_window);
 
     constexpr auto frame_time = time::Millis{16.6f};
 
