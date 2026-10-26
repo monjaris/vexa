@@ -42,24 +42,24 @@ class VX_NODISCARD Font
 
 public:
     // ctor
-    Font() noexcept;
+    Font();
     // rule of 5
-    ~Font() noexcept;
-    Font(Font&& other) noexcept;
-    Font& operator= (Font&& other) noexcept;
-    Font(const Font&) noexcept = delete;
-    Font& operator= (const Font&) noexcept = delete;
+    ~Font();
+    Font(Font&& other);
+    Font& operator= (Font&& other);
+    Font(const Font&) = delete;
+    Font& operator= (const Font&) = delete;
 
-    static Font Load(const char* path, usize load_size) noexcept;
-    static void Unload(RefMut<Font> font) noexcept;
+    static Font Load(const char* path, usize load_size);
+    static void Unload(RefMut<Font> font);
 
-    Image createImage(const char* text, Color bg, Color fg) noexcept;
-    bool exists() const noexcept;
+    Image createImage(const char* text, Color bg, Color fg);
+    bool exists() const;
 
-    void setSize(fp32 font_size) noexcept;
+    void setSize(fp32 font_size);
 
-    const char* path() const noexcept;
-    fp32 size() const noexcept;
+    const char* path() const;
+    fp32 size() const;
 };
 
 

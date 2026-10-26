@@ -35,20 +35,20 @@ public:
         return *this;
     }
 
-    auto value() const noexcept { return m_value; }
+    auto value() const { return m_value; }
 
     // get default value of the config object
-    T defaultVal() const noexcept { return m_default; }
+    T defaultVal() const { return m_default; }
 
     // bool operator== (T other) {
         // return value == other;
     // }
 
     // to access @member value implicitly
-    constexpr operator T() const noexcept { return m_value; }
+    constexpr operator T() const { return m_value; }
 
     // to access underlying members of value via `->`
-    constexpr T* operator ->() noexcept { return &m_value; }
+    constexpr T* operator ->() { return &m_value; }
 };
 
 

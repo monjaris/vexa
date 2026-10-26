@@ -21,12 +21,12 @@ class VX_NODISCARD Renderer
         CfgVal<uint8> mode;
 
     public:
-        constexpr M_Cfg () noexcept:
+        constexpr M_Cfg ():
             vsync(false),
             mode(0)
         {}
 
-        void reset() noexcept {
+        void reset() {
             vsync = vsync.defaultVal();
         }
     }
@@ -50,8 +50,8 @@ public:
     Renderer(Cfg config = Cfg{});
     // rule of 5
     ~Renderer();
-    Renderer(Renderer&& other) noexcept;
-    Renderer& operator= (Renderer&& other) noexcept;
+    Renderer(Renderer&& other);
+    Renderer& operator= (Renderer&& other);
     Renderer (const Renderer& copy_ctor) = delete;
     Renderer& operator= (const Renderer& copy_operator) = delete;
 
@@ -71,9 +71,9 @@ public:
     void finish();
 
     // create texture from image
-    Texture loadTexture(Image&& image) noexcept;
+    Texture loadTexture(Image&& image);
     // create texture from font
-    Texture loadTexture(Font& font, uint64 font_ize, const char* text) noexcept;
+    Texture loadTexture(Font& font, uint64 font_ize, const char* text);
 
     void drawTexture(const Texture& texture, Vec2 pos);
     void drawTexture(const Texture& texture, Vec2 pos, Color color);

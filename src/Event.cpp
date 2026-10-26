@@ -165,29 +165,29 @@ static constexpr TypeMap type_maps[] = {
 };
 
 
-constexpr inline uint64 This::M_ToSDL3EventTypeRuntime(This::Type type) noexcept
+constexpr inline uint64 This::M_ToSDL3EventTypeRuntime(This::Type type)
 {
     for(const auto& [mk_type, sdl_type] : type_maps)  if(mk_type == type)  return sdl_type;
     VX_UNREACHABLE();
 }
-consteval inline uint64 This::M_ToSDL3EventTypeCompt(This::Type type) noexcept
+consteval inline uint64 This::M_ToSDL3EventTypeCompt(This::Type type)
 {
     return M_ToSDL3EventTypeRuntime(type);
 }
 
-constexpr inline This::Type This::M_ToVexaEventTypeRuntime(uint64 sdl_type) noexcept
+constexpr inline This::Type This::M_ToVexaEventTypeRuntime(uint64 sdl_type)
 {
     for(const auto& [mk_type, _sdl_type] : type_maps)  if(_sdl_type == sdl_type)  return mk_type;
     VX_UNREACHABLE();
 }
-consteval inline This::Type This::M_ToVexaEventTypeCompt(uint64 type) noexcept
+consteval inline This::Type This::M_ToVexaEventTypeCompt(uint64 type)
 {
     return M_ToVexaEventTypeRuntime(type);
 }
 
 
 
-This::Event() noexcept {
+This::Event() {
     m.kb.date = m.kb_device.date =
     m.text.date = m.text_edit.date = m.text_edit_candids.date =
     m.mouse.date = m.mouse_device.date = m.mouse_motion.date = m.mouse_wheel.date =
@@ -221,16 +221,16 @@ This::Event() noexcept {
 
 
 // set all default
-This::~Event() noexcept = default;
-This::Event(Event&&) noexcept = default;
-This::Event(const Event&) noexcept = default;
-Event& This::operator= (const Event&) noexcept = default;
-Event& This::operator= (Event&&) noexcept = default;
+This::~Event() = default;
+This::Event(Event&&) = default;
+This::Event(const Event&) = default;
+Event& This::operator= (const Event&) = default;
+Event& This::operator= (Event&&) = default;
 
 
 
 
-This::ActiveKeysState This::ActiveKeys() noexcept {
+This::ActiveKeysState This::ActiveKeys() {
     ActiveKeysState aks;
 
     // copy sdl keyboard state to internal buffer
@@ -244,7 +244,7 @@ This::ActiveKeysState This::ActiveKeys() noexcept {
 
 
 
-void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
+void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) {
     namespace i = internal;
 
     switch (ev.m_type)
@@ -603,13 +603,13 @@ void This::M_Fill(Event& ev, enum_t<Type> ev_type, uint64 ev_date) noexcept {
 
 
 
-void This::m_toVexaEvent(void* sdl_event) noexcept {
+void This::m_toVexaEvent(void* sdl_event) {
     m_type = M_ToVexaEventTypeRuntime(CAST<SDL_Event*>(sdl_event)->type);
     m_date = Event::Date::DurationT{CAST<SDL_Event*>(sdl_event)->common.timestamp};
 }
 
 
-VX_NODISCARD std::optional<Event> Event::Poll() noexcept {
+VX_NODISCARD std::optional<Event> Event::Poll() {
     namespace i = internal;
 
     if (!SDL_PollEvent(&i::event)) return std::nullopt;
@@ -623,19 +623,19 @@ VX_NODISCARD std::optional<Event> Event::Poll() noexcept {
 
 
 
-VX_NODISCARD This::Type This::type() const noexcept {
+VX_NODISCARD This::Type This::type() const {
     return m_type;
 }
 
-VX_NODISCARD This::Date This::date() const noexcept {
+VX_NODISCARD This::Date This::date() const {
     return m_date;
 }
 
-VX_NODISCARD bool This::isFirst() const noexcept {
+VX_NODISCARD bool This::isFirst() const {
     return m_type == Type::FIRST;
 }
 
-VX_NODISCARD bool This::isLast() const noexcept {
+VX_NODISCARD bool This::isLast() const {
     return m_type == Type::LAST;
 }
 

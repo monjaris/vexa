@@ -62,14 +62,14 @@ This::Renderer(This::Cfg config): impl(Uptr<Impl>::Alloc()), m_bconfig(config) {
 
 This::~Renderer() = default;
 
-This::Renderer(Renderer&& other) noexcept
+This::Renderer(Renderer&& other)
     : impl(std::move(other.impl))
 {
     other.impl = nullptr;
     m_bconfig = other.m_bconfig;
 }
 
-Renderer& This::operator= (Renderer&& other) noexcept {
+Renderer& This::operator= (Renderer&& other) {
     if (this != &other) {
         if (impl.get() == nullptr) {
             // this->~Renderer();
@@ -181,11 +181,11 @@ void This::finish() {
 
 
 
-Texture This::loadTexture(Image&& texture_source) noexcept {
+Texture This::loadTexture(Image&& texture_source) {
     return Texture::M_Load(impl->m_renderer, texture_source);
 }
 // overload
-Texture This::loadTexture(Font& font, uint64 font_size, const char* text) noexcept {
+Texture This::loadTexture(Font& font, uint64 font_size, const char* text) {
     font.setSize(font_size);
     Image image = font.createImage(text, Color::BLACK, Color::WHITE);
     return loadTexture(std::move(image));

@@ -23,13 +23,13 @@ NAMESPACE_END(platform_detail)
 namespace detail = platform_detail;
 
 
-auto cwd() noexcept -> StrBuf<PATH_MAX> {
+auto cwd() -> StrBuf<PATH_MAX> {
     StrBuf<PATH_MAX> buf;
     ::getcwd(buf.data(), buf.lengthMax());
     return buf;
 }
 
-bool setCwd(StrBuf<PATH_MAX> dir) noexcept {
+bool setCwd(StrBuf<PATH_MAX> dir) {
     return CHANGE_DIR(dir.cstr()) != 0;
 }
 

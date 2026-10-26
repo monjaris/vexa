@@ -27,21 +27,21 @@ struct Triangle {
     VecT last;
 
     // create a triangle: (pos1, pos2, pos3)
-    explicit constexpr inline Triangle(VecT pos1, VecT pos2, VecT pos3) noexcept
+    explicit constexpr inline Triangle(VecT pos1, VecT pos2, VecT pos3)
         : first(pos1), middle(pos2), last(pos3) {}
 
 
-    fp32 side1() const noexcept {
+    fp32 side1() const {
         return VecDist(first, middle);
     }
-    fp32 side2() const noexcept {
+    fp32 side2() const {
         return VecDist(middle, last);
     }
-    fp32 side3() const noexcept {
+    fp32 side3() const {
         return VecDist(last, first);
     }
 
-    constexpr fp32 area() const noexcept {
+    constexpr fp32 area() const {
         fp32 semi_p = Perimeter(this->side1(), this->side2(), this->side3()) / 2.0f;
         return math::sqrt(semi_p*(semi_p-side1())*(semi_p-side2())*(semi_p-side3()));
     }
@@ -56,51 +56,51 @@ struct Rect {
 
 
     // default ctor
-    constexpr Rect() noexcept: pos({0, 0}), size({0, 0}) {}
+    constexpr Rect(): pos({0, 0}), size({0, 0}) {}
 
     // create a rectangle: (x, y, w, h)
     constexpr inline Rect(
         Vec2::ValueT x, Vec2::ValueT y, Vec2::ValueT width, Vec2::ValueT height
-    ) noexcept: pos({x, y}), size(width, height) {}
+    ): pos({x, y}), size(width, height) {}
 
     // create a rectangle: ({x, y}, {w, h})
-    constexpr Rect(Vec2 position, Vec2 size) noexcept
+    constexpr Rect(Vec2 position, Vec2 size)
         : pos(position), size(size) {}
 
     // create a square: ({x, y}, a)
-    constexpr Rect(Vec2 position, Vec2::ValueT side) noexcept
+    constexpr Rect(Vec2 position, Vec2::ValueT side)
         : pos(position), size({side, side}) {}
 
 
     // methods: empty(), area(), perimeter(), center()
     constexpr inline bool isEmpty()
-        const noexcept { return !pos.x && !pos.y && !size.x && !size.y; }
+        const { return !pos.x && !pos.y && !size.x && !size.y; }
     constexpr inline Vec2::ValueT area()
-        const noexcept { return size.x * size.y; }
+        const { return size.x * size.y; }
     constexpr inline Vec2::ValueT perimeter()
-        const noexcept { return 2*(size.x + size.y); }
+        const { return 2*(size.x + size.y); }
     constexpr inline Vec2 center()
-        const noexcept { return {pos.x + size.x / 2, pos.y + size.y / 2}; }
+        const { return {pos.x + size.x / 2, pos.y + size.y / 2}; }
 
     // methods: left(), right(), top(), bottom()
     constexpr inline Vec2 left()
-    const noexcept { return {pos.x, pos.y + size.y / 2}; }
+    const { return {pos.x, pos.y + size.y / 2}; }
     constexpr inline Vec2 right()
-    const noexcept { return {pos.x + size.x, pos.y + size.y / 2}; }
+    const { return {pos.x + size.x, pos.y + size.y / 2}; }
     constexpr inline Vec2 top() 
-    const noexcept { return {pos.x + size.x / 2, pos.y}; }
+    const { return {pos.x + size.x / 2, pos.y}; }
     constexpr inline Vec2 bottom()
-    const noexcept { return {pos.x + size.x / 2, pos.y + size.y}; }
+    const { return {pos.x + size.x / 2, pos.y + size.y}; }
 
     // methods: topLeft(), topRight(), bottomLeft(), bottomRight()
     constexpr inline Vec2 topLeft()
-    const noexcept { return pos; }
+    const { return pos; }
     constexpr inline Vec2 topRight()
-    const noexcept { return {pos.x + size.x, pos.y}; }
+    const { return {pos.x + size.x, pos.y}; }
     constexpr inline Vec2 bottomLeft()
-    const noexcept { return {pos.x,pos.y + size.y}; }
+    const { return {pos.x,pos.y + size.y}; }
     constexpr inline Vec2 bottomRight()
-    const noexcept { return {pos.x + size.x, pos.y + size.y}; }
+    const { return {pos.x + size.x, pos.y + size.y}; }
 };
 
 
@@ -117,19 +117,19 @@ struct VX_NODISCARD Circle {
     static constexpr fp32 PERFECT = 0.270;
 
     // create a circle: ({x, y}, r)
-    explicit constexpr inline Circle(Vec2 position, Vec2::ValueT radius) noexcept
+    explicit constexpr inline Circle(Vec2 position, Vec2::ValueT radius)
         : pos(position), radius(radius) {}
 
 
-    constexpr Vec2::ValueT area() const noexcept {
+    constexpr Vec2::ValueT area() const {
         return math::PI32 * math::pow(radius, 2);
     }
 
-    constexpr Vec2::ValueT circumference() const noexcept {
+    constexpr Vec2::ValueT circumference() const {
         return 2.f * math::PI32 * radius;
     }
 
-    Circle& enlarge(const fp64 percent) noexcept {
+    Circle& enlarge(const fp64 percent) {
         radius += radius * percent * 0.01f;
         return *this;
     }

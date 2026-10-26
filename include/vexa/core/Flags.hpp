@@ -16,54 +16,54 @@ private:
 
 public:
     //  Ctors  //
-    constexpr Flags (ValueT ini_value = ValueT{}) noexcept: m_value(ini_value) {}
+    constexpr Flags (ValueT ini_value = ValueT{}): m_value(ini_value) {}
     Flags (const This&) = default;
     Flags (This&&) = default;
 
 
     //  Getters  //
-    VX_NODISCARD constexpr ValueT value() const noexcept {
+    VX_NODISCARD constexpr ValueT value() const {
         return m_value;
     }
-    VX_NODISCARD constexpr EnumT intValue() const noexcept {
+    VX_NODISCARD constexpr EnumT intValue() const {
         return CAST<enum_t<ValueT>>(m_value);
     }
 
     //  has/has-not  //
-    constexpr bool has(const This& flags) const noexcept {
+    constexpr bool has(const This& flags) const {
         return (m_value & flags.m_value) != ValueT{};
     }
-    constexpr bool hasNot(const This& flags) const noexcept {
+    constexpr bool hasNot(const This& flags) const {
         return (m_value & flags.m_value) == ValueT{};
     }
 
     // copy operator
-    void operator= (const This& other) noexcept {
+    void operator= (const This& other) {
         m_value = other.m_value;
     }
 
     // clears the flags
-    constexpr This& reset() noexcept {
+    constexpr This& reset() {
         m_value = ValueT{};
         return *this;
     }
 
     // add flag to value
-    constexpr This& add(This flag) noexcept {
+    constexpr This& add(This flag) {
         m_value |= flag.m_value;
         return *this;
     }
-    constexpr This& add(ValueT flag) noexcept {
+    constexpr This& add(ValueT flag) {
         m_value |= flag;
         return *this;
     }
 
     // subtract flag from base
-    constexpr This& sub(ValueT flag) noexcept {
+    constexpr This& sub(ValueT flag) {
         m_value &= ~flag;
         return *this;
     }
-    constexpr This& sub(This flag) noexcept {
+    constexpr This& sub(This flag) {
         m_value &= ~flag.m_value;
         return *this;
     }
