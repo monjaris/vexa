@@ -172,7 +172,7 @@ template<typename... Args>
 void This::m_trySetWithArgs(
     const char* prop, auto& build_config_var, auto config_val,
     auto (*sdl_fn), Args... sdl_fn_args
-) noexcept
+)
 {
     if (m->m_window && m->window_exists) {
         if (sdl_fn(m->m_window, sdl_fn_args...) == false) {
@@ -186,7 +186,7 @@ void This::m_trySetWithArgs(
 void This::m_trySetNoArgs(
     const char* prop, auto& build_config_var, auto config_val,
     auto (*sdl_fn)
-) noexcept
+)
 {
     if (m->m_window && m->window_exists) {
         if (sdl_fn(m->m_window) == false) {
@@ -269,12 +269,12 @@ bool This::exists() {
 }
 
 
-uint32 This::id() const noexcept {
+uint32 This::id() const {
     return SDL_GetWindowID(m->m_window);
 }
 
 
-Renderer& This::renderer() noexcept {
+Renderer& This::renderer() {
     IF_THEN(!m.data(),
         log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
     );
@@ -310,43 +310,43 @@ Vec2 This::aspectRatio() {
 }
 
 
-bool This::isResizable() const noexcept {
+bool This::isResizable() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_RESIZABLE);
 }
 
-bool This::isMaximized() const noexcept {
+bool This::isMaximized() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_MAXIMIZED);
 }
 
-bool This::isMinimized() const noexcept {
+bool This::isMinimized() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_MINIMIZED);
 }
 
-bool This::isFullScreen() const noexcept {
+bool This::isFullScreen() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_FULLSCREEN);
 }
 
-bool This::isBorderless() const noexcept {
+bool This::isBorderless() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_BORDERLESS);
 }
 
-bool This::isHidden() const noexcept {
+bool This::isHidden() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_HIDDEN);
 }
 
-bool This::isAlwaysOnTop() const noexcept {
+bool This::isAlwaysOnTop() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_ALWAYS_ON_TOP);
 }
 
-bool This::isKeyboardGrabbed() const noexcept {
+bool This::isKeyboardGrabbed() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_KEYBOARD_GRABBED);
 }
 
-bool This::isMouseRelative() const noexcept {
+bool This::isMouseRelative() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_MOUSE_RELATIVE_MODE);
 }
 
-bool This::isMouseGrabbed() const noexcept {
+bool This::isMouseGrabbed() const {
     return (m_getActiveFlags(m->m_window) & SDL_WINDOW_MOUSE_GRABBED);
 }
 

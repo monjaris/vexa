@@ -29,20 +29,20 @@ private:
     static inline Flags<Subsystem> m_subsystems;
     static inline time::Date m_init_date;
 
-    static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag) noexcept;
-    static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag) noexcept;
+    static constexpr Subsystem M_toVexaSubsystems(uint32 sdl_flag);
+    static constexpr uint32 M_toSDLSubsystems(Subsystem sdl_flag);
 
 public:
-    static bool Init(Subsystem initial_subsystems) noexcept;
-    static void Quit() noexcept;
-    static bool InitSubsystems(Subsystem subsystems) noexcept;
-    static void QuitSubsystems(Subsystem subsystems) noexcept;
+    static bool Init(Subsystem initial_subsystems);
+    static void Quit();
+    static bool InitSubsystems(Subsystem subsystems);
+    static void QuitSubsystems(Subsystem subsystems);
 
-    static bool setMouseCaptured(bool yes) noexcept;
+    static bool setMouseCaptured(bool yes);
 
-    static time::Date InitDate() noexcept;
-    static time::Nanos Uptime() noexcept;
-    static bool IsMouseCaptured() noexcept;
+    static time::Date InitDate();
+    static time::Nanos Uptime();
+    static bool IsMouseCaptured();
 };
 
 

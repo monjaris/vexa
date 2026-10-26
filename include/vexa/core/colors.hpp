@@ -46,7 +46,7 @@ struct Color : ColorBase<uint8> {
     {}
 
 
-    constexpr ColorF32 toF32() const noexcept;
+    constexpr ColorF32 toF32() const;
 
 
     static const This TRANSPARENT;
@@ -77,7 +77,7 @@ struct ColorF32 : ColorBase<fp32> {
     {}
 
 
-    constexpr Color toU8() const noexcept;
+    constexpr Color toU8() const;
 
 
     static const This BLACK;
@@ -101,14 +101,14 @@ concept ColorConcept = (
 
 
 
-constexpr ColorF32 Color::toF32() const noexcept {
+constexpr ColorF32 Color::toF32() const {
     constexpr fp32 scale = 1.0f / 255.0f;
 
     return { r * scale,  g * scale,  b * scale,  a * scale };
 }
 
 
-constexpr Color ColorF32::toU8() const noexcept {
+constexpr Color ColorF32::toU8() const {
     constexpr fp32 scale = 255.0f;
 
     return {

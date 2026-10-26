@@ -36,10 +36,10 @@ constexpr inline auto sqrt(fp64 x) -> decltype(x) {
 
 
 //  POW  //
-constexpr inline fp32 pow(fp32 x, fp32 exp) noexcept {
+constexpr inline fp32 pow(fp32 x, fp32 exp) {
     return std::powf(x, exp);
 }
-constexpr inline fp64 pow(fp64 x, fp64 exp) noexcept {
+constexpr inline fp64 pow(fp64 x, fp64 exp) {
     return std::pow(x, exp);
 }
 
@@ -66,17 +66,17 @@ NAMESPACE_END(constants)
 
 
 // convert radians to degrees
-constexpr inline fp32 toDegrees(fp32 radians) noexcept {
+constexpr inline fp32 toDegrees(fp32 radians) {
     return radians * 180.0f * PI32_INV;
 }
-constexpr inline fp64 toDegrees(fp64 radians) noexcept {
+constexpr inline fp64 toDegrees(fp64 radians) {
     return radians * 180.0 * PI64_INV;
 }
 // convert degrees to radians
-constexpr inline fp32 toRadians(fp32 degrees) noexcept {
+constexpr inline fp32 toRadians(fp32 degrees) {
     return degrees * (PI32 / 180.0f);
 }
-constexpr inline fp64 toRadians(fp64 degrees) noexcept {
+constexpr inline fp64 toRadians(fp64 degrees) {
     return degrees * (PI64 / 180.0);
 }
 

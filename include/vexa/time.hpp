@@ -61,26 +61,26 @@ public:
     explicit constexpr Duration(ValueT amount): m_nanos(amount * t_ratio) {}
 
     // { +=, -=, +, - } operators for <Duration>s
-    constexpr Duration& operator+= (const Duration& duration) noexcept {
+    constexpr Duration& operator+= (const Duration& duration) {
         m_nanos += duration.m_nanos;  return *this;
     }
-    constexpr Duration& operator-= (const Duration& duration) noexcept {
+    constexpr Duration& operator-= (const Duration& duration) {
         m_nanos -= duration.m_nanos;  return *this;
     }
-    constexpr Duration operator+ (const Duration& other) const noexcept {
+    constexpr Duration operator+ (const Duration& other) const {
         return Duration{nullptr, m_nanos + other.m_nanos};
     }
-    constexpr Duration operator- (const Duration& other) const noexcept {
+    constexpr Duration operator- (const Duration& other) const {
         return Duration{nullptr, m_nanos - other.m_nanos};
     }
 
 
-    consteval inline uint64 ratio() const noexcept { return t_ratio; }
-    constexpr inline ValueT amount() const noexcept { return m_nanos / static_cast<ValueT>(t_ratio); }
-    constexpr inline ValueT nanos() const noexcept { return m_nanos; }
-    constexpr inline ValueT micros() const noexcept { return m_nanos / 1'000.0l; }
-    constexpr inline ValueT millis() const noexcept { return m_nanos / 1'000'000.0l; }
-    constexpr inline ValueT seconds() const noexcept { return m_nanos / 1'000'000'000.0l; }
+    consteval inline uint64 ratio() const { return t_ratio; }
+    constexpr inline ValueT amount() const { return m_nanos / static_cast<ValueT>(t_ratio); }
+    constexpr inline ValueT nanos() const { return m_nanos; }
+    constexpr inline ValueT micros() const { return m_nanos / 1'000.0l; }
+    constexpr inline ValueT millis() const { return m_nanos / 1'000'000.0l; }
+    constexpr inline ValueT seconds() const { return m_nanos / 1'000'000'000.0l; }
 };
 
 
@@ -105,25 +105,25 @@ public:
 
     // { +=, -=, +, - } operators
     // <Date> += <DurationT>
-    constexpr TimePoint& operator+= (DurationT duration) noexcept {
+    constexpr TimePoint& operator+= (DurationT duration) {
         m_since_epoch += duration;
         return *this;
     }
     // <Date> -= <DurationT>
-    constexpr TimePoint& operator-= (DurationT duration) noexcept {
+    constexpr TimePoint& operator-= (DurationT duration) {
         m_since_epoch -= duration;
         return *this;
     }
     // <Date> + <DurationT>
-    constexpr TimePoint operator+ (DurationT duration) noexcept {
+    constexpr TimePoint operator+ (DurationT duration) {
         return {.m_since_epoch = m_since_epoch + duration};
     }
     // <Date> - <DurationT>
-    constexpr TimePoint operator- (DurationT duration) noexcept {
+    constexpr TimePoint operator- (DurationT duration) {
         return {.m_since_epoch = m_since_epoch - duration};
     }
     // <Date> - <Date>
-    constexpr DurationT operator- (const TimePoint& other) noexcept {
+    constexpr DurationT operator- (const TimePoint& other) {
         return DurationT{m_since_epoch - other.m_since_epoch};
     }
 

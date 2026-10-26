@@ -13,13 +13,13 @@ This::~Image() {
     Unload(RefMut{*this});
 }
 
-This::Image(Image&& other) noexcept
+This::Image(Image&& other)
     : m(other.m)
 {
     other.m = {};
 }
 
-Image& This::operator= (Image&& other) noexcept {
+Image& This::operator= (Image&& other) {
     if (this != address(other)) {
         if (m.is_loaded) SDL_DestroySurface(EXTERN_CAST(m.image));
         m = other.m;
@@ -29,7 +29,7 @@ Image& This::operator= (Image&& other) noexcept {
 }
 
 
-Image This::Load(const char* path) noexcept {
+Image This::Load(const char* path) {
     Image build = {};
 
     build.m.image = SDL_LoadSurface(path);
@@ -44,7 +44,7 @@ Image This::Load(const char* path) noexcept {
 }
 
 
-void This::Unload(RefMut<Image> image_ref) noexcept {
+void This::Unload(RefMut<Image> image_ref) {
     if (image_ref.get().m.is_loaded) {
         SDL_DestroySurface(EXTERN_CAST(image_ref.get().m.image));
     }
@@ -53,7 +53,7 @@ void This::Unload(RefMut<Image> image_ref) noexcept {
 }
 
 
-bool This::operator== (const Image& other) const noexcept {
+bool This::operator== (const Image& other) const {
     return (
         m.image == other.m.image &&
         m.path == other.m.path

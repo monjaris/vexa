@@ -14,10 +14,10 @@ class VX_NODISCARD StrBuf
     usize m_len = 0;
 
 public:
-    constexpr StrBuf() noexcept = default;
-    constexpr ~StrBuf() noexcept = default;
+    constexpr StrBuf() = default;
+    constexpr ~StrBuf() = default;
 
-    constexpr StrBuf(const CharT* cstr) noexcept {
+    constexpr StrBuf(const CharT* cstr) {
         m_len = cstrLen(cstr);
 
         if (m_len >= size) m_len = size - 1;
@@ -26,19 +26,19 @@ public:
         m_buf[m_len] = '\0';
     }
 
-    constexpr CharT* data() noexcept {
+    constexpr CharT* data() {
         return m_buf;
     }
 
-    constexpr const CharT* cstr() const noexcept {
+    constexpr const CharT* cstr() const {
         return m_buf;
     }
 
-    constexpr usize length() const noexcept {
+    constexpr usize length() const {
         return m_len;
     }
 
-    constexpr usize lengthMax() const noexcept {
+    constexpr usize lengthMax() const {
         return size - 1;
     }
 };
