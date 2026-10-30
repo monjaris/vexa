@@ -132,7 +132,7 @@ bool This::vsync() {
     return vsync;
 }
 
-void This::setMode(Mode render_mode) {
+Renderer& This::setMode(Mode render_mode) {
     m_bconfig.mode = CAST<uint8>(render_mode);
     if (impl->m_init) {
         int win_w, win_h;
@@ -141,6 +141,8 @@ void This::setMode(Mode render_mode) {
             impl->m_renderer, win_w, win_h, SDL_RendererLogicalPresentation(CAST<uint8>(render_mode))
         );
     }
+
+    return *this;
 }
 
 This::Mode This::mode() {

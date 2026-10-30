@@ -39,10 +39,22 @@ public:
         gfx.circleFill(circle, Color::WHITE, Circle::PERFECT);
     }
 
+
     void update()
     {
         circle.pos.x += speed.x;
         circle.pos.y += speed.y;
+    
+        if (circle.pos.y - circle.radius <= 0)
+        {
+            circle.pos.y = circle.radius;
+            speed.y = -speed.y;
+        }
+        else if (circle.pos.y + circle.radius >= window_size.y)
+        {
+            circle.pos.y = window_size.y - circle.radius;
+            speed.y = -speed.y;
+        }
 
         if (circle.pos.x - circle.radius <= 0)
         {
@@ -56,9 +68,6 @@ public:
             checkWindowBounds();
             resetPosition();
         }
-
-        if ((circle.pos.y + circle.radius >= window_size.y) || (circle.pos.y - circle.radius <= 0))
-            speed.y *= -1.1;
     }
 
     void checkWindowBounds()
@@ -129,7 +138,7 @@ public:
         gfx.rectFill(body, ColorF32::WHITE);
     }
 
-    void Update(enum Key key)
+    void update(enum Key key)
     {
         if (key == Key::UP) body.pos.y -= speed;
         else if (key == Key::DOWN) body.pos.y += speed;
@@ -165,7 +174,7 @@ int main(void)
         .setRenderer(Renderer::Cfg{})
         .create();
 
-    auto& gfx = window.renderer();
+    auto& gfx = window.renderer().setMode(Renderer::STRETCH);
 
     Paddle player;
     player.body.pos = {10, 10};
@@ -196,10 +205,10 @@ int main(void)
                 {
                     auto key = event->kb().key;
 
-                    if (key == Key::Q)
+                    if (key == Key::ESC)
                         running = false;
 
-                    player.Update(key);
+                    player.update(key);
 
                     break;
                 }
