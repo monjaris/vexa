@@ -283,12 +283,12 @@ public:
   }
 
   void Run() {
-    Window _window = Window{}
+    Window _window_temp = Window{}
                  .setSize({WINDOW_W, WINDOW_H})
                  .setTitle("Snake")
                  .setRenderer(Renderer::Cfg{})
                  .create();
-    window = std::move(_window);
+    window = std::move(_window_temp);
 
     constexpr auto frame_time = time::Millis{16.6f};
 

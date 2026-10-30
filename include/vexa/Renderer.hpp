@@ -61,7 +61,7 @@ public:
 
     Renderer& setVsync(bool enabled = true);
     bool vsync();
-    void setMode(Mode render_mode);
+    Renderer& setMode(Mode render_mode);
     Mode mode();
 
     void start();  // sets color black
