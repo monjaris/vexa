@@ -44,7 +44,7 @@ public:
     {
         circle.pos.x += speed.x;
         circle.pos.y += speed.y;
-    
+
         if (circle.pos.y - circle.radius <= 0)
         {
             circle.pos.y = circle.radius;
