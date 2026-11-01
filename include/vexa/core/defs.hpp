@@ -30,10 +30,29 @@ namespace vexa {
 #define IF_THEN($CONDITION, $STATEMENT) if(($CONDITION)) {DEFINE_STMT($STATEMENT)}
 #define CASE_OR($CASE_1, $CASE_2)  case $CASE_1: case $CASE_2
 
-// throw error at compile time - only should be used inside `consteval` functions
-#define CASSERT($COND, $MESSAGE) { if(!($COND)) vx_force_compile_time_error($MESSAGE); }
-consteval void vx_force_compile_time_error(const char*) {}
 
+#if defined _WIN32
+#   define VX_WINDOWS
+#elif defined __APPLE__
+#   define VX_MACOS
+#elif defined __unix__
+#   define VX_GENERIC_UNIX
+#else
+#   define VX_UNKNOWN_OS
+#   warning Unknown operating system detected
+#endif
+
+#if defined VX_GENERIC_UNIX
+#   if defined __linux__
+#       define VX_LINUX
+#   elif defined __FreeBSD__
+#       define VX_FREEBSD
+#   elif defined __OpenBSD__
+#       define VX_OPENBSD
+#   elif defined __NetBSD__
+#       define VX_NETBSD
+#   endif
+#endif
 
 
 #if defined(_WIN32)

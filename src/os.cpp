@@ -1,38 +1,42 @@
 #include "vexa/os.hpp"
+#include <cstdlib>
 
-
-#if defined(_WIN32)
+#if defined VX_WINDOWS
     #include <direct.h>
-    #define CHANGE_DIR ::_chdir
+    #define CHANGE_CWD ::_chdir
+    #define GET_CWD ::_getcwd
 
-#elif defined(__unix__) || defined(__APPLE__)
+#elif defined VX_GENERIC_UNIX || defined VX_MACOS
     #include <unistd.h>
-    #define CHANGE_DIR ::chdir
+    #define CHANGE_CWD ::chdir
+    #define GET_CWD ::getcwd
 
 #else
     #error "Unknown OS."
 #endif
 
 
-NAMESPACE_BEGIN(vexa)
-NAMESPACE_BEGIN(os)
-
-NAMESPACE_BEGIN(platform_detail)
-NAMESPACE_END(platform_detail)
-
-namespace detail = platform_detail;
+NAMESPACE_BEGIN(vexa::os)
 
 
-auto cwd() -> StrBuf<PATH_MAX> {
-    StrBuf<PATH_MAX> buf;
-    ::getcwd(buf.data(), buf.lengthMax());
-    return buf;
+[[noreturn]] void exitProcess(int exit_code) {
+    ::exit(exit_code);
 }
 
-bool setCwd(StrBuf<PATH_MAX> dir) {
-    return CHANGE_DIR(dir.cstr()) != 0;
+auto cwd() -> StrBuf<FS_PATH_MAX> {
+    decltype(cwd()) buf;
+
+    if (GET_CWD(buf.data(), buf.lengthMax())) {
+        return buf;
+    }
+    else {
+        return {};
+    }
+}
+
+bool setCwd(StrBuf<FS_PATH_MAX> dir) {
+    return CHANGE_CWD(dir.cstr()) == 0;
 }
 
 
-NAMESPACE_END(os)
-NAMESPACE_END(vexa)
+NAMESPACE_END(vexa::os)

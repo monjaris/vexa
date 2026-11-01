@@ -10,9 +10,9 @@ template<uint8 iterations = 64>
 consteval auto sqrtCT(auto x) {
     using T = decltype(x);
 
-    CASSERT(x < CAST<T>(0),
-        "sqrt of negative number is undefined"
-    );
+    if(x < CAST<T>(0)) {
+        VX_WRITE(2, "sqrt of negative number is undefined\n", 38);
+    }
 
     // is 0 or NAN
     if (x == T{0} || x != x) {
