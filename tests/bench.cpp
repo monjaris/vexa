@@ -4,7 +4,7 @@
 
 auto main() -> int
 {
-//     Engine::Init(Engine::VIDEO);
+//     initCores(Core::VIDEO);
 
 //     Window::Cfg window_cfg = {};
 //     Renderer::Cfg renderer_cfg = {};

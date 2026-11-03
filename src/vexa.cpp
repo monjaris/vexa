@@ -17,6 +17,8 @@ struct Importer {
 
 
 bool initCores(Core initial_subsystems) {
+    using enum Core;
+
     if (!vx_init) {
         vx_init = true;
         vx_subsystems = initial_subsystems;
@@ -39,6 +41,8 @@ bool initCores(Core initial_subsystems) {
 
 
 void quitCores() {
+    using enum Core;
+
     if (vx_init) {
         vx_init = false;
         log::info("Engine::Quit(): uptime = {}s", Uptime().millis() / 1000.0);
@@ -80,6 +84,8 @@ VX_NODISCARD bool IsMouseCaptured() {
 
 
 constexpr Core M_toVexaCores(uint32 sdl_flag) {
+    using enum Core;
+
     switch (sdl_flag)
     {
         VX_MAP(AUDIO, SDL_INIT_AUDIO);
@@ -96,6 +102,8 @@ constexpr Core M_toVexaCores(uint32 sdl_flag) {
 }
 
 constexpr uint32 M_toSDLSubsys(Core subsys) {
+    using enum Core;
+
     switch (subsys)
     {
         VX_REVERSE_MAP(SDL_INIT_AUDIO, AUDIO);

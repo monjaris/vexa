@@ -5,14 +5,23 @@ using namespace vexa;
 
 int main()
 {
-    Engine::Init(Engine::VIDEO | Engine::FONT);
+    vexa::initCores(Core::VIDEO | Core::FONT);
 
     Window window = Window{}.setSize({1280, 720}).setRenderer({}).setResizable().create();
     Renderer& gfx = window.renderer();
     gfx.setMode(Renderer::STRETCH);
 
+    log::setEnabled(false);
     Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
+    if (!texture.exists()) {
+        tfmt::println("The texture is loaded from relative path, inspect the source code");
+    }
+
     Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
+    if (!font.exists()) {
+        tfmt::println("Change the hardcoded font from source code, your system doesnt have it");
+    }
+    log::setEnabled(true);
 
     bool running = true;
     while(running)

@@ -77,13 +77,13 @@ public:
         if (score_player >= scoreToWin)
         {
             log::print("You WON!");
-            Engine::Quit();
+            quitCores();
             std::exit(0);
         }
         else if (score_cpu >= scoreToWin)
         {
             log::print("Game OVER!");
-            Engine::Quit();
+            quitCores();
             std::exit(0);
         }
     }
@@ -164,7 +164,7 @@ public:
 
 int main(void)
 {
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
 
     constexpr auto dt = time::Millis{16.6f};
 
@@ -246,6 +246,6 @@ int main(void)
         );
     }
 
-    Engine::Quit();
+    quitCores();
     return 0;
 }

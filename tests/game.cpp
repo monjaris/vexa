@@ -4,7 +4,7 @@ using namespace vexa;
 
 int main()
 {
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
 
     auto window = Window{}
         .setSize({1280, 720})
@@ -19,7 +19,7 @@ int main()
         while (auto event = Event::Poll()) {
             switch (event->type())
             {
-                case Event::QUIT: { running = false; }
+                case Event::QUIT: { running = false; break; }
 
                 case Event::KEY_DOWN: {
                     if (event->kb().key == Key::ESC) { running = false; }
@@ -38,5 +38,5 @@ int main()
         time::sleep(time::Millis{16.67});
     }
 
-    Engine::Quit();
+    quitCores();
 }

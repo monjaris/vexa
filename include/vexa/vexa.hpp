@@ -2,7 +2,6 @@
 //
 #include "Renderer.hpp"
 #include "Window.hpp"
-#include "Engine.hpp"
 #include "Event.hpp"
 #include "Image.hpp"
 #include "time.hpp"
@@ -26,7 +25,6 @@ enum class Core : uint16 {
     FONT = 1 << 15
 };
 
-using enum Core;
 static constexpr auto NON_COMPAT = Core(-1);  // intentional overflow
 
 

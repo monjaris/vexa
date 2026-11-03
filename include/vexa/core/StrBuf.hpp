@@ -41,6 +41,14 @@ public:
     constexpr usize lengthMax() const {
         return size - 1;
     }
+
+    bool operator== (const CharT* cstr) const{
+        return isCstrEqu(m_buf, cstr);
+    }
+
+    bool operator== (const StrBuf& other) const{
+        return this->operator== (other.cstr());
+    }
 };
 
 NAMESPACE_END(vexa)

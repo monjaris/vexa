@@ -5,7 +5,7 @@ namespace vx = vexa;
 
 int main()
 {
-    vx::Engine::Init(vx::Engine::VIDEO);
+    vx::initCores(vx::Core::VIDEO);
     vx::Window::Cfg window_config;
     window_config.is_resizable = true;
     window_config.size = {1280, 720};
@@ -38,5 +38,5 @@ int main()
         vx::time::sleep(vx::time::Millis{16});
     }
 
-    vx::Engine::Quit();
+    vx::quitCores();
 }

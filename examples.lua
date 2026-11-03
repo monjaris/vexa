@@ -8,7 +8,7 @@ examples = {
 }
 
 
-for _,name in ipairs(examples) do
+for _, name in ipairs(examples) do
     target(name)
     set_kind("binary")
     add_files("examples/".. name ..".cpp")

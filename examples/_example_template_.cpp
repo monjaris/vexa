@@ -13,7 +13,7 @@ using namespace vexa;
 
 int main()
 {
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
 
     auto window = Window{}
         .setSize({1280, 720})

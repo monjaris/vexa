@@ -23,7 +23,15 @@ NAMESPACE_BEGIN(vexa::os)
     ::exit(exit_code);
 }
 
-auto cwd() -> StrBuf<FS_PATH_MAX> {
+StrBuf<PATH_MAX> env(const char* env_var) {
+    decltype(env({})) buf;
+    char* val = ::getenv(env_var);
+
+    return (val != nullptr)? (val):(decltype(buf){});
+}
+
+
+StrBuf<FS_PATH_MAX> cwd() {
     decltype(cwd()) buf;
 
     if (GET_CWD(buf.data(), buf.lengthMax())) {
@@ -36,6 +44,15 @@ auto cwd() -> StrBuf<FS_PATH_MAX> {
 
 bool setCwd(StrBuf<FS_PATH_MAX> dir) {
     return CHANGE_CWD(dir.cstr()) == 0;
+}
+
+
+StrBuf<PATH_MAX> homeDir() {
+#   if defined VX_WINDOWS
+        return env("USERPROFILE");
+#   else
+        return env("HOME");
+#   endif
 }
 
 

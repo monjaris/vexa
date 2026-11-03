@@ -209,7 +209,7 @@ void place_piece(PieceType piece_type, char grid[20][10]){
 
     for (int block = 0; block < 4; block++){
         if (grid[current_piece.blocks[block].row][current_piece.blocks[block].column] == 1){
-            vexa::Engine::Quit();
+            vexa::quitCores();
             exit(0);
         }
         grid[current_piece.blocks[block].row][current_piece.blocks[block].column] = 1;
@@ -1013,7 +1013,7 @@ int main() {
     place_piece(random_piece, grid); // places a random piece
 
     // Initialize Vexa
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
 
     // create a window with 720x720 size and default renderer
     auto window = Window{}
@@ -1060,6 +1060,8 @@ int main() {
                     if (event->kb().key == Key::A || event->kb().key == Key::LEFT) {
                         left(grid);
                     }
+
+                    break;
                 }
                 case Event::KEY_UP: {
                     // return gravity to normal speed when S or DOWN is released
@@ -1120,5 +1122,5 @@ int main() {
     }
 
     // quit the engine
-    Engine::Quit();
+    vexa::quitCores();
 }

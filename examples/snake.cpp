@@ -274,12 +274,12 @@ class Game {
 
 public:
   Game() {
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
     food.Respawn(snake);
   }
 
   ~Game() {
-    Engine::Quit();
+    quitCores();
   }
 
   void Run() {

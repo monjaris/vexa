@@ -31,7 +31,7 @@ using namespace vexa;
 int main()
 {
     // Initialize Vexa
-    Engine::Init(Engine::VIDEO);
+    initCores(Core::VIDEO);
 
     // create a window with 1280x720 size and default renderer
     auto window = Window{}
