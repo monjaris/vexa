@@ -10,8 +10,8 @@ target("vexa")
 
     -- local dependencies
     add_packages("tiny-fmt", {public = true})
-    add_packages("libsdl3")
-    add_packages("libsdl3_ttf")
+    add_packages("libsdl3", {public = true})
+    add_packages("libsdl3_ttf", {public = true})
     add_syslinks("pthread", "dl", "m", "rt")
     add_shflags("-Wl,--no-undefined")
 
