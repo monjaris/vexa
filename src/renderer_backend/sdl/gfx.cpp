@@ -1,4 +1,4 @@
-#include "vexa/alt/SDL3.h"
+#include <SDL3/SDL.h>
 #include "vexa/renderer_backend/gfx.hpp"
 
 // forward declare so we can use them without including <cmath>

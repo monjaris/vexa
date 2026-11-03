@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "vexa/alt/SDL3.h"
+#include <SDL3/SDL.h>
 #include "vexa/Event.hpp"
 NAMESPACE_BEGIN(vexa)
 

@@ -6,9 +6,6 @@ MODE="release"  # or debug
 PROJ="vexa"
 OS="$(xmake lua -c 'print(os.host())')"
 PLAT="$(xmake lua -c 'print(os.arch())')"
-VIDEO="wayland"  # or x11
-RENDERER="sdl"  # no other renderer backends for now
-LIBCPP="libstdc++"  # or libc++
 
 
 if [ "$1" = "dev" ]; then
@@ -18,12 +15,7 @@ fi
 copy_bin="./build/${OS}/${PLAT}/${MODE}/${PROJ}"
 
 
-xmake config \
-    --mode="$MODE" \
-    --window-backend="$VIDEO" \
-    --renderer-backend="$RENDERER" \
-    --libcxx="$LIBCPP" \
-    -y
+xmake config --mode="$MODE" -y
 
 nproc="$(getconf _NPROCESSORS_ONLN)"
 xmake build -j"$(nproc)" "${PROJ}" || exit $?

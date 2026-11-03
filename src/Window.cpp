@@ -1,4 +1,4 @@
-#include "vexa/alt/SDL3.h"
+#include <SDL3/SDL.h>
 #include "vexa/Window.hpp"
 NAMESPACE_BEGIN(vexa)
 

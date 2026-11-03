@@ -1,6 +1,6 @@
 #include <thread>
 #include <chrono>
-#include "vexa/alt/SDL3.h"
+#include <SDL3/SDL.h>
 #include "vexa/time.hpp"
 NAMESPACE_BEGIN(vexa::time)
 

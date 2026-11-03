@@ -1,4 +1,4 @@
-#include "vexa/alt/SDL3-TTF.hpp"
+#include <SDL3_ttf/SDL_ttf.h>
 #include "vexa/Font.hpp"
 #include "vexa/core/log.hpp"
 #include "vexa/core/utils.hpp"

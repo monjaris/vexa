@@ -1,5 +1,5 @@
 #include <unordered_map>
-#include "vexa/alt/SDL3.h"
+#include <SDL3/SDL.h>
 #include "vexa/Renderer.hpp"
 #include "vexa/renderer_backend/gfx.hpp"
 NAMESPACE_BEGIN(vexa)

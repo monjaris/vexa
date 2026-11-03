@@ -9,6 +9,8 @@ NAMESPACE_BEGIN(vexa)
 
 class VX_NODISCARD Font
 {
+    friend struct Importer;
+
     struct {
         uint32 id = 0;
         bool is_loaded = false;
@@ -18,11 +20,8 @@ class VX_NODISCARD Font
     } m;
 
     static inline uint32 M_id_counter = 0;
-
-
-    // `ttf_context_loaded` turns true when Engine initializes Engine::FONT subsystem
-    friend class Engine;
     static inline bool m_context_init = false;
+
 
     static bool M_InitSystem();
     static void M_QuitSystem();
