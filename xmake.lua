@@ -13,8 +13,8 @@ end
 --- DEPS
 add_repositories("mj-xrepo https://github.com/monjaris/mj-xrepo")
 add_requires("tiny-fmt", {public = true})
-add_requires("libsdl3", {public = true})
-add_requires("libsdl3_ttf", {public = true})
+add_requires("libsdl3")
+add_requires("libsdl3_ttf")
 
 --- CONFIG
 add_rules("mode.debug", "mode.release");
