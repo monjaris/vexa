@@ -23,7 +23,6 @@ add_rules("plugin.compile_commands.autoupdate")
 set_languages("c++23")
 add_includedirs("include/", {public = true})
 add_cxxflags(
-    "-Wall", "-Wextra",
     "-fno-exceptions", "-fno-rtti",
     "-Wno-sequence-point"
 )
