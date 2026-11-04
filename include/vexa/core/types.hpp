@@ -35,7 +35,7 @@ template<typename T, typename... U>
 concept any_same_as = is_any_same_t<T, U...>;
 
 
-namespace internal {
+namespace typeimpl {
     template<class T> struct IsLvalReferenceImpl { constexpr static bool value = false; };
     template<class T> struct IsLvalReferenceImpl<T&> { constexpr static bool value = true; };
     template<class T> struct IsLvalReferenceImpl<T&&> { constexpr static bool value = false; };
@@ -52,23 +52,33 @@ namespace internal {
     template<class T> struct RemoveConstImpl<const T> { using Type = T; };
 
     template<class T> struct NoDeduceImpl { using Type = T; };
+
+    template<class T> struct UnderlyingTypeImpl { using Type = __underlying_type(T); };
 }
 
 
 template<class T>
-using RmRef = internal::RemoveReferenceImpl<T>::Type;
+using RmRef = typeimpl::RemoveReferenceImpl<T>::Type;
 
 template<class T>
-using RmConst = internal::RemoveConstImpl<T>::Type;
+using RmConst = typeimpl::RemoveConstImpl<T>::Type;
 
 template<class T>
-constexpr bool is_lvref = internal::IsLvalReferenceImpl<T>::value;
+constexpr bool is_lvref = typeimpl::IsLvalReferenceImpl<T>::value;
 
 template<class T>
-constexpr bool is_rvref = internal::IsRvalReferenceImpl<T>::value;
+constexpr bool is_rvref = typeimpl::IsRvalReferenceImpl<T>::value;
 
 template<class T>
-using NoDeduce = internal::NoDeduceImpl<T>::Type;
+using NoDeduce = typeimpl::NoDeduceImpl<T>::Type;
+
+
+template<class T> using enum_t = typeimpl::UnderlyingTypeImpl<T>::Type;
+
+template<class EnumType>
+enum_t<EnumType> enum_v(EnumType enum_member) {
+    return static_cast<enum_t<EnumType>>(enum_member);
+}
 
 
 
