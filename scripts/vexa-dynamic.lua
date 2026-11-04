@@ -11,8 +11,8 @@ target("vexa")
     add_headerfiles("../include/(vexa/**.hpp)")
 
     add_packages("tiny-fmt", {public = true})
-    add_packages("libsdl3")
-    add_packages("libsdl3_ttf")
+    add_packages("libsdl3", {system = false})
+    add_packages("libsdl3_ttf", {system = false})
     add_syslinks("pthread", "dl", "m", "rt")
     add_shflags("-Wl,--no-undefined")
 
