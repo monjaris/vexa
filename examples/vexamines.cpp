@@ -6,11 +6,6 @@
 
 \*=============================================*/
 
-#include "vexa/Renderer.hpp"
-#include "vexa/core/MouseBtn.hpp"
-#include "vexa/core/colors.hpp"
-#include "vexa/core/vec.hpp"
-#include "vexa/time.hpp"
 #include "vexa/vexa.hpp"
 #include <random>
 #include <string>
