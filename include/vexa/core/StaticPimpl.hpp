@@ -1,5 +1,6 @@
 #pragma once
 #include "defs.hpp"
+#include "memory.hpp"
 NAMESPACE_BEGIN(vexa)
 
 
@@ -30,6 +31,21 @@ class StaticPimpl
 public:
     StaticPimpl() = default;
 
+    constexpr StaticPimpl(StaticPimpl&& other) {
+        this->construct(mem::move(*other.mGet()));
+        other.destruct();
+    }
+
+    constexpr StaticPimpl& operator=(StaticPimpl&& other) {
+        if (this != &other) {
+            this->destruct();
+            this->construct(mem::move(*other.mGet()));
+            other.destruct();
+        }
+        return *this;
+    }
+
+
     consteval void ensure() {
         if constexpr (pedantic) {
             static_assert(storage_size == sizeof(ImplT),
@@ -54,6 +70,10 @@ public:
         }
 
         new (m_data) ImplT {};
+    }
+
+    constexpr void construct(ImplT&& other) {
+        new (m_data) ImplT(static_cast<ImplT&&>(other));
     }
 
     constexpr void destruct() {

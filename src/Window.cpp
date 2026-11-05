@@ -75,6 +75,7 @@ NAMESPACE_END()
 
 //  m  //
 
+
 class This::Impl {
 public:
     SDL_Window* m_window = nullptr;
@@ -96,6 +97,21 @@ public:
             window_exists = false;
         }
     }
+
+    Impl(Impl&& other) noexcept
+        : m_window(other.m_window),
+          m_id(other.m_id),
+          window_ever_existed(other.window_ever_existed),
+          window_exists(other.window_exists),
+          renderer(std::move(other.renderer)),
+          renderer_set(other.renderer_set)
+    {
+        other.m_window = nullptr;
+        other.m_id = 0;
+        other.window_exists = false;
+        other.renderer_set = false;
+    }
+
 
     SDL_Window* createWindow(Cfg config) {
         if (!window_exists)
@@ -126,19 +142,19 @@ This::Window(Cfg config): m_bconfig(config) {
 
 This::~Window() { m.destruct(); }
 
-This::Window(Window&& other) {
-    m = std::move(other.m);
-    m_bconfig = other.m_bconfig;
-}
 
-Window& This::operator= (Window&& other) {
+This::Window(Window&& other)
+    : m(std::move(other.m)),
+      m_bconfig(std::move(other.m_bconfig))
+{}
+
+Window& This::operator=(Window&& other) {
     if (this != &other) {
         m = std::move(other.m);
-        m_bconfig = other.m_bconfig;
+        m_bconfig = std::move(other.m_bconfig);
     }
     return *this;
 }
-
 
 
 
