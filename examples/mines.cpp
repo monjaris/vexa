@@ -259,7 +259,7 @@ int main()
 
     std::vector<std::vector<Cell>> board (5, std::vector<Cell>(5));
     Grid grid = Grid();
-    Font font = Font::Load("/usr/share/fonts/Adwaita/AdwaitaMono-Bold.ttf", sizeof(Font));
+    Font font = Font::Load("/usr/share/fonts/Adwaita/AdwaitaMono-Bold.ttf", 32);
 
     mineSet(board);
     numerizer(board);
@@ -270,8 +270,6 @@ int main()
             switch (event->type())
             {
                 case Event::QUIT: { running = false; break; }
-
-                case Event::KEY_DOWN: { event-; break; }
 
                 case Event::MOUSE_BUTTON_DOWN: {
                     auto mouse = event->mouse().button;
