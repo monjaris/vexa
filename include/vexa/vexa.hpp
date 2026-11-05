@@ -38,7 +38,7 @@ time::Nanos Uptime();
 bool IsMouseCaptured();
 
 
-// generate bit operators for Subsystem enum
+// generate bit operators for Core enum
 GEN_BITOPS(Core, enum_t<Core>);
 
 

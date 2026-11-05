@@ -15,11 +15,13 @@ int main()
     Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
     if (!texture.exists()) {
         tfmt::println("The texture is loaded from relative path, inspect the source code");
+        ::exit(1);
     }
 
     Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
     if (!font.exists()) {
         tfmt::println("Change the hardcoded font from source code, your system doesnt have it");
+        ::exit(1);
     }
     log::setEnabled(true);
 

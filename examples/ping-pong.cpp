@@ -1,8 +1,8 @@
 /*=============================================*\
 
- vexa implementation of ping-pong (vexa-0.0.1)
+ vexa implementation of *ping-pong*
 
- Copyright (c) 2026 @gitduck6
+ Copyright (c) 25.08.2026 @gitduck6
 
 \*=============================================*/
 

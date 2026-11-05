@@ -1,8 +1,8 @@
 /*=============================================*\
 
- vexa implementation of <GAME> (vexa-<VERSION>)
+ vexa implementation of *mines*
 
- Copyright (c) <YEAR> @<USER>
+ Copyright (c) 04.11.2026 @gosti37
 
 \*=============================================*/
 
@@ -18,7 +18,7 @@ using namespace vexa;
 bool running = true;
 bool first_press = false;
 
-class Grid 
+class Grid
 {
     public:
         Grid();
@@ -36,7 +36,7 @@ struct Cell {
     int adjacentMines;
 };
 
-Grid::Grid() 
+Grid::Grid()
 {
     numRows = 5;
     numCols = 5;
@@ -144,7 +144,7 @@ void numerizer(std::vector<std::vector<Cell>>& board)
     }
 }
 
-void revealCell(std::vector<std::vector<Cell>>& board, int x, int y)
+void revealCell(std::vector<std::vector<Cell>> board, int x, int y)
 {
     if (!board[x][y].isOpen && !board[x][y].isFlagged)
     {
@@ -246,7 +246,7 @@ bool winCheck(std::vector<std::vector<Cell>>& board)
 
 int main()
 {
-    initCores(Core::FONT);
+    initCores(Core::VIDEO | Core::FONT);
 
     auto window = Window{}
         .setSize({500, 500})
@@ -269,7 +269,9 @@ int main()
         while (auto event = Event::Poll()) {
             switch (event->type())
             {
-                case Event::QUIT: { running = false; }
+                case Event::QUIT: { running = false; break; }
+
+                case Event::KEY_DOWN: { event-; break; }
 
                 case Event::MOUSE_BUTTON_DOWN: {
                     auto mouse = event->mouse().button;

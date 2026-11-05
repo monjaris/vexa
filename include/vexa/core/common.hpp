@@ -1,6 +1,5 @@
 #pragma once
 #include "defs.hpp"
-#include "vexa/alt/ini_list.hpp"
 #include "vexa/core/utils.hpp"
 #include "vexa/core/math.hpp"
 #include "vexa/core/memory.hpp"
@@ -19,7 +18,7 @@ template<class StdContainerType>
 constexpr usize stdcont_len = std::tuple_size_v<StdContainerType>;
 
 
-// a value with default value storage
+// a value with default value stored
 template<typename T>
 class CfgVal {
     T m_default;
@@ -60,6 +59,7 @@ bool isContained(T cont, typename T::value_type elem) {
     }
     return false;
 }
+
 
 template<class T>
 bool contains(T cont, typename T::ValueT elem) {

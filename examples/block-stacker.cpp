@@ -1,8 +1,8 @@
 /*=============================================*\
 
- vexa implementation of block-stacker (vexa-0.1.0)
+ vexa implementation of *block-stacker*
 
- Copyright (c) 2026 @abdulrahman-103
+ Copyright (c) 26.08.2026 @abdulrahman-103
 
 \*=============================================*/
 

@@ -1,8 +1,8 @@
 /*=============================================*\
 
- vexa implementation of <GAME> (vexa-<VERSION>)
+ vexa implementation of *<GAME>*
 
- Copyright (c) <YEAR> @<USER>
+ Copyright (c) <Day.Month.Year> @<USER>
 
 \*=============================================*/
 

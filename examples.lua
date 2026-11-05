@@ -5,7 +5,7 @@ examples = {
     "ping-pong",  -- by @gitduck6
     "block-stacker",  -- by @abdulrahman-103
     "snake", -- by @btwmarcel
-    "vexamines", -- by @gosti37
+    "mines", -- by @gosti37
 }
 
 

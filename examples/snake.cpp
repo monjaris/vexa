@@ -1,8 +1,8 @@
 /*=============================================*\
 
- vexa implementation of Snake (vexa-0.2.0)
+ vexa implementation of snake
 
- Copyright (c) 2026 @btwmarcel
+ Copyright (c) 03.09.2026 @btwmarcel
 
 \*=============================================*/
 
