@@ -43,5 +43,5 @@ int main()
         gfx.finish();
     }
 
-    Engine::Quit();
+    quitCores();
 }
