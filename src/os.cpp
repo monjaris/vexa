@@ -23,7 +23,7 @@ NAMESPACE_BEGIN(vexa::os)
     ::exit(exit_code);
 }
 
-StrBuf<PATH_MAX> env(const char* env_var) {
+StrBuf<FS_PATH_MAX> env(const char* env_var) {
     decltype(env({})) buf;
     char* val = ::getenv(env_var);
 
@@ -47,7 +47,7 @@ bool setCwd(StrBuf<FS_PATH_MAX> dir) {
 }
 
 
-StrBuf<PATH_MAX> homeDir() {
+StrBuf<FS_PATH_MAX> homeDir() {
 #   if defined VX_WINDOWS
         return env("USERPROFILE");
 #   else

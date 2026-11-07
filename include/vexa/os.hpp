@@ -18,15 +18,17 @@ constexpr uint32 FS_PATH_MAX = {
 // exit the current process, just like std::exit()
 [[noreturn]] void exitProcess(int exit_code);
 
-StrBuf<PATH_MAX> env(const char* env_var);
+StrBuf<FS_PATH_MAX> env(const char* env_var);
 void setEnv(const char* env);  // IMPL!
 void unsetEnv(const char* env);  // IMPL!
 
 // get the current working directory
-StrBuf<PATH_MAX> cwd();
+StrBuf<FS_PATH_MAX> cwd();
 // set current working directory
 bool setCwd(const char* dir);
 
-StrBuf<PATH_MAX> homeDir();
+StrBuf<FS_PATH_MAX> homeDir();
+
+StrBuf<FS_PATH_MAX> execPath();
 
 NAMESPACE_END(vexa::os)

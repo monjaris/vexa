@@ -2,6 +2,16 @@
 #include "vexa/vexa.hpp"
 NAMESPACE_BEGIN(vexa)
 
+
+namespace os
+{
+    StrBuf<FS_PATH_MAX> execPath() {
+        const char* exec_path = SDL_GetBasePath();
+        return exec_path;
+    }
+};
+
+
 inline bool vx_init = false;
 inline Flags<Core> vx_subsystems;
 inline time::Date vx_init_date;
