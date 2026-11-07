@@ -24,7 +24,7 @@ bool initCores(Core initial_subsystems) {
         vx_subsystems = initial_subsystems;
         vx_init_date = time::now();
         log::info("Initializing vexa-{}", VX_VERSION);
-        log::info("Engine::Init(): working-directory: {}", os::cwd().data());
+        log::info("initCores(): working-directory: {}", os::cwd().data());
 
         using subsys_int = enum_t<Core>;
         subsys_int subsys = M_toSDLSubsys(vx_subsystems.value());
@@ -45,7 +45,7 @@ void quitCores() {
 
     if (vx_init) {
         vx_init = false;
-        log::info("Engine::Quit(): uptime = {}s", Uptime().millis() / 1000.0);
+        log::info("quitCores(): uptime = {}s", Uptime().millis() / 1000.0);
 
         using subsys_int = enum_t<Core>;
         subsys_int subsys = M_toSDLSubsys(vx_subsystems.value());

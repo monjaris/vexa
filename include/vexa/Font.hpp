@@ -36,7 +36,7 @@ class VX_NODISCARD Font
     };
 
     static constexpr const char* MSG_CONTEXT_UNINITED = {
-        "FONT subsystem(Engine::FONT) is not initialized"
+        "FONT subsystem(Core::FONT) is not initialized"
     };
 
 public:
