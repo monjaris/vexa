@@ -1,7 +1,31 @@
 #include "vexa/vexa.hpp"
 #include <string>
+#include <filesystem>
 
 using namespace vexa;
+
+
+std::filesystem::path findProjectRoot()
+{
+    std::filesystem::path current = os::execPath().cstr();
+
+    while (!current.empty()) {
+        if (std::filesystem::exists(current / ".clangd")) {
+            return current;
+        }
+
+        const std::filesystem::path parent = current.parent_path();
+
+        if (parent == current) {
+            break;
+        }
+
+        current = parent;
+    }
+
+    return {};
+}
+
 
 int main()
 {
@@ -11,25 +35,25 @@ int main()
     Renderer& gfx = window.renderer();
     gfx.setMode(Renderer::STRETCH);
 
-
-    std::string asset_path = __FILE__;
-    tfmt::println("{}", asset_path);
-
+    std::string asset_path = findProjectRoot().string() + "/tests/assets/gd.png";
+    Texture texture = gfx.loadTexture(Image::Load(asset_path.c_str()));
+    Font font;
 
     log::setEnabled(false);
-    Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
+    {
+        if (!texture.exists()) {
+            tfmt::println("The texture is loaded from relative path, inspect the source code");
+            ::exit(1);
+        }
 
-    if (!texture.exists()) {
-        tfmt::println("The texture is loaded from relative path, inspect the source code");
-        ::exit(1);
-    }
-
-    Font font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
-    if (!font.exists()) {
-        tfmt::println("Change the hardcoded font from source code, your system doesnt have it");
-        ::exit(1);
+        font = Font::Load("/usr/share/fonts/TTF/JetBrainsMonoNerdFontMono-Italic.ttf", 32);
+        if (!font.exists()) {
+            tfmt::println("Change the hardcoded font from source code, your system doesnt have it");
+            ::exit(1);
+        }
     }
     log::setEnabled(true);
+
 
     bool running = true;
     while(running)
