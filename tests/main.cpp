@@ -11,8 +11,14 @@ int main()
     Renderer& gfx = window.renderer();
     gfx.setMode(Renderer::STRETCH);
 
+
+    std::string asset_path = __FILE__;
+    tfmt::println("{}", asset_path);
+
+
     log::setEnabled(false);
     Texture texture = gfx.loadTexture(Image::Load("tests/assets/gd.png"));
+
     if (!texture.exists()) {
         tfmt::println("The texture is loaded from relative path, inspect the source code");
         ::exit(1);

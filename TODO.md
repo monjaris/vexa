@@ -6,4 +6,4 @@
     <cmath>  -- math.hpp
     <cstring>  -- StrBuf.hpp
 
-2. implement vexa::input::*
+2. implement namespace vexa::input

@@ -1,3 +1,4 @@
+--- SETUP
 if is_mode("debug") then
     add_cxxflags(
         "-Wall", "-Wextra",
@@ -27,9 +28,40 @@ add_cxxflags(
     "-Wno-sequence-point"
 )
 
+-- whether vexa should be compiled as shared or static library
+option("lib")
+    set_default("shared")
+    set_values("shared", "static")
+    set_showmenu(true)
+option_end()
+
+-- copy targets' output file to the project root with a .(mode) suffix
+after_build(function(target)
+    local out = target:filename() .. "." .. get_config("mode")
+    os.cp(target:targetfile(), "$(projectdir)/" .. out)
+end)
+
+
 
 --- TARGETS
-includes("scripts/vexa-dynamic.lua")
+target("vexa")
+    set_kind(get_config("lib"))
+    set_version("0.2.0")
+    set_languages("c++23")
+
+    add_files("src/*.cpp")
+    add_files("src/renderer_backend/sdl/gfx.cpp")
+    add_headerfiles("include/(vexa/**.hpp)")
+
+    add_packages("tiny-fmt", {public = true})
+    add_packages("libsdl3", {system = false})
+    add_packages("libsdl3_ttf", {system = false})
+    add_shflags("-Wl,--no-undefined")
+
+    after_build(function(target)
+        os.cp(target:targetfile(), "$(projectdir)/")
+    end)
+
 
 --- TESTS
 target("game")  add_files("tests/game.cpp")  add_deps("vexa")

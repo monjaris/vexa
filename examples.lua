@@ -1,5 +1,4 @@
--- All VEXA example files
-
+-- examples file
 
 examples = {
     "ping-pong",  -- by @gitduck6
@@ -7,7 +6,6 @@ examples = {
     "snake", -- by @btwmarcel
     "mines", -- by @gosti37
 }
-
 
 for _, name in ipairs(examples) do
     target(name)
