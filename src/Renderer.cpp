@@ -82,6 +82,10 @@ Renderer& This::operator= (Renderer&& other) {
 
 
 Renderer This::create(void* window_ptr) {
+    if (impl.get() == nullptr) {
+        impl = Uptr<Impl>::Alloc();
+    }
+
     Renderer build = {};
     build.m_bconfig = m_bconfig;
 
@@ -103,16 +107,12 @@ Renderer This::create(void* window_ptr) {
 }
 
 void This::destroy() {
-    log::info("Renderer::destroy(): destroyed renderer of window [ID={}]",
-        SDL_GetWindowID(impl->m_window)
-    );
-    impl->m_init = false;
     impl.reset();
     m_bconfig.reset();
 }
 
 bool This::exists() {
-    return impl->m_init;
+    return impl.get() != nullptr && impl->m_init;
 }
 
 

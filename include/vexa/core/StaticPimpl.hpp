@@ -24,6 +24,7 @@ class StaticPimpl
     static constexpr usize m_size = storage_size;
 
     alignas(alignment) internal::Byte m_data[m_size];
+    bool m_constructed = false;
 
     ImplT* mGet() { return LAUNDER(reinterpret_cast<ImplT*>(m_data)); }
     const ImplT* mGetConst() const { return LAUNDER(reinterpret_cast<const ImplT*>(m_data)); }
@@ -32,15 +33,17 @@ public:
     StaticPimpl() = default;
 
     constexpr StaticPimpl(StaticPimpl&& other) {
-        this->construct(mem::move(*other.mGet()));
-        other.destruct();
+        if (other.m_constructed) {
+            this->construct(mem::move(*other.mGet()));
+        }
     }
 
-    constexpr StaticPimpl& operator=(StaticPimpl&& other) {
+    constexpr StaticPimpl& operator= (StaticPimpl&& other) {
         if (this != &other) {
             this->destruct();
-            this->construct(mem::move(*other.mGet()));
-            other.destruct();
+            if (other.m_constructed) {
+                this->construct(mem::move(*other.mGet()));
+            }
         }
         return *this;
     }
@@ -70,14 +73,19 @@ public:
         }
 
         new (m_data) ImplT {};
+        m_constructed = true;
     }
 
     constexpr void construct(ImplT&& other) {
         new (m_data) ImplT(static_cast<ImplT&&>(other));
+        m_constructed = true;
     }
 
     constexpr void destruct() {
-        mGet()->~ImplT();
+        if (m_constructed) {
+            mGet()->~ImplT();
+            m_constructed = false;
+        }
     }
 
     const ImplT* data() const { return mGetConst(); }

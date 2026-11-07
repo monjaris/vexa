@@ -87,15 +87,25 @@ public:
 
     explicit Impl() = default;
 
-    ~Impl() {
-        renderer = {};  // release renderer first
-        if (window_exists) {
-            log::info("Window::destroy(): destroyed window [ID={}]",
-                SDL_GetWindowID(m_window)
-            );
-            SDL_DestroyWindow(m_window);
-            window_exists = false;
+    void destroyWindow() {
+        if (renderer_set) {
+            renderer = {};
+            renderer_set = false;
         }
+
+        if (!window_exists) {
+            return;
+        }
+
+        log::info("Window::destroy(): destroyed window [ID={}]", m_id);
+        SDL_DestroyWindow(m_window);
+        m_window = nullptr;
+        m_id = 0;
+        window_exists = false;
+    }
+
+    ~Impl() {
+        destroyWindow();
     }
 
     Impl(Impl&& other) noexcept
@@ -218,9 +228,6 @@ void This::m_trySetNoArgs(
 
 //  GENERAL METHODS  //
 
-#define IS_CFG_DEFAULT(_cfg_prop) \
-    (m_bconfig._cfg_prop == m_bconfig._cfg_prop.defaultVal())
-
 Window This::create() {
     Window build = {};
     build.m_bconfig = m_bconfig;
@@ -235,39 +242,39 @@ Window This::create() {
         log::error(FN"{} [ID={}]", __func__, ERR_CREATE_INPUT_CTX, new_window_id);
     );
 
-    if (!IS_CFG_DEFAULT(title))
+    if (cfg.title.isSet())
         build.setTitle(cfg.title);
-    if (!IS_CFG_DEFAULT(size))
+    if (cfg.size.isSet())
         build.setSize(cfg.size);
-    if (!IS_CFG_DEFAULT(pos))
+    if (cfg.pos.isSet())
         build.setPosition(cfg.pos);
-    if (!IS_CFG_DEFAULT(aspect_ratio))
+    if (cfg.aspect_ratio.isSet())
         build.setAspectRatio(cfg.aspect_ratio->x, cfg.aspect_ratio->y);
-    if (!IS_CFG_DEFAULT(icon_image_path))
+    if (cfg.icon_image_path.isSet())
         build.setIcon(cfg.icon_image_path);
-    if (!IS_CFG_DEFAULT(is_resizable))
+    if (cfg.is_resizable.isSet())
         build.setResizable(cfg.is_resizable);
-    if (!IS_CFG_DEFAULT(is_minimized))
+    if (cfg.is_minimized.isSet())
         build.setMinimized(cfg.is_minimized);
-    if (!IS_CFG_DEFAULT(is_maximized))
+    if (cfg.is_maximized.isSet())
         build.setMaximized(cfg.is_maximized);
-    if (!IS_CFG_DEFAULT(is_fullscreen))
+    if (cfg.is_fullscreen.isSet())
         build.setFullScreen(cfg.is_fullscreen);
-    if (!IS_CFG_DEFAULT(is_borderless))
+    if (cfg.is_borderless.isSet())
         build.setBorderless(cfg.is_borderless);
-    if (!IS_CFG_DEFAULT(is_hidden))
+    if (cfg.is_hidden.isSet())
         build.setHidden(cfg.is_hidden);
-    if (!IS_CFG_DEFAULT(is_on_top))
+    if (cfg.is_on_top.isSet())
         build.setAlwaysOnTop(cfg.is_on_top);
-    if (!IS_CFG_DEFAULT(is_mouse_grabbed))
+    if (cfg.is_mouse_grabbed.isSet())
         build.setMouseGrabbed(cfg.is_mouse_grabbed);
-    if (!IS_CFG_DEFAULT(is_mouse_relative))
+    if (cfg.is_mouse_relative.isSet())
         build.setMouseRelative(cfg.is_mouse_relative);
-    if (!IS_CFG_DEFAULT(is_keyboard_grabbed))
+    if (cfg.is_keyboard_grabbed.isSet())
         build.setKeyboardGrabbed(cfg.is_keyboard_grabbed);
 
     if (m->renderer_set) {
-        build.m->renderer = build.m->renderer.create((SDL_Window*)new_window);
+        build.setRenderer(m->renderer.m_bconfig);
     }
     return build;
 }
@@ -275,7 +282,7 @@ Window This::create() {
 
 
 void This::destroy() {
-    log::info(FN"destroyed window [ID={}]", __func__, SDL_GetWindowID(m->m_window));
+    m->destroyWindow();
     m_bconfig.reset();
 }
 
@@ -286,7 +293,7 @@ bool This::exists() {
 
 
 uint32 This::id() const {
-    return SDL_GetWindowID(m->m_window);
+    return m->m_id;
 }
 
 
@@ -298,10 +305,10 @@ Renderer& This::renderer() {
         log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
     )
     IF_THEN(!m->window_exists,
-        log::fatal(FN"{}", __func__, ERR_NEVER_EXIST);
+        log::fatal(FN"{}", __func__, ERR_NOT_EXIST);
     )
     IF_THEN(!m->renderer.exists(),
-        log::error(FN"{}", __func__, ERR_RENDERER_NOT_EXIST);
+        log::fatal(FN"{}", __func__, ERR_RENDERER_NOT_EXIST);
     )
     return m->renderer;
 }
@@ -423,8 +430,20 @@ Window& This::setIcon(const char* image_path) {
         return *this;
     }
 
-    auto image = Image::Load(image_path);
-    SDL_SetWindowIcon(m->m_window, CAST<SDL_Surface*>(image.ptr()));
+    // Keep the path so the icon is applied later if this is still a builder.
+    m_bconfig.icon_image_path = image_path;
+
+    if (m->m_window && m->window_exists) {
+        auto image = Image::Load(image_path);
+        IF_THEN(image.ptr() == nullptr,
+            log::error("Window::setIcon(): failed to load icon from '{}'", image_path);
+            return *this;
+        )
+
+        IF_THEN(SDL_SetWindowIcon(m->m_window, CAST<SDL_Surface*>(image.ptr())) == false,
+            log::error("Window::setIcon(): failed to set icon from '{}': {}", image_path, SDL_GetError());
+        )
+    }
 
     return *this;
 }

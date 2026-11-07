@@ -23,18 +23,30 @@ template<typename T>
 class CfgVal {
     T m_default;
     T m_value;
+    bool m_set = false;
 public:
 
     constexpr CfgVal (T default_and_initial_value)
-        : m_default(default_and_initial_value), m_value(m_default)
+        : m_default(default_and_initial_value), m_value(m_default), m_set(false)
     {}
 
     constexpr CfgVal& operator=(const T& new_value) {
         m_value = new_value;
+        m_set = true;
         return *this;
     }
 
     auto value() const { return m_value; }
+
+    // true if this value was explicitly assigned
+    constexpr bool isSet() const { return m_set; }
+
+    // restore the default value and mark this value as not explicitly set
+    constexpr CfgVal& reset() {
+        m_value = m_default;
+        m_set = false;
+        return *this;
+    }
 
     // get default value of the config object
     T defaultVal() const { return m_default; }

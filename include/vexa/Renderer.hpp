@@ -27,7 +27,8 @@ class VX_NODISCARD Renderer
         {}
 
         void reset() {
-            vsync = vsync.defaultVal();
+            vsync.reset();
+            mode.reset();
         }
     }
     m_bconfig;

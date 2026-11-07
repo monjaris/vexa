@@ -58,22 +58,22 @@ private:
         {}
 
         M_Cfg& reset() {
-            flags = flags.defaultVal();
-            title = title.defaultVal();
-            size = size.defaultVal();
-            pos = pos.defaultVal();
-            aspect_ratio = aspect_ratio.defaultVal();
-            icon_image_path = icon_image_path.defaultVal();
-            is_resizable = is_resizable.defaultVal();
-            is_maximized = is_maximized.defaultVal();
-            is_minimized = is_minimized.defaultVal();
-            is_fullscreen = is_fullscreen.defaultVal();
-            is_borderless = is_borderless.defaultVal();
-            is_hidden = is_hidden.defaultVal();
-            is_on_top = is_on_top.defaultVal();
-            is_mouse_grabbed = is_mouse_grabbed.defaultVal();
-            is_mouse_relative = is_mouse_relative.defaultVal();
-            is_keyboard_grabbed = is_keyboard_grabbed.defaultVal();
+            flags.reset();
+            title.reset();
+            size.reset();
+            pos.reset();
+            aspect_ratio.reset();
+            icon_image_path.reset();
+            is_resizable.reset();
+            is_maximized.reset();
+            is_minimized.reset();
+            is_fullscreen.reset();
+            is_borderless.reset();
+            is_hidden.reset();
+            is_on_top.reset();
+            is_mouse_grabbed.reset();
+            is_mouse_relative.reset();
+            is_keyboard_grabbed.reset();
             return *this;
         }
     }
