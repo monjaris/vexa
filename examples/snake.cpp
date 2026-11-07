@@ -279,7 +279,7 @@ public:
   }
 
   ~Game() {
-    quitCores();
+    // quitCores();
   }
 
   void Run() {

@@ -3,6 +3,9 @@
 NAMESPACE_BEGIN(vexa)
 
 
+void _quitCores();
+
+
 namespace os
 {
     StrBuf<FS_PATH_MAX> execPath() {
@@ -16,14 +19,20 @@ inline bool vx_init = false;
 inline Flags<Core> vx_subsystems;
 inline time::Date vx_init_date;
 
-constexpr Core M_toVexaCore(uint32 sdl_flag);
-constexpr uint32 M_toSDLSubsys(Core sdl_flag);
+constexpr Core _toVexaCore(uint32 sdl_flag);
+constexpr uint32 _toSDLSubsys(Core sdl_flag);
 
 
 struct Importer {
     static constexpr auto fontInit = Font::M_InitSystem;
     static constexpr auto fontQuit = Font::M_QuitSystem;
 };
+
+struct Guard {
+    ~Guard() {
+        _quitCores();
+    }
+} guard;
 
 
 bool initCores(Core initial_subsystems) {
@@ -37,7 +46,7 @@ bool initCores(Core initial_subsystems) {
         log::info("initCores(): working-directory: {}", os::cwd().data());
 
         using subsys_int = enum_t<Core>;
-        subsys_int subsys = M_toSDLSubsys(vx_subsystems.value());
+        subsys_int subsys = _toSDLSubsys(vx_subsystems.value());
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
@@ -50,7 +59,7 @@ bool initCores(Core initial_subsystems) {
 }
 
 
-void quitCores() {
+void _quitCores() {
     using enum Core;
 
     if (vx_init) {
@@ -58,7 +67,7 @@ void quitCores() {
         log::info("quitCores(): uptime = {}s", Uptime().millis() / 1000.0);
 
         using subsys_int = enum_t<Core>;
-        subsys_int subsys = M_toSDLSubsys(vx_subsystems.value());
+        subsys_int subsys = _toSDLSubsys(vx_subsystems.value());
 
         if (subsys & CAST<subsys_int>(FONT)) {
             subsys &= ~CAST<subsys_int>(FONT);
@@ -111,7 +120,7 @@ constexpr Core M_toVexaCores(uint32 sdl_flag) {
     return NON_COMPAT;
 }
 
-constexpr uint32 M_toSDLSubsys(Core subsys) {
+constexpr uint32 _toSDLSubsys(Core subsys) {
     using enum Core;
 
     switch (subsys)

@@ -43,5 +43,4 @@ int main()
         gfx.finish();
     }
 
-    quitCores();
 }

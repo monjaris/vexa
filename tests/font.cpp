@@ -38,5 +38,5 @@ int main()
         vx::time::sleep(vx::time::Millis{16});
     }
 
-    vx::quitCores();
+    // vx::quitCores();
 }

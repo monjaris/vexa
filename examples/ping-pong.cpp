@@ -77,13 +77,13 @@ public:
         if (score_player >= scoreToWin)
         {
             log::print("You WON!");
-            quitCores();
+            // quitCores();
             std::exit(0);
         }
         else if (score_cpu >= scoreToWin)
         {
             log::print("Game OVER!");
-            quitCores();
+            // quitCores();
             std::exit(0);
         }
     }
@@ -246,6 +246,6 @@ int main(void)
         );
     }
 
-    quitCores();
+    // quitCores();
     return 0;
 }

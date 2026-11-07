@@ -29,7 +29,7 @@ static constexpr auto NON_COMPAT = Core(-1);  // intentional overflow
 
 
 bool initCores(Core initial_subsystems);
-void quitCores();
+// void quitCores();
 
 bool setMouseCaptured(bool yes);
 

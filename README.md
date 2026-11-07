@@ -60,7 +60,6 @@ int main()
         time::sleep(time::Millis(16.67));
     }
 
-    quitCores();
 }
 ```
 

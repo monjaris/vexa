@@ -209,7 +209,7 @@ void place_piece(PieceType piece_type, char grid[20][10]){
 
     for (int block = 0; block < 4; block++){
         if (grid[current_piece.blocks[block].row][current_piece.blocks[block].column] == 1){
-            vexa::quitCores();
+            // vexa::quitCores();
             exit(0);
         }
         grid[current_piece.blocks[block].row][current_piece.blocks[block].column] = 1;
@@ -1122,5 +1122,5 @@ int main() {
     }
 
     // quit the engine
-    vexa::quitCores();
+    // vexa::quitCores();
 }
