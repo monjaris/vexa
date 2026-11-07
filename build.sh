@@ -6,5 +6,5 @@ LIB="shared"  # or static
 
 if [ "$1" = "dev" ]; then MODE="debug"; shift; fi
 
-xmake config --mode="$MODE" --kind="$LIB"
+xmake config --mode="$MODE" --lib="$LIB"
 xmake build -j16 vexa || exit $?
