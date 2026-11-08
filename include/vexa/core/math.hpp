@@ -28,19 +28,19 @@ consteval auto sqrtCT(auto x) {
 
 //  SQRT  //
 constexpr inline auto sqrt(fp32 x) -> decltype(x) {
-    return std::sqrtf(x);
+    return ::sqrtf(x);
 }
 constexpr inline auto sqrt(fp64 x) -> decltype(x) {
-    return std::sqrt(x);
+    return ::sqrt(x);
 }
 
 
 //  POW  //
 constexpr inline fp32 pow(fp32 x, fp32 exp) {
-    return std::powf(x, exp);
+    return ::powf(x, exp);
 }
 constexpr inline fp64 pow(fp64 x, fp64 exp) {
-    return std::pow(x, exp);
+    return ::pow(x, exp);
 }
 
 
@@ -84,25 +84,25 @@ constexpr inline fp64 toRadians(fp64 degrees) {
 
 //  Trigonometry  //
 // sin
-constexpr fp32 sin(fp32 rad) { return std::sinf(rad); }
-constexpr fp64 sin(fp64 rad) { return std::sin(rad); }
-constexpr fp32 sinDeg(fp32 deg) { return std::sinf(toRadians(deg)); }
-constexpr fp64 sinDeg(fp64 deg) { return std::sin(toRadians(deg)); }
+constexpr fp32 sin(fp32 rad) { return ::sinf(rad); }
+constexpr fp64 sin(fp64 rad) { return ::sin(rad); }
+constexpr fp32 sinDeg(fp32 deg) { return ::sinf(toRadians(deg)); }
+constexpr fp64 sinDeg(fp64 deg) { return ::sin(toRadians(deg)); }
 // cos
-constexpr fp32 cos(fp32 rad) { return std::cosf(rad); }
-constexpr fp64 cos(fp64 rad) { return std::cos(rad); }
-constexpr fp32 cosDeg(fp32 deg) { return std::cosf(toRadians(deg)); }
-constexpr fp64 cosDeg(fp64 deg) { return std::cos(toRadians(deg)); }
+constexpr fp32 cos(fp32 rad) { return ::cosf(rad); }
+constexpr fp64 cos(fp64 rad) { return ::cos(rad); }
+constexpr fp32 cosDeg(fp32 deg) { return ::cosf(toRadians(deg)); }
+constexpr fp64 cosDeg(fp64 deg) { return ::cos(toRadians(deg)); }
 // tan
-constexpr fp32 tan(fp32 rad) { return std::tanf(rad); }
-constexpr fp64 tan(fp64 rad) { return std::tan(rad); }
-constexpr fp32 tanDeg(fp32 deg) { return std::tanf(toRadians(deg)); }
-constexpr fp64 tanDeg(fp64 deg) { return std::tan(toRadians(deg)); }
+constexpr fp32 tan(fp32 rad) { return ::tanf(rad); }
+constexpr fp64 tan(fp64 rad) { return ::tan(rad); }
+constexpr fp32 tanDeg(fp32 deg) { return ::tanf(toRadians(deg)); }
+constexpr fp64 tanDeg(fp64 deg) { return ::tan(toRadians(deg)); }
 // cot
-constexpr fp32 cot(fp32 rad) { return 1.0f / std::tanf(rad); }
-constexpr fp64 cot(fp64 rad) { return 1.0 / std::tan(rad); }
-constexpr fp32 cotDeg(fp32 deg) { return 1.0f / std::tanf(toRadians(deg)); }
-constexpr fp64 cotDeg(fp64 deg) { return 1.0 / std::tan(toRadians(deg)); }
+constexpr fp32 cot(fp32 rad) { return 1.0f / ::tanf(rad); }
+constexpr fp64 cot(fp64 rad) { return 1.0 / ::tan(rad); }
+constexpr fp32 cotDeg(fp32 deg) { return 1.0f / ::tanf(toRadians(deg)); }
+constexpr fp64 cotDeg(fp64 deg) { return 1.0 / ::tan(toRadians(deg)); }
 
 
 // return clamped value of @arg value between @arg min and @arg max

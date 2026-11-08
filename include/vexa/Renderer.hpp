@@ -1,5 +1,5 @@
 #pragma once
-#include "vexa/core/common.hpp"
+#include "core/common.hpp"
 #include "Texture.hpp"
 #include "Font.hpp"
 NAMESPACE_BEGIN(vexa)
