@@ -59,7 +59,7 @@ const char* This::path() const {
     return m.path;
 }
 
-Vec2 This::pos() const {
+Vec2 This::size() const {
     return {
         CAST<fp32>(EXTERN_CAST(m.texture)->w),
         CAST<fp32>(EXTERN_CAST(m.texture)->h)

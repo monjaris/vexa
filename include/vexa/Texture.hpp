@@ -38,7 +38,7 @@ public:
     bool exists() const;
     uint32 id() const;
     const char* path() const;
-    Vec2 pos() const;
+    Vec2 size() const;
 };
 
 
