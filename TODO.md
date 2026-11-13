@@ -10,3 +10,5 @@
     <cmath>  -- math.hpp
 
 3. implement namespace vexa::input
+
+4. time::now() returns time::TimePoint<> specilization but dev may need a different specilization.
