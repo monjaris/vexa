@@ -19,6 +19,7 @@ add_requires("libsdl3_ttf")
 
 --- CONFIG
 add_rules("mode.debug", "mode.release");
+set_defaultmode("debug")
 add_rules("plugin.compile_commands.autoupdate")
 
 set_languages("c++23")
