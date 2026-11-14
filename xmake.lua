@@ -46,14 +46,14 @@ end)
 --- TARGETS
 target("vexa")
     set_kind(get_config("lib"))
-    set_version("0.2.0")
+    set_version("0.4.0")
     set_languages("c++23")
 
     add_files("src/*.cpp")
     add_files("src/renderer_backend/sdl/gfx.cpp")
     add_headerfiles("include/(vexa/**.hpp)")
 
-    add_packages("tiny-fmt", {public = true})
+    add_packages("tiny-fmt", {public = true, system = false})
     add_packages("libsdl3", {system = false})
     add_packages("libsdl3_ttf", {system = false})
     add_shflags("-Wl,--no-undefined")
