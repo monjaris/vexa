@@ -11,8 +11,7 @@ struct ColorF32;  struct Color;  // both derives from ColorBase template
 template <typename T>
 requires (is_same_t<uint8, T> || is_same_t<fp32, T>)
 struct ColorBase {
-    T r, g, b;
-    T a = T{1};
+    T r, g, b, a;
 
     // increase r, g and b values by @arg n
     T& increase(T n) {
@@ -37,12 +36,8 @@ struct Color : ColorBase<uint8> {
     using This = Color;
     using Value = uint8;
 
-    constexpr Color(
-        Value r,
-        Value g,
-        Value b,
-        Value a = 255
-    ) : ColorBase<Value>{r, g, b, a}
+    constexpr Color(Value r, Value g, Value b, Value a = 255)
+        : ColorBase<Value>{r, g, b, a}
     {}
 
 
@@ -68,12 +63,8 @@ struct ColorF32 : ColorBase<fp32> {
     using This = ColorF32;
     using Value = fp32;
 
-    constexpr ColorF32(
-        Value r,
-        Value g,
-        Value b,
-        Value a = 1.0f
-    ) : ColorBase<Value>{r, g, b, a}
+    constexpr ColorF32(Value r, Value g, Value b, Value a = 1.0f)
+        : ColorBase<Value>{r, g, b, a}
     {}
 
 
