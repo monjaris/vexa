@@ -116,11 +116,11 @@ public:
     }
     // <Date> + <DurationT>
     constexpr TimePoint operator+ (DurationT duration) {
-        return {.m_since_epoch = m_since_epoch + duration};
+        return {m_since_epoch + duration};
     }
     // <Date> - <DurationT>
     constexpr TimePoint operator- (DurationT duration) {
-        return {.m_since_epoch = m_since_epoch - duration};
+        return {m_since_epoch - duration};
     }
     // <Date> - <Date>
     constexpr DurationT operator- (const TimePoint& other) {
