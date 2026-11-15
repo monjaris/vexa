@@ -1,7 +1,7 @@
 # MacOS
 .DS_Store
 
-# Xmake cache
+# Build
 /.xmake/
 /build/
 
@@ -15,10 +15,7 @@
 # Scripts
 /run.sh
 
-# Directories
-/entity/
-
-# Editors & LSP
+# Editors & LSP-related
 /.zed/
 /.vscode/
 /compile_commands.json
