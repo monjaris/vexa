@@ -1,13 +1,12 @@
 #include <print>
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
 
 struct Player {
     SDL_Texture* texture;
     float x, y = 0;
 
     void start(SDL_Renderer* renderer) {
-        
+
     }
 
     void render(SDL_Renderer* renderer) {
